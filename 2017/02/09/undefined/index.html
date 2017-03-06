@@ -1,0 +1,765 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="wangyuwei" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Mess ：https://github.com/JackCho/Mess
+Mess介绍众所周知，我们开混淆打包后生成的apk里，Activity、自定义View、Service等出现在xml里的相关Java类默认都会被keep住，那么这对于app的保护是不足够好的，Mess就是来解决这个问题，把即使出现在xml文件中的Java类照样混淆。
+使用1234567dependencies &amp;#123;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mess详解（关于Activity、自定义View等的混淆）">
+<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2017/02/09/undefined/index.html">
+<meta property="og:site_name" content="巴巴巴巴巴巴掌">
+<meta property="og:description" content="Mess ：https://github.com/JackCho/Mess
+Mess介绍众所周知，我们开混淆打包后生成的apk里，Activity、自定义View、Service等出现在xml里的相关Java类默认都会被keep住，那么这对于app的保护是不足够好的，Mess就是来解决这个问题，把即使出现在xml文件中的Java类照样混淆。
+使用1234567dependencies &amp;#123;">
+<meta property="og:updated_time" content="2017-02-10T03:51:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mess详解（关于Activity、自定义View等的混淆）">
+<meta name="twitter:description" content="Mess ：https://github.com/JackCho/Mess
+Mess介绍众所周知，我们开混淆打包后生成的apk里，Activity、自定义View、Service等出现在xml里的相关Java类默认都会被keep住，那么这对于app的保护是不足够好的，Mess就是来解决这个问题，把即使出现在xml文件中的Java类照样混淆。
+使用1234567dependencies &amp;#123;">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 9125510,
+      author: '巴掌（作者）'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/02/09/undefined/"/>
+
+  <title> Mess详解（关于Activity、自定义View等的混淆） | 巴巴巴巴巴巴掌 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?a1124557c8347bcc3f0d292e1395b686";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">巴巴巴巴巴巴掌</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">菜比成长记</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Mess详解（关于Activity、自定义View等的混淆）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-02-09T14:19:35+08:00" content="2017-02-09">
+              2017-02-09
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/02/09/undefined/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/09/undefined/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Mess ：<a href="https://github.com/JackCho/Mess">https://github.com/JackCho/Mess</a></p>
+<h3 id="Mess介绍"><a href="#Mess介绍" class="headerlink" title="Mess介绍"></a>Mess介绍</h3><p>众所周知，我们开混淆打包后生成的apk里，Activity、自定义View、Service等出现在xml里的相关Java类默认都会被keep住，那么这对于app的保护是不足够好的，Mess就是来解决这个问题，把即使出现在xml文件中的Java类照样混淆。</p>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">   ...</div><div class="line">   classpath &apos;me.ele:mess-plugin:1.0.1&apos;</div><div class="line"> &#125;</div><div class="line"></div><div class="line">apply plugin: &apos;com.android.library&apos;</div><div class="line">apply plugin: &apos;me.ele.mess&apos;</div></pre></td></tr></table></figure>
+<p>此外，Mess还提供一个可选配置，<strong>ignoreProguard</strong>，由于有些依赖库本身也配置了相关混淆配置，如<strong>com.android.support:recyclerview-v7</strong>、<strong>com.jakewharton:butterknife</strong>等，那么这些文件都将会被添加到<strong>proguardFiles</strong>中，导致依赖库无法被混淆，所以<strong>ignoreProguard</strong>配置就是来解决这个问题的。</p>
+<p>比如忽视<strong>com.android.support:recyclerview-v7</strong>的混淆配置文件，则直接</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mess &#123;</div><div class="line">    ignoreProguard &apos;com.android.support:recyclerview-v7&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h3><p>先来看看Android gradle plugin在构建时最后所走的几个task：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">:app:processReleaseResources</div><div class="line">...</div><div class="line">:app:transformClassesAndResourcesWithProguardForRelease</div><div class="line">:app:transformClassesWithDexForRelease</div><div class="line">:app:transformClassesWithShrinkResForRelease</div><div class="line">:app:mergeReleaseJniLibFolders</div><div class="line">:app:transformNative_libsWithMergeJniLibsForRelease</div><div class="line">:app:validateDebugSigning</div><div class="line">:app:packageRelease</div><div class="line">:app:zipalignRelease</div><div class="line">:app:assembleRelease</div></pre></td></tr></table></figure>
+<p>其中有几个关键性的task，可以看到<strong>:app:transformClassesAndResourcesWithProguardForRelease</strong>是走在<strong>:app:packageRelease</strong>之前的，那么我们就在打包前对混淆的task做些操作来实现我们的目的。</p>
+<ul>
+<li>hook <strong>transformClassesAndResourcesWithProguardFor${variant.name.capitalize()}</strong></li>
+<li>hook <strong>ProcessAndroidResources</strong> Task，将生成的<strong>aapt_rules.txt</strong>中内容清空</li>
+<li>如果需要混淆依赖库，则删除依赖库中的<strong>proguard.txt</strong>文件</li>
+<li>遍历一遍mapping.txt获取所有Java类名的的映射关系得到一个Map</li>
+<li>拿映射Map替换AndroidManifest.xml里的Java原类名</li>
+<li>拿映射Map替换layout、menu和value文件夹下的xml的Java原类名</li>
+<li>重新跑<strong>ProcessAndroidResources</strong> Task</li>
+<li>恢复之前删除依赖库中的<strong>proguard.txt</strong>文件</li>
+</ul>
+<p>以上就是Mess干的关键性的东西，接下来依次说明。</p>
+<h4 id="hook-transformClassesAndResourcesWithProguardFor-variant-name"><a href="#hook-transformClassesAndResourcesWithProguardFor-variant-name" class="headerlink" title="hook transformClassesAndResourcesWithProguardFor${variant.name}"></a>hook <strong>transformClassesAndResourcesWithProguardFor${variant.name}</strong></h4><p>这个task是处理类和资源混淆的，也是我们的突破口，Mess中大部分自定义task都是围绕在这个task执行的，之后会有详解。</p>
+<h4 id="hook-ProcessAndroidResources-Task，将生成的aapt-rules-txt中内容清空"><a href="#hook-ProcessAndroidResources-Task，将生成的aapt-rules-txt中内容清空" class="headerlink" title="hook ProcessAndroidResources Task，将生成的aapt_rules.txt中内容清空"></a>hook <strong>ProcessAndroidResources</strong> Task，将生成的<strong>aapt_rules.txt</strong>中内容清空</h4><p>这一步是虽说只是把<strong>aapt_rules.txt</strong>文件中的内容清空，但是确实Mess Plugin能成功的最关键的一步。</p>
+<p><strong>ProcessAndroidResources</strong> task会生成一个<strong>aapt_rules.txt</strong>，可见源码<a href="https://android.googlesource.com/platform/tools/base/+/d472591/build-system/gradle-core/src/main/groovy/com/android/build/gradle/tasks/ProcessAndroidResources.java" target="_blank" rel="external">ProcessAndroidResources.groovy</a>，aapt_rules.txt里会keep住我们在xml里所书写的那些Activity、自定义View等Java类名部分，还可以看到<a href="https://android.googlesource.com/platform/tools/base/+/master/build-system/gradle-core/src/main/groovy/com/android/build/gradle/tasks/JackTask.java" target="_blank" rel="external">JackTask.java</a>里的相关代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (config.isMinifyEnabled()) &#123;</div><div class="line">    ConventionMappingHelper.map(jackTask, <span class="string">"proguardFiles"</span>, <span class="keyword">new</span> Callable&lt;List&lt;File&gt;&gt;() &#123;</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> List&lt;File&gt; <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">            <span class="comment">// since all the output use the same resources, we can use the first output</span></div><div class="line">            <span class="comment">// to query for a proguard file.</span></div><div class="line">            File sdkDir = scope.getGlobalScope().getSdkHandler().getAndCheckSdkFolder();</div><div class="line">            File defaultProguardFile =  <span class="keyword">new</span> File(sdkDir,</div><div class="line">                SdkConstants.FD_TOOLS + File.separatorChar</div><div class="line">                    + SdkConstants.FD_PROGUARD + File.separatorChar</div><div class="line">                    + TaskManager.DEFAULT_PROGUARD_CONFIG_FILE);</div><div class="line"></div><div class="line">            List&lt;File&gt; proguardFiles = config.getProguardFiles(<span class="keyword">true</span> <span class="comment">/*includeLibs*/</span>,</div><div class="line">                ImmutableList.of(defaultProguardFile));</div><div class="line">            File proguardResFile = scope.getProcessAndroidResourcesProguardOutputFile();</div><div class="line">            proguardFiles.add(proguardResFile);</div><div class="line">            <span class="comment">// for tested app, we only care about their aapt config since the base</span></div><div class="line">            <span class="comment">// configs are the same files anyway.</span></div><div class="line">            <span class="keyword">if</span> (scope.getTestedVariantData() != <span class="keyword">null</span>) &#123;</div><div class="line">                proguardResFile = scope.getTestedVariantData().getScope()</div><div class="line">                    .getProcessAndroidResourcesProguardOutputFile();</div><div class="line">                proguardFiles.add(proguardResFile);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="keyword">return</span> proguardFiles;</div><div class="line">         &#125;</div><div class="line">   &#125;);</div><div class="line"></div><div class="line">   jackTask.mappingFile = <span class="keyword">new</span> File(scope.getProguardOutputFolder(), <span class="string">"mapping.txt"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其中getProcessAndroidResourcesProguardOutputFile方法所对应的文件就是我们所需要清空的aapt_rules.txt，可以在<a href="https://android.googlesource.com/platform/tools/base/+/fe0923f/build-system/gradle-core/src/main/groovy/com/android/build/gradle/internal/scope/VariantScope.java" target="_blank" rel="external">VariantScope.java</a>中查看。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@NonNull</span></div><div class="line"><span class="function"><span class="keyword">public</span> File <span class="title">getProcessAndroidResourcesProguardOutputFile</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> File(globalScope.getIntermediatesDir(),</div><div class="line">         <span class="string">"/proguard-rules/"</span> + getVariantConfiguration().getDirName() + <span class="string">"/aapt_rules.txt"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>很明显，aapt_rules.txt所keep住的所有内容都将会添加到最后的混淆配置中，因此，我们需要在<strong>ProcessAndroidResources</strong>这个Task执行之后清空aapt_rules.txt中的内容，以保证编译出的main.jar中的所有.class都是混淆后的。</p>
+<p>相关代码如下：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">boolean</span> hasProcessResourcesExecuted = <span class="literal">false</span></div><div class="line">output.processResources.doLast &#123;</div><div class="line">    <span class="keyword">if</span> (hasProcessResourcesExecuted) &#123;</div><div class="line">    <span class="keyword">return</span></div><div class="line">    &#125;</div><div class="line">    hasProcessResourcesExecuted = <span class="literal">true</span></div><div class="line"></div><div class="line">    <span class="keyword">def</span> rulesPath = <span class="string">"$&#123;project.buildDir.absolutePath&#125;/intermediates/proguard-rules/$&#123;variant.dirName&#125;/aapt_rules.txt"</span></div><div class="line">    File aaptRules = <span class="keyword">new</span> File(rulesPath)</div><div class="line">    aaptRules.delete()</div><div class="line">    aaptRules &lt;&lt; <span class="string">""</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="如果需要混淆依赖库，则删除依赖库中的proguard-txt文件"><a href="#如果需要混淆依赖库，则删除依赖库中的proguard-txt文件" class="headerlink" title="如果需要混淆依赖库，则删除依赖库中的proguard.txt文件"></a>如果需要混淆依赖库，则删除依赖库中的<strong>proguard.txt</strong>文件</h4><p>这一步就是删除依赖库中所保护的内容，具体<strong>proguard.txt</strong>文件位于<strong>app目录下/build/intermediates/exploded-aar/依赖库maven名/proguard.txt</strong>。</p>
+<p>Mess中直接将<strong>proguard.txt</strong>文件名最后加上<strong>~</strong>，如<strong>proguard.txt~</strong>，在linux中表示备份，以便之后文件的恢复。</p>
+<p>相关代码如下：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> hideProguardTxt(Project project, String component) &#123;</div><div class="line">  renameProguardTxt(project, component, <span class="string">'proguard.txt'</span>, <span class="string">'proguard.txt~'</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> recoverProguardTxt(Project project, String component) &#123;</div><div class="line">  renameProguardTxt(project, component, <span class="string">'proguard.txt~'</span>, <span class="string">'proguard.txt'</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> renameProguardTxt(Project project, String component, String orgName,</div><div class="line">    String newName) &#123;</div><div class="line">  MavenCoordinates mavenCoordinates = parseMavenString(component)</div><div class="line">  File bundlesDir = <span class="keyword">new</span> File(project.buildDir, <span class="string">"intermediates/exploded-aar"</span>)</div><div class="line">  File bundleDir = <span class="keyword">new</span> File(bundlesDir,</div><div class="line">      <span class="string">"$&#123;mavenCoordinates.groupId&#125;/$&#123;mavenCoordinates.artifactId&#125;"</span>)</div><div class="line">  <span class="keyword">if</span> (!bundleDir.exists()) <span class="keyword">return</span></div><div class="line">  bundleDir.eachFileRecurse(FileType.FILES) &#123; File f -&gt;</div><div class="line">    <span class="keyword">if</span> (f.name == orgName) &#123;</div><div class="line">      File targetFile = <span class="keyword">new</span> File(f.parentFile.absolutePath, newName)</div><div class="line">      println <span class="string">"rename file $&#123;f.absolutePath&#125; to $&#123;targetFile.absolutePath&#125;"</span></div><div class="line">      Files.move(f, targetFile)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="遍历一遍mapping-txt获取所有Java类名的的映射关系得到一个Map"><a href="#遍历一遍mapping-txt获取所有Java类名的的映射关系得到一个Map" class="headerlink" title="遍历一遍mapping.txt获取所有Java类名的的映射关系得到一个Map"></a>遍历一遍mapping.txt获取所有Java类名的的映射关系得到一个Map</h4><p>之前第一步已经将生成的main.jar中所有的.class文件做相关混淆了，那么我们之前所在xml里写的还是原来的Java类名，因此，我们想要替换xml里的Java类名，就得先知道原先的类名被替换成什么了，这个时候就得依赖mapping.txt了。</p>
+<p>直接遍历：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">File mappingFile = apkVariant.mappingFile</div><div class="line">println mappingFile.toString()</div><div class="line">mappingFile.eachLine &#123; line -&gt;</div><div class="line">    <span class="comment">//方法名的混淆前面是会有空格的，我们这里只需要拿类名的映射关系</span></div><div class="line">    <span class="keyword">if</span> (!line.startsWith(<span class="string">" "</span>)) &#123;</div><div class="line">        <span class="comment">// 如me.ele.mess.SecondActivity -&gt; me.ele.mess.z:</span></div><div class="line">        <span class="comment">// -&gt; 作为分割符号</span></div><div class="line">        String[] keyValue = line.split(<span class="string">"-&gt;"</span>)</div><div class="line">        <span class="comment">// 原始文件名</span></div><div class="line">        String key = keyValue[<span class="number">0</span>].trim()</div><div class="line">        <span class="comment">// 混淆后文件名，去掉最后一个":"</span></div><div class="line">        String value = keyValue[<span class="number">1</span>].subSequence(<span class="number">0</span>, keyValue[<span class="number">1</span>].length() - <span class="number">1</span>).trim()</div><div class="line">        <span class="comment">// 添加进map</span></div><div class="line">        <span class="keyword">if</span> (!key.equals(value)) &#123;</div><div class="line">            map.put(key, value)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样后map里就存有所有类名的映射关系了，但是有个小问题要注意，假如存在这种情况，me.ele.foo -&gt; me.ele.a，me.ele.fooNew -&gt; me.ele.b，也就是恰巧有类名是另一个类名的开始部分，那么这样对我们之后的替换是会有bug的，会导致fooNew被替换成了aNew。因此，拿到map后需要对map做一次原类名长度的降序排序（也就是map中的key），以避免这个bug发生。相关代码如下：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> Map&lt;String, String&gt; sortMapping(Map&lt;String, String&gt; map) &#123;</div><div class="line">  List&lt;Map.Entry&lt;String, String&gt;&gt; list = <span class="keyword">new</span> LinkedList&lt;&gt;(map.entrySet());</div><div class="line">  Collections.sort(list, <span class="keyword">new</span> Comparator&lt;Map.Entry&lt;String, String&gt;&gt;() &#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">int</span> compare(Map.Entry&lt;String, String&gt; o1, Map.Entry&lt;String, String&gt; o2) &#123;</div><div class="line">      <span class="keyword">return</span> o2.key.length() - o1.key.length()</div><div class="line">    &#125;</div><div class="line">  &#125;);</div><div class="line"></div><div class="line">  Map&lt;String, String&gt; result = <span class="keyword">new</span> LinkedHashMap&lt;&gt;();</div><div class="line">  <span class="keyword">for</span> (Iterator&lt;Map.Entry&lt;String, String&gt;&gt; it = list.iterator(); it.hasNext();) &#123;</div><div class="line">    Map.Entry&lt;String, String&gt; entry = (Map.Entry&lt;String, String&gt;) it.next();</div><div class="line">    result.put(entry.getKey(), entry.getValue());</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>至此，一个正确的map已经拿到，接下来就是靠这个map来对相关的xml文件做替换了。</p>
+<h4 id="拿映射Map替换AndroidManifest-xml里的Java原类名"><a href="#拿映射Map替换AndroidManifest-xml里的Java原类名" class="headerlink" title="拿映射Map替换AndroidManifest.xml里的Java原类名"></a>拿映射Map替换AndroidManifest.xml里的Java原类名</h4><p>细心活，拿到AndroidManifest.xml一行一行读取，匹配到相关字符串则进行替换，但这里有个小坑，由于Java内部类的类名是用<strong>$</strong>符号分割的，刚好它又是正则表达式表示匹配字符串的结尾，因此对于内部类，我们应该现将<strong>$</strong>符号先替换成其他字符串，然后再做类名的替换，Mess中是替换成<strong>inner</strong>，相关代码如下：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">File f = <span class="keyword">new</span> File(path)</div><div class="line">StringBuilder builder = <span class="keyword">new</span> StringBuilder()</div><div class="line">f.eachLine &#123; line -&gt;</div><div class="line">    <span class="comment">//&lt;me.ele.base.widget.LoadingViewPager -&gt; &lt;me.ele.aaa</span></div><div class="line">    <span class="comment">// app:actionProviderClass="me.ele.base.ui.SearchViewProvider" -&gt; app:actionProviderClass="me.ele.bbv"</span></div><div class="line">    <span class="keyword">if</span> (line.contains(<span class="string">"&lt;$&#123;oldStr&#125;"</span>) || line.contains(<span class="string">"$&#123;oldStr&#125;&gt;"</span>) || line.contains(<span class="string">"$&#123;oldStr&#125;\""</span>)) &#123;</div><div class="line">        <span class="keyword">if</span> (line.contains(<span class="string">"\$"</span>) &amp;&amp; oldStr.contains(<span class="string">"\$"</span>)) &#123;</div><div class="line">             oldStr = oldStr.replaceAll(<span class="string">"\\\$"</span>, <span class="string">"inner"</span>)</div><div class="line">             line = line.replaceAll(<span class="string">"\\\$"</span>, <span class="string">"inner"</span>).replaceAll(oldStr, newStr)</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            line = line.replaceAll(oldStr, newStr)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    builder.append(line);</div><div class="line">    builder.append(<span class="string">"\n"</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line">f.delete()</div><div class="line">f &lt;&lt; builder.toString()</div></pre></td></tr></table></figure>
+<h4 id="拿映射Map替换layout、menu和value文件夹下的xml的Java原类名"><a href="#拿映射Map替换layout、menu和value文件夹下的xml的Java原类名" class="headerlink" title="拿映射Map替换layout、menu和value文件夹下的xml的Java原类名"></a>拿映射Map替换layout、menu和value文件夹下的xml的Java原类名</h4><p>前一步已经把AndroidManifest.xml中的对应Java类名替换了，这一步就是替换layout、menu和value这三个文件夹下的xml内容，感谢groovy语法让整件事情变得非常简单。layout、menu文件夹大家能立马理解，那么value呢？其实就是behavior引入后才存在的，所以value文件夹千万别忽视。</p>
+<p>相关代码如下：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">File layoutDir = <span class="keyword">new</span> File(getLayoutPath())</div><div class="line">File menuDir = <span class="keyword">new</span> File(getMenuPath())</div><div class="line">File valueDir = <span class="keyword">new</span> File(getValuePath())</div><div class="line">[layoutDir, menuDir, valueDir].each &#123;File dir -&gt;</div><div class="line">    <span class="keyword">if</span> (dir.exists()) &#123;</div><div class="line">        dir.eachFileRecurse(FileType.FILES) &#123; File file -&gt;</div><div class="line">            String orgTxt = file.text</div><div class="line">            String newTxt = orgTxt</div><div class="line">            map.each &#123; k, v -&gt;</div><div class="line">                newTxt = newTxt.replace(k, v)</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (newTxt != orgTxt) &#123;</div><div class="line">            println <span class="string">'rewrite file: '</span> + file.absolutePath</div><div class="line">            file.text = newTxt</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>至此，整个工程的main.jar中的.class文件以及资源文件都替换成相互匹配的混淆后的名称了。</p>
+<h4 id="重新跑ProcessAndroidResources-Task"><a href="#重新跑ProcessAndroidResources-Task" class="headerlink" title="重新跑ProcessAndroidResources Task"></a>重新跑<strong>ProcessAndroidResources</strong> Task</h4><p>前些步骤hook后<strong>ProcessAndroidResources</strong> Task之后我们已经把静态的文件都替换好了，那么接下来就还得依靠Android gradle plugin的原有tasks了，于是乎我们重新执行<strong>ProcessAndroidResources</strong> Task。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ProcessAndroidResources processTask = variantOutput.processResources</div><div class="line">processTask.state.executed = <span class="literal">false</span></div><div class="line">processTask.execute()</div></pre></td></tr></table></figure>
+<h4 id="恢复之前删除依赖库中的proguard-txt文件"><a href="#恢复之前删除依赖库中的proguard-txt文件" class="headerlink" title="恢复之前删除依赖库中的proguard.txt文件"></a>恢复之前删除依赖库中的<strong>proguard.txt</strong>文件</h4><p>有头有尾。</p>
+<h3 id="尾语"><a href="#尾语" class="headerlink" title="尾语"></a>尾语</h3><p>想要写出Mess这样的plugin，对Android整个打包流程是要相当熟悉的，这样才能知道什么时候该hook什么task，平常开发过程中尽量不要直接点击run按钮，应该直接通过gradle assemble** 构建，这样无数次的看构建过程中经历哪些task，然后去阅读相关task源码，这样对整个打包流程才会越来越胸有成竹。</p>
+<p>Mess有个小遗憾，那就是ButterKnife这个库在绝大多数app中都使用了，但是ButterKnife的混淆规则中有对使用注解的方法名和变量名做保护，这样就比较尴尬了，会导致Mess对使用ButterKnife库的app而言是没多大作用的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">-keepclasseswithmembernames class * &#123; @butterknife.* &lt;methods&gt;; &#125;</div><div class="line">-keepclasseswithmembernames class * &#123; @butterknife.* &lt;fields&gt;; &#125;</div></pre></td></tr></table></figure>
+<p>但是不要灰心，ButterMess这个Lib就来解决这个问题，接下来会写篇详解ButterMess的文章，先放个ButterMess的链接：<a href="https://github.com/peacepassion/ButterMess">https://github.com/peacepassion/ButterMess</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/22/undefined/" rel="next" title="手摸手增加字节码往方法体内插代码">
+                <i class="fa fa-chevron-left"></i> 手摸手增加字节码往方法体内插代码
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/05/undefined/" rel="prev" title="ASM实战统计方法耗时">
+                ASM实战统计方法耗时 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/02/09/undefined/"
+     data-title="Mess详解（关于Activity、自定义View等的混淆）"
+     data-content=""
+     data-url="https://github.com/JeasonWong/JeasonWong.github.io/2017/02/09/undefined/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/02/09/undefined/"
+           data-title="Mess详解（关于Activity、自定义View等的混淆）" data-url="https://github.com/JeasonWong/JeasonWong.github.io/2017/02/09/undefined/">
+      </div>
+    
+  </div>
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="JeasonWong" />
+          <p class="site-author-name" itemprop="name">JeasonWong</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/JeasonWong" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/WongYuwei" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mess介绍"><span class="nav-number">1.</span> <span class="nav-text">Mess介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用"><span class="nav-number">2.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现原理"><span class="nav-number">3.</span> <span class="nav-text">实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#hook-transformClassesAndResourcesWithProguardFor-variant-name"><span class="nav-number">3.1.</span> <span class="nav-text">hook transformClassesAndResourcesWithProguardFor${variant.name}</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#hook-ProcessAndroidResources-Task，将生成的aapt-rules-txt中内容清空"><span class="nav-number">3.2.</span> <span class="nav-text">hook ProcessAndroidResources Task，将生成的aapt_rules.txt中内容清空</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如果需要混淆依赖库，则删除依赖库中的proguard-txt文件"><span class="nav-number">3.3.</span> <span class="nav-text">如果需要混淆依赖库，则删除依赖库中的proguard.txt文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#遍历一遍mapping-txt获取所有Java类名的的映射关系得到一个Map"><span class="nav-number">3.4.</span> <span class="nav-text">遍历一遍mapping.txt获取所有Java类名的的映射关系得到一个Map</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#拿映射Map替换AndroidManifest-xml里的Java原类名"><span class="nav-number">3.5.</span> <span class="nav-text">拿映射Map替换AndroidManifest.xml里的Java原类名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#拿映射Map替换layout、menu和value文件夹下的xml的Java原类名"><span class="nav-number">3.6.</span> <span class="nav-text">拿映射Map替换layout、menu和value文件夹下的xml的Java原类名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#重新跑ProcessAndroidResources-Task"><span class="nav-number">3.7.</span> <span class="nav-text">重新跑ProcessAndroidResources Task</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#恢复之前删除依赖库中的proguard-txt文件"><span class="nav-number">3.8.</span> <span class="nav-text">恢复之前删除依赖库中的proguard.txt文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#尾语"><span class="nav-number">4.</span> <span class="nav-text">尾语</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JeasonWong</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wangyuwei"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("mYvvgL0PzbOqyPpwIf48D1VT-gzGzoHsz", "4xDzVUWBfHximEB6PP1sx16u");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+  
+
+</body>
+</html>
