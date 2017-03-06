@@ -1,20 +1,754 @@
-extends partial/layout
+<!doctype html>
 
-block site_title
-    != page.title + " · " + config.title
 
-block description
-    - var desc = page.desc || page.title + ' - ' + config.author;
-    meta(name="description", content=desc)
 
-block container
-    include mixins/post
-    +post(page)
+  
 
-block pagination
-    include mixins/paginator
-    +post()
-    include partial/comment
 
-block copyright
-    include partial/copyright
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="wangyuwei" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="项目地址：https://github.com/JeasonWong/SnowingView
+效果图：
+
+前几天看到有个朋友开源了一个雪花动画，感觉蛮不错的，算法简单，思路清楚，还使用了加速度传感器，于是fork下来，想在此基础上拓展下，动态壁纸应该是个不错的选择。
+分析目前github上大部分的自定义动画都是继承View实现的，包括我自己，平时都直接用View解决，但是想做动态壁纸，就必须得熟悉">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手摸手教你做动态壁纸">
+<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2016/09/30/手摸手教你做动态壁纸/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="项目地址：https://github.com/JeasonWong/SnowingView
+效果图：
+
+前几天看到有个朋友开源了一个雪花动画，感觉蛮不错的，算法简单，思路清楚，还使用了加速度传感器，于是fork下来，想在此基础上拓展下，动态壁纸应该是个不错的选择。
+分析目前github上大部分的自定义动画都是继承View实现的，包括我自己，平时都直接用View解决，但是想做动态壁纸，就必须得熟悉">
+<meta property="og:image" content="https://github.com/JeasonWong/SnowingView/blob/master/design/snowingwallpaper.gif?raw=true">
+<meta property="og:updated_time" content="2016-09-30T16:15:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="手摸手教你做动态壁纸">
+<meta name="twitter:description" content="项目地址：https://github.com/JeasonWong/SnowingView
+效果图：
+
+前几天看到有个朋友开源了一个雪花动画，感觉蛮不错的，算法简单，思路清楚，还使用了加速度传感器，于是fork下来，想在此基础上拓展下，动态壁纸应该是个不错的选择。
+分析目前github上大部分的自定义动画都是继承View实现的，包括我自己，平时都直接用View解决，但是想做动态壁纸，就必须得熟悉">
+<meta name="twitter:image" content="https://github.com/JeasonWong/SnowingView/blob/master/design/snowingwallpaper.gif?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 9125510,
+      author: '巴掌（作者）'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="https://github.com/JeasonWong/JeasonWong.github.io/2016/09/30/手摸手教你做动态壁纸/"/>
+
+  <title> 手摸手教你做动态壁纸 | Hexo </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?a1124557c8347bcc3f0d292e1395b686";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Hexo</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            Über
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                手摸手教你做动态壁纸
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Veröffentlicht am</span>
+            <time itemprop="dateCreated" datetime="2016-09-30T23:08:56+08:00" content="2016-09-30">
+              2016-09-30
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/30/手摸手教你做动态壁纸/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/30/手摸手教你做动态壁纸/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>项目地址：<a href="https://github.com/JeasonWong/SnowingView">https://github.com/JeasonWong/SnowingView</a></p>
+<p>效果图：</p>
+<p><img src="https://github.com/JeasonWong/SnowingView/blob/master/design/snowingwallpaper.gif?raw=true" alt="Markdown"></p>
+<p>前几天看到有个朋友开源了一个雪花动画，感觉蛮不错的，算法简单，思路清楚，还使用了加速度传感器，于是fork下来，想在此基础上拓展下，动态壁纸应该是个不错的选择。</p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>目前github上大部分的自定义动画都是继承View实现的，包括我自己，平时都直接用View解决，但是想做动态壁纸，就必须得熟悉用SurfaceView做动画，原因是实现动态壁纸，得继承WallpaperService，并且实现自己的Engine类，而Engine类的内部实现逻辑与SurfaceView类似。</p>
+<p>先简单介绍下SurfaceView，SurfaceView可以避免画图任务繁重的时候造成主线程阻塞，因为它可以在主线程之外的线程中向屏幕上绘图，详细使用后面再说。</p>
+<p>了解了需要什么技术后，还有一点很重要，那就是得充分利用github上现有的轮子，这篇文章我是fork了别人已经写好的一个View，然后改了个别地方，其余的都直接照搬过来，正如我前面所说，目前github上大部分动画都是直接用View实现的，所以要学会如何花少量的时间把View转成SurfaceView尤为重要了。</p>
+<p>其实写任何自定义View无非就是以下几点：</p>
+<ul>
+<li>创建各种画笔</li>
+<li>初始化各种绘图需要使用的实体</li>
+<li>各种坐标计算/实体值变化</li>
+<li>onDraw()画画画</li>
+</ul>
+<p>基本star数量&gt;100的项目对以上几方面都分类的比较清楚，改成SurfaceView也相应简单点，我们只需要找准关键的onDraw()的内容，然后ctrl+c ctrl+v就好了（当然自己心里要对该轮子有数，并不是star多的项目就是好代码。。。）</p>
+<h3 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h3><h4 id="继承WallpaperService并实现内部Engine"><a href="#继承WallpaperService并实现内部Engine" class="headerlink" title="继承WallpaperService并实现内部Engine"></a>继承WallpaperService并实现内部Engine</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SnowingPaperService</span> <span class="keyword">extends</span> <span class="title">WallpaperService</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Engine <span class="title">onCreateEngine</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> SnowingEngine();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SnowingEngine</span> <span class="keyword">extends</span> <span class="title">Engine</span> <span class="keyword">implements</span> <span class="title">SensorEventListener</span> </span>&#123;</div><div class="line">        ...</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="重写onSurfaceChanged"><a href="#重写onSurfaceChanged" class="headerlink" title="重写onSurfaceChanged()"></a>重写onSurfaceChanged()</h4><p>在直接使用SurfaceView的时候若想拿到View的宽高，可以从onMeasure()或者onSizeChanged()中拿到，而在WallpaperService里，可以从onSurfaceChanged中拿到，拿到后再做些需要宽高的一些初始化。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSurfaceChanged</span><span class="params">(SurfaceHolder holder, <span class="keyword">int</span> format, <span class="keyword">int</span> width, <span class="keyword">int</span> height)</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>.onSurfaceChanged(holder, format, width, height);</div><div class="line">    mWidth = width;</div><div class="line">    mHeight = height;</div><div class="line">    createSnowFlakes();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="重写onVisibilityChanged"><a href="#重写onVisibilityChanged" class="headerlink" title="重写onVisibilityChanged()"></a>重写onVisibilityChanged()</h4><p>这个和常见业务开发一样，当页面不展现时总想取消一些操作，比如网络请求亦或是其他操作，在动态壁纸里，取消的当然就是让动画动起来的轮询啦。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onVisibilityChanged</span><span class="params">(<span class="keyword">boolean</span> visible)</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>.onVisibilityChanged(visible);</div><div class="line">    isVisible = visible;</div><div class="line">    <span class="keyword">if</span> (visible) &#123;</div><div class="line">        startFall();</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        stopFall();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="重写onSurfaceDestroyed"><a href="#重写onSurfaceDestroyed" class="headerlink" title="重写onSurfaceDestroyed()"></a>重写onSurfaceDestroyed()</h4><p>在这里做些结束操作（如结束轮询）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSurfaceDestroyed</span><span class="params">(SurfaceHolder holder)</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>.onSurfaceDestroyed(holder);</div><div class="line">    stopFall();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="找准优秀轮子的onDraw"><a href="#找准优秀轮子的onDraw" class="headerlink" title="找准优秀轮子的onDraw()"></a>找准优秀轮子的onDraw()</h4><p>当然还是更鼓励自己写出优秀的轮子。。</p>
+<p>这里就是之前强调的绘制层。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span> </span>&#123;</div><div class="line">    Canvas canvas = <span class="keyword">null</span>;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        canvas = mHolder.lockCanvas();</div><div class="line">        <span class="keyword">if</span> (canvas != <span class="keyword">null</span>) &#123;</div><div class="line"></div><div class="line">            canvas.drawColor(Color.BLACK);</div><div class="line"></div><div class="line">            <span class="comment">//优秀轮子的onDraw()</span></div><div class="line">             ...</div><div class="line">        &#125;</div><div class="line">    &#125;<span class="keyword">finally</span>&#123;    </div><div class="line">        <span class="keyword">if</span> (canvas != <span class="keyword">null</span>) &#123;</div><div class="line">            mHolder.unlockCanvasAndPost(canvas);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Java层的代码基本就是以上了。</p>
+<p>接下来就是一些配置问题了。</p>
+<h4 id="AndroidManifest-xml"><a href="#AndroidManifest-xml" class="headerlink" title="AndroidManifest.xml"></a>AndroidManifest.xml</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">service</span></span></div><div class="line">    <span class="attr">android:name</span>=<span class="string">"info.hellovass.snowingview.widgets.SnowingPaperService"</span></div><div class="line">    <span class="attr">android:label</span>=<span class="string">"@string/app_name"</span></div><div class="line">    <span class="attr">android:permission</span>=<span class="string">"android.permission.BIND_WALLPAPER"</span>&gt;</div><div class="line">    <span class="tag">&lt;<span class="name">intent-filter</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"android.service.wallpaper.WallpaperService"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span></div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">meta-data</span></span></div><div class="line">        <span class="attr">android:name</span>=<span class="string">"android.service.wallpaper"</span></div><div class="line">        <span class="attr">android:resource</span>=<span class="string">"@xml/snowing_paper"</span>/&gt;</div><div class="line"><span class="tag">&lt;/<span class="name">service</span>&gt;</span></div></pre></td></tr></table></figure>
+<h4 id="snowing-paper-xml"><a href="#snowing-paper-xml" class="headerlink" title="snowing_paper.xml"></a>snowing_paper.xml</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</div><div class="line"><span class="tag">&lt;<span class="name">wallpaper</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></div><div class="line">    <span class="attr">android:thumbnail</span>=<span class="string">"@drawable/ic_snowflake"</span>/&gt;</div></pre></td></tr></table></figure>
+<h4 id="权限"><a href="#权限" class="headerlink" title="权限"></a>权限</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">uses-permission</span> <span class="attr">android:name</span>=<span class="string">"android.permission.SET_WALLPAPER"</span>/&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>动态壁纸的实现不难，但我觉得意义还是很大的，一是熟悉SurfaceView，二是能快速利用别人的优秀代码，三是这是目前Android独有的功能噢，iOS木有哈哈哈哈。我自己github上有一些直接用View写的轮子，欢迎大家fork下来改成动态壁纸哈~</p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="http://blog.csdn.net/lzq08ms/article/details/45717021" target="_blank" rel="external">surfaceview刷新操作的一些优化建议</a></p>
+<p><a href="http://www.cnblogs.com/devinzhang/archive/2012/02/03/2337559.html" target="_blank" rel="external">Android之SurfaceView使用总结</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/07/FlipShare分享控件/" rel="next" title="FlipShare分享控件">
+                <i class="fa fa-chevron-left"></i> FlipShare分享控件
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/04/手摸手带你mock-api/" rel="prev" title="手摸手带你mock api">
+                手摸手带你mock api <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/09/30/手摸手教你做动态壁纸/"
+     data-title="手摸手教你做动态壁纸"
+     data-content=""
+     data-url="https://github.com/JeasonWong/JeasonWong.github.io/2016/09/30/手摸手教你做动态壁纸/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/30/手摸手教你做动态壁纸/"
+           data-title="手摸手教你做动态壁纸" data-url="https://github.com/JeasonWong/JeasonWong.github.io/2016/09/30/手摸手教你做动态壁纸/">
+      </div>
+    
+  </div>
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="JeasonWong" />
+          <p class="site-author-name" itemprop="name">JeasonWong</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-name">Artikel</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/JeasonWong" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/WongYuwei" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#分析"><span class="nav-number">1.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体实现"><span class="nav-number">2.</span> <span class="nav-text">具体实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#继承WallpaperService并实现内部Engine"><span class="nav-number">2.1.</span> <span class="nav-text">继承WallpaperService并实现内部Engine</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#重写onSurfaceChanged"><span class="nav-number">2.2.</span> <span class="nav-text">重写onSurfaceChanged()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#重写onVisibilityChanged"><span class="nav-number">2.3.</span> <span class="nav-text">重写onVisibilityChanged()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#重写onSurfaceDestroyed"><span class="nav-number">2.4.</span> <span class="nav-text">重写onSurfaceDestroyed()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#找准优秀轮子的onDraw"><span class="nav-number">2.5.</span> <span class="nav-text">找准优秀轮子的onDraw()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AndroidManifest-xml"><span class="nav-number">2.6.</span> <span class="nav-text">AndroidManifest.xml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#snowing-paper-xml"><span class="nav-number">2.7.</span> <span class="nav-text">snowing_paper.xml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#权限"><span class="nav-number">2.8.</span> <span class="nav-text">权限</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文章"><span class="nav-number">4.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JeasonWong</span>
+</div>
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wangyuwei"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("mYvvgL0PzbOqyPpwIf48D1VT-gzGzoHsz", "4xDzVUWBfHximEB6PP1sx16u");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+  
+
+</body>
+</html>
