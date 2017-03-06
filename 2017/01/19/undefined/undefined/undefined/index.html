@@ -1,0 +1,1897 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="wangyuwei" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="指令码
+助记符
+说明
+
+
+
+
+0×00
+nop
+什么都不做
+
+
+0×01
+aconst_null
+将null推送至栈顶
+
+
+0×02
+iconst_m1
+将int型-1推送至栈顶
+
+
+0×03
+iconst_0
+将int型0推送至栈顶
+
+
+0×04
+iconst_1
+将int型1推送至栈顶
+
+
+0×05
+iconst_2
+将int型2推送至栈顶
+
+
+0×06
+iconst_3
+将int型3推">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM指令集整理">
+<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2017/01/19/undefined/undefined/undefined/index.html">
+<meta property="og:site_name" content="巴巴巴巴巴巴掌">
+<meta property="og:description" content="指令码
+助记符
+说明
+
+
+
+
+0×00
+nop
+什么都不做
+
+
+0×01
+aconst_null
+将null推送至栈顶
+
+
+0×02
+iconst_m1
+将int型-1推送至栈顶
+
+
+0×03
+iconst_0
+将int型0推送至栈顶
+
+
+0×04
+iconst_1
+将int型1推送至栈顶
+
+
+0×05
+iconst_2
+将int型2推送至栈顶
+
+
+0×06
+iconst_3
+将int型3推">
+<meta property="og:updated_time" content="2017-01-19T09:14:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVM指令集整理">
+<meta name="twitter:description" content="指令码
+助记符
+说明
+
+
+
+
+0×00
+nop
+什么都不做
+
+
+0×01
+aconst_null
+将null推送至栈顶
+
+
+0×02
+iconst_m1
+将int型-1推送至栈顶
+
+
+0×03
+iconst_0
+将int型0推送至栈顶
+
+
+0×04
+iconst_1
+将int型1推送至栈顶
+
+
+0×05
+iconst_2
+将int型2推送至栈顶
+
+
+0×06
+iconst_3
+将int型3推">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 9125510,
+      author: '巴掌（作者）'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/01/19/undefined/undefined/undefined/"/>
+
+  <title> JVM指令集整理 | 巴巴巴巴巴巴掌 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?a1124557c8347bcc3f0d292e1395b686";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">巴巴巴巴巴巴掌</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">菜比成长记</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JVM指令集整理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-01-19T13:58:54+08:00" content="2017-01-19">
+              2017-01-19
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/01/19/undefined/undefined/undefined/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/19/undefined/undefined/undefined/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <table>
+<thead>
+<tr>
+<th>指令码</th>
+<th style="text-align:left">助记符</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0×00</td>
+<td style="text-align:left">nop</td>
+<td style="text-align:left">什么都不做</td>
+</tr>
+<tr>
+<td>0×01</td>
+<td style="text-align:left">aconst_null</td>
+<td style="text-align:left">将null推送至栈顶</td>
+</tr>
+<tr>
+<td>0×02</td>
+<td style="text-align:left">iconst_m1</td>
+<td style="text-align:left">将int型-1推送至栈顶</td>
+</tr>
+<tr>
+<td>0×03</td>
+<td style="text-align:left">iconst_0</td>
+<td style="text-align:left">将int型0推送至栈顶</td>
+</tr>
+<tr>
+<td>0×04</td>
+<td style="text-align:left">iconst_1</td>
+<td style="text-align:left">将int型1推送至栈顶</td>
+</tr>
+<tr>
+<td>0×05</td>
+<td style="text-align:left">iconst_2</td>
+<td style="text-align:left">将int型2推送至栈顶</td>
+</tr>
+<tr>
+<td>0×06</td>
+<td style="text-align:left">iconst_3</td>
+<td style="text-align:left">将int型3推送至栈顶</td>
+</tr>
+<tr>
+<td>0×07</td>
+<td style="text-align:left">iconst_4</td>
+<td style="text-align:left">将int型4推送至栈顶</td>
+</tr>
+<tr>
+<td>0×08</td>
+<td style="text-align:left">iconst_5</td>
+<td style="text-align:left">将int型5推送至栈顶</td>
+</tr>
+<tr>
+<td>0×09</td>
+<td style="text-align:left">lconst_0</td>
+<td style="text-align:left">将long型0推送至栈顶</td>
+</tr>
+<tr>
+<td>0x0a</td>
+<td style="text-align:left">lconst_1</td>
+<td style="text-align:left">将long型1推送至栈顶</td>
+</tr>
+<tr>
+<td>0x0b</td>
+<td style="text-align:left">fconst_0</td>
+<td style="text-align:left">将float型0推送至栈顶</td>
+</tr>
+<tr>
+<td>0x0c</td>
+<td style="text-align:left">fconst_1</td>
+<td style="text-align:left">将float型1推送至栈顶</td>
+</tr>
+<tr>
+<td>0x0d</td>
+<td style="text-align:left">fconst_2</td>
+<td style="text-align:left">将float型2推送至栈顶</td>
+</tr>
+<tr>
+<td>0x0e</td>
+<td style="text-align:left">dconst_0</td>
+<td style="text-align:left">将double型0推送至栈顶</td>
+</tr>
+<tr>
+<td>0x0f</td>
+<td style="text-align:left">dconst_1</td>
+<td style="text-align:left">将double型1推送至栈顶</td>
+</tr>
+<tr>
+<td>0×10</td>
+<td style="text-align:left">bipush</td>
+<td style="text-align:left">将单字节的常量值(-128~127)推送至栈顶</td>
+</tr>
+<tr>
+<td>0×11</td>
+<td style="text-align:left">sipush</td>
+<td style="text-align:left">将一个短整型常量值(-32768~32767)推送至栈顶</td>
+</tr>
+<tr>
+<td>0×12</td>
+<td style="text-align:left">ldc</td>
+<td style="text-align:left">将int, float或String型常量值从常量池中推送至栈顶</td>
+</tr>
+<tr>
+<td>0×13</td>
+<td style="text-align:left">ldc_w</td>
+<td style="text-align:left">将int, float或String型常量值从常量池中推送至栈顶（宽索引）</td>
+</tr>
+<tr>
+<td>0×14</td>
+<td style="text-align:left">ldc2_w</td>
+<td style="text-align:left">将long或double型常量值从常量池中推送至栈顶（宽索引）</td>
+</tr>
+<tr>
+<td>0×15</td>
+<td style="text-align:left">iload</td>
+<td style="text-align:left">将指定的int型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0×16</td>
+<td style="text-align:left">lload</td>
+<td style="text-align:left">将指定的long型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0×17</td>
+<td style="text-align:left">fload</td>
+<td style="text-align:left">将指定的float型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0×18</td>
+<td style="text-align:left">dload</td>
+<td style="text-align:left">将指定的double型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0×19</td>
+<td style="text-align:left">aload</td>
+<td style="text-align:left">将指定的引用类型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x1a</td>
+<td style="text-align:left">iload_0</td>
+<td style="text-align:left">将第0个int型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x1b</td>
+<td style="text-align:left">iload_1</td>
+<td style="text-align:left">将第1个int型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x1c</td>
+<td style="text-align:left">iload_2</td>
+<td style="text-align:left">将第2个int型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x1d</td>
+<td style="text-align:left">iload_3</td>
+<td style="text-align:left">将第3个int型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x1e</td>
+<td style="text-align:left">lload_0</td>
+<td style="text-align:left">将第0个long型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x1f</td>
+<td style="text-align:left">lload_1</td>
+<td style="text-align:left">将第1个long型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0×20</td>
+<td style="text-align:left">lload_2</td>
+<td style="text-align:left">将第2个long型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0×21</td>
+<td style="text-align:left">lload_3</td>
+<td style="text-align:left">将第3个long型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0×22</td>
+<td style="text-align:left">fload_0</td>
+<td style="text-align:left">将第0个float型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0×23</td>
+<td style="text-align:left">fload_1</td>
+<td style="text-align:left">将第1个float型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0×24</td>
+<td style="text-align:left">fload_2</td>
+<td style="text-align:left">将第2个float型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0×25</td>
+<td style="text-align:left">fload_3</td>
+<td style="text-align:left">将第3个float型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0×26</td>
+<td style="text-align:left">dload_0</td>
+<td style="text-align:left">将第0个double型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0×27</td>
+<td style="text-align:left">dload_1</td>
+<td style="text-align:left">将第1个double型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0×28</td>
+<td style="text-align:left">dload_2</td>
+<td style="text-align:left">将第2个double型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0×29</td>
+<td style="text-align:left">dload_3</td>
+<td style="text-align:left">将第3个double型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x2a</td>
+<td style="text-align:left">aload_0</td>
+<td style="text-align:left">将第0个引用类型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x2b</td>
+<td style="text-align:left">aload_1</td>
+<td style="text-align:left">将第1个引用类型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x2c</td>
+<td style="text-align:left">aload_2</td>
+<td style="text-align:left">将第2个引用类型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x2d</td>
+<td style="text-align:left">aload_3</td>
+<td style="text-align:left">将第3个引用类型本地变量推送至栈顶</td>
+</tr>
+<tr>
+<td>0x2e</td>
+<td style="text-align:left">iaload</td>
+<td style="text-align:left">将int型数组指定索引的值推送至栈顶</td>
+</tr>
+<tr>
+<td>0x2f</td>
+<td style="text-align:left">laload</td>
+<td style="text-align:left">将long型数组指定索引的值推送至栈顶</td>
+</tr>
+<tr>
+<td>0×30</td>
+<td style="text-align:left">faload</td>
+<td style="text-align:left">将float型数组指定索引的值推送至栈顶</td>
+</tr>
+<tr>
+<td>0×31</td>
+<td style="text-align:left">daload</td>
+<td style="text-align:left">将double型数组指定索引的值推送至栈顶</td>
+</tr>
+<tr>
+<td>0×32</td>
+<td style="text-align:left">aaload</td>
+<td style="text-align:left">将引用型数组指定索引的值推送至栈顶</td>
+</tr>
+<tr>
+<td>0×33</td>
+<td style="text-align:left">baload</td>
+<td style="text-align:left">将boolean或byte型数组指定索引的值推送至栈顶</td>
+</tr>
+<tr>
+<td>0×34</td>
+<td style="text-align:left">caload</td>
+<td style="text-align:left">将char型数组指定索引的值推送至栈顶</td>
+</tr>
+<tr>
+<td>0×35</td>
+<td style="text-align:left">saload</td>
+<td style="text-align:left">将short型数组指定索引的值推送至栈顶</td>
+</tr>
+<tr>
+<td>0×36</td>
+<td style="text-align:left">istore</td>
+<td style="text-align:left">将栈顶int型数值存入指定本地变量</td>
+</tr>
+<tr>
+<td>0×37</td>
+<td style="text-align:left">lstore</td>
+<td style="text-align:left">将栈顶long型数值存入指定本地变量</td>
+</tr>
+<tr>
+<td>0×38</td>
+<td style="text-align:left">fstore</td>
+<td style="text-align:left">将栈顶float型数值存入指定本地变量</td>
+</tr>
+<tr>
+<td>0×39</td>
+<td style="text-align:left">dstore</td>
+<td style="text-align:left">将栈顶double型数值存入指定本地变量</td>
+</tr>
+<tr>
+<td>0x3a</td>
+<td style="text-align:left">astore</td>
+<td style="text-align:left">将栈顶引用型数值存入指定本地变量</td>
+</tr>
+<tr>
+<td>0x3b</td>
+<td style="text-align:left">istore_0</td>
+<td style="text-align:left">将栈顶int型数值存入第0个本地变量</td>
+</tr>
+<tr>
+<td>0x3c</td>
+<td style="text-align:left">istore_1</td>
+<td style="text-align:left">将栈顶int型数值存入第1个本地变量</td>
+</tr>
+<tr>
+<td>0x3d</td>
+<td style="text-align:left">istore_2</td>
+<td style="text-align:left">将栈顶int型数值存入第2个本地变量</td>
+</tr>
+<tr>
+<td>0x3e</td>
+<td style="text-align:left">istore_3</td>
+<td style="text-align:left">将栈顶int型数值存入第3个本地变量</td>
+</tr>
+<tr>
+<td>0x3f</td>
+<td style="text-align:left">lstore_0</td>
+<td style="text-align:left">将栈顶long型数值存入第0个本地变量</td>
+</tr>
+<tr>
+<td>0×40</td>
+<td style="text-align:left">lstore_1</td>
+<td style="text-align:left">将栈顶long型数值存入第1个本地变量</td>
+</tr>
+<tr>
+<td>0×41</td>
+<td style="text-align:left">lstore_2</td>
+<td style="text-align:left">将栈顶long型数值存入第2个本地变量</td>
+</tr>
+<tr>
+<td>0×42</td>
+<td style="text-align:left">lstore_3</td>
+<td style="text-align:left">将栈顶long型数值存入第3个本地变量</td>
+</tr>
+<tr>
+<td>0×43</td>
+<td style="text-align:left">fstore_0</td>
+<td style="text-align:left">将栈顶float型数值存入第0个本地变量</td>
+</tr>
+<tr>
+<td>0×44</td>
+<td style="text-align:left">fstore_1</td>
+<td style="text-align:left">将栈顶float型数值存入第1个本地变量</td>
+</tr>
+<tr>
+<td>0×45</td>
+<td style="text-align:left">fstore_2</td>
+<td style="text-align:left">将栈顶float型数值存入第2个本地变量</td>
+</tr>
+<tr>
+<td>0×46</td>
+<td style="text-align:left">fstore_3</td>
+<td style="text-align:left">将栈顶float型数值存入第3个本地变量</td>
+</tr>
+<tr>
+<td>0×47</td>
+<td style="text-align:left">dstore_0</td>
+<td style="text-align:left">将栈顶double型数值存入第0个本地变量</td>
+</tr>
+<tr>
+<td>0×48</td>
+<td style="text-align:left">dstore_1</td>
+<td style="text-align:left">将栈顶double型数值存入第1个本地变量</td>
+</tr>
+<tr>
+<td>0×49</td>
+<td style="text-align:left">dstore_2</td>
+<td style="text-align:left">将栈顶double型数值存入第2个本地变量</td>
+</tr>
+<tr>
+<td>0x4a</td>
+<td style="text-align:left">dstore_3</td>
+<td style="text-align:left">将栈顶double型数值存入第3个本地变量</td>
+</tr>
+<tr>
+<td>0x4b</td>
+<td style="text-align:left">astore_0</td>
+<td style="text-align:left">将栈顶引用型数值存入第0个本地变量</td>
+</tr>
+<tr>
+<td>0x4c</td>
+<td style="text-align:left">astore_1</td>
+<td style="text-align:left">将栈顶引用型数值存入第1个本地变量</td>
+</tr>
+<tr>
+<td>0x4d</td>
+<td style="text-align:left">astore_2</td>
+<td style="text-align:left">将栈顶引用型数值存入第2个本地变量</td>
+</tr>
+<tr>
+<td>0x4e</td>
+<td style="text-align:left">astore_3</td>
+<td style="text-align:left">将栈顶引用型数值存入第3个本地变量</td>
+</tr>
+<tr>
+<td>0x4f</td>
+<td style="text-align:left">iastore</td>
+<td style="text-align:left">将栈顶int型数值存入指定数组的指定索引位置</td>
+</tr>
+<tr>
+<td>0×50</td>
+<td style="text-align:left">lastore</td>
+<td style="text-align:left">将栈顶long型数值存入指定数组的指定索引位置</td>
+</tr>
+<tr>
+<td>0×51</td>
+<td style="text-align:left">fastore</td>
+<td style="text-align:left">将栈顶float型数值存入指定数组的指定索引位置</td>
+</tr>
+<tr>
+<td>0×52</td>
+<td style="text-align:left">dastore</td>
+<td style="text-align:left">将栈顶double型数值存入指定数组的指定索引位置</td>
+</tr>
+<tr>
+<td>0×53</td>
+<td style="text-align:left">aastore</td>
+<td style="text-align:left">将栈顶引用型数值存入指定数组的指定索引位置</td>
+</tr>
+<tr>
+<td>0×54</td>
+<td style="text-align:left">bastore</td>
+<td style="text-align:left">将栈顶boolean或byte型数值存入指定数组的指定索引位置</td>
+</tr>
+<tr>
+<td>0×55</td>
+<td style="text-align:left">castore</td>
+<td style="text-align:left">将栈顶char型数值存入指定数组的指定索引位置</td>
+</tr>
+<tr>
+<td>0×56</td>
+<td style="text-align:left">sastore</td>
+<td style="text-align:left">将栈顶short型数值存入指定数组的指定索引位置</td>
+</tr>
+<tr>
+<td>0×57</td>
+<td style="text-align:left">pop</td>
+<td style="text-align:left">将栈顶数值弹出 (数值不能是long或double类型的)</td>
+</tr>
+<tr>
+<td>0×58</td>
+<td style="text-align:left">pop2</td>
+<td style="text-align:left">将栈顶的一个（long或double类型的)或两个数值弹出（其它）</td>
+</tr>
+<tr>
+<td>0×59</td>
+<td style="text-align:left">dup</td>
+<td style="text-align:left">复制栈顶数值并将复制值压入栈顶</td>
+</tr>
+<tr>
+<td>0x5a</td>
+<td style="text-align:left">dup_x1</td>
+<td style="text-align:left">复制栈顶数值并将两个复制值压入栈顶</td>
+</tr>
+<tr>
+<td>0x5b</td>
+<td style="text-align:left">dup_x2</td>
+<td style="text-align:left">复制栈顶数值并将三个（或两个）复制值压入栈顶</td>
+</tr>
+<tr>
+<td>0x5c</td>
+<td style="text-align:left">dup2</td>
+<td style="text-align:left">复制栈顶一个（long或double类型的)或两个（其它）数值并将复制值压入栈顶</td>
+</tr>
+<tr>
+<td>0x5d</td>
+<td style="text-align:left">dup2_x1</td>
+<td style="text-align:left">&lt;待补充&gt;</td>
+</tr>
+<tr>
+<td>0x5e</td>
+<td style="text-align:left">dup2_x2</td>
+<td style="text-align:left">&lt;待补充&gt;</td>
+</tr>
+<tr>
+<td>0x5f</td>
+<td style="text-align:left">swap</td>
+<td style="text-align:left">将栈最顶端的两个数值互换(数值不能是long或double类型的)</td>
+</tr>
+<tr>
+<td>0×60</td>
+<td style="text-align:left">iadd</td>
+<td style="text-align:left">将栈顶两int型数值相加并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×61</td>
+<td style="text-align:left">ladd</td>
+<td style="text-align:left">将栈顶两long型数值相加并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×62</td>
+<td style="text-align:left">fadd</td>
+<td style="text-align:left">将栈顶两float型数值相加并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×63</td>
+<td style="text-align:left">dadd</td>
+<td style="text-align:left">将栈顶两double型数值相加并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×64</td>
+<td style="text-align:left">isub</td>
+<td style="text-align:left">将栈顶两int型数值相减并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×65</td>
+<td style="text-align:left">lsub</td>
+<td style="text-align:left">将栈顶两long型数值相减并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×66</td>
+<td style="text-align:left">fsub</td>
+<td style="text-align:left">将栈顶两float型数值相减并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×67</td>
+<td style="text-align:left">dsub</td>
+<td style="text-align:left">将栈顶两double型数值相减并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×68</td>
+<td style="text-align:left">imul</td>
+<td style="text-align:left">将栈顶两int型数值相乘并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×69</td>
+<td style="text-align:left">lmul</td>
+<td style="text-align:left">将栈顶两long型数值相乘并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x6a</td>
+<td style="text-align:left">fmul</td>
+<td style="text-align:left">将栈顶两float型数值相乘并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x6b</td>
+<td style="text-align:left">dmul</td>
+<td style="text-align:left">将栈顶两double型数值相乘并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x6c</td>
+<td style="text-align:left">idiv</td>
+<td style="text-align:left">将栈顶两int型数值相除并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x6d</td>
+<td style="text-align:left">ldiv</td>
+<td style="text-align:left">将栈顶两long型数值相除并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x6e</td>
+<td style="text-align:left">fdiv</td>
+<td style="text-align:left">将栈顶两float型数值相除并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x6f</td>
+<td style="text-align:left">ddiv</td>
+<td style="text-align:left">将栈顶两double型数值相除并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×70</td>
+<td style="text-align:left">irem</td>
+<td style="text-align:left">将栈顶两int型数值作取模运算并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×71</td>
+<td style="text-align:left">lrem</td>
+<td style="text-align:left">将栈顶两long型数值作取模运算并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×72</td>
+<td style="text-align:left">frem</td>
+<td style="text-align:left">将栈顶两float型数值作取模运算并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×73</td>
+<td style="text-align:left">drem</td>
+<td style="text-align:left">将栈顶两double型数值作取模运算并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×74</td>
+<td style="text-align:left">ineg</td>
+<td style="text-align:left">将栈顶int型数值取负并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×75</td>
+<td style="text-align:left">lneg</td>
+<td style="text-align:left">将栈顶long型数值取负并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×76</td>
+<td style="text-align:left">fneg</td>
+<td style="text-align:left">将栈顶float型数值取负并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×77</td>
+<td style="text-align:left">dneg</td>
+<td style="text-align:left">将栈顶double型数值取负并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×78</td>
+<td style="text-align:left">ishl</td>
+<td style="text-align:left">将int型数值左移位指定位数并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×79</td>
+<td style="text-align:left">lshl</td>
+<td style="text-align:left">将long型数值左移位指定位数并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x7a</td>
+<td style="text-align:left">ishr</td>
+<td style="text-align:left">将int型数值右（符号）移位指定位数并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x7b</td>
+<td style="text-align:left">lshr</td>
+<td style="text-align:left">将long型数值右（符号）移位指定位数并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x7c</td>
+<td style="text-align:left">iushr</td>
+<td style="text-align:left">将int型数值右（无符号）移位指定位数并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x7d</td>
+<td style="text-align:left">lushr</td>
+<td style="text-align:left">将long型数值右（无符号）移位指定位数并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x7e</td>
+<td style="text-align:left">iand</td>
+<td style="text-align:left">将栈顶两int型数值作“按位与”并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x7f</td>
+<td style="text-align:left">land</td>
+<td style="text-align:left">将栈顶两long型数值作“按位与”并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×80</td>
+<td style="text-align:left">ior</td>
+<td style="text-align:left">将栈顶两int型数值作“按位或”并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×81</td>
+<td style="text-align:left">lor</td>
+<td style="text-align:left">将栈顶两long型数值作“按位或”并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×82</td>
+<td style="text-align:left">ixor</td>
+<td style="text-align:left">将栈顶两int型数值作“按位异或”并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×83</td>
+<td style="text-align:left">lxor</td>
+<td style="text-align:left">将栈顶两long型数值作“按位异或”并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×84</td>
+<td style="text-align:left">iinc</td>
+<td style="text-align:left">将指定int型变量增加指定值，可以有两个变量，分别表示index, const，index指第index个int型本地变量，const增加的值</td>
+</tr>
+<tr>
+<td>0×85</td>
+<td style="text-align:left">i2l</td>
+<td style="text-align:left">将栈顶int型数值强制转换成long型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×86</td>
+<td style="text-align:left">i2f</td>
+<td style="text-align:left">将栈顶int型数值强制转换成float型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×87</td>
+<td style="text-align:left">i2d</td>
+<td style="text-align:left">将栈顶int型数值强制转换成double型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×88</td>
+<td style="text-align:left">l2i</td>
+<td style="text-align:left">将栈顶long型数值强制转换成int型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×89</td>
+<td style="text-align:left">l2f</td>
+<td style="text-align:left">将栈顶long型数值强制转换成float型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x8a</td>
+<td style="text-align:left">l2d</td>
+<td style="text-align:left">将栈顶long型数值强制转换成double型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x8b</td>
+<td style="text-align:left">f2i</td>
+<td style="text-align:left">将栈顶float型数值强制转换成int型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x8c</td>
+<td style="text-align:left">f2l</td>
+<td style="text-align:left">将栈顶float型数值强制转换成long型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x8d</td>
+<td style="text-align:left">f2d</td>
+<td style="text-align:left">将栈顶float型数值强制转换成double型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x8e</td>
+<td style="text-align:left">d2i</td>
+<td style="text-align:left">将栈顶double型数值强制转换成int型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0x8f</td>
+<td style="text-align:left">d2l</td>
+<td style="text-align:left">将栈顶double型数值强制转换成long型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×90</td>
+<td style="text-align:left">d2f</td>
+<td style="text-align:left">将栈顶double型数值强制转换成float型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×91</td>
+<td style="text-align:left">i2b</td>
+<td style="text-align:left">将栈顶int型数值强制转换成byte型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×92</td>
+<td style="text-align:left">i2c</td>
+<td style="text-align:left">将栈顶int型数值强制转换成char型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×93</td>
+<td style="text-align:left">i2s</td>
+<td style="text-align:left">将栈顶int型数值强制转换成short型数值并将结果压入栈顶</td>
+</tr>
+<tr>
+<td>0×94</td>
+<td style="text-align:left">lcmp</td>
+<td style="text-align:left">比较栈顶两long型数值大小，并将结果（1，0，-1）压入栈顶</td>
+</tr>
+<tr>
+<td>0×95</td>
+<td style="text-align:left">fcmpl</td>
+<td style="text-align:left">比较栈顶两float型数值大小，并将结果（1，0，-1）压入栈顶；当其中一个数值为NaN时，将-1压入栈顶</td>
+</tr>
+<tr>
+<td>0×96</td>
+<td style="text-align:left">fcmpg</td>
+<td style="text-align:left">比较栈顶两float型数值大小，并将结果（1，0，-1）压入栈顶；当其中一个数值为NaN时，将1压入栈顶</td>
+</tr>
+<tr>
+<td>0×97</td>
+<td style="text-align:left">dcmpl</td>
+<td style="text-align:left">比较栈顶两double型数值大小，并将结果（1，0，-1）压入栈顶；当其中一个数值为NaN时，将-1压入栈顶</td>
+</tr>
+<tr>
+<td>0×98</td>
+<td style="text-align:left">dcmpg</td>
+<td style="text-align:left">比较栈顶两double型数值大小，并将结果（1，0，-1）压入栈顶；当其中一个数值为NaN时，将1压入栈顶</td>
+</tr>
+<tr>
+<td>0×99</td>
+<td style="text-align:left">ifeq</td>
+<td style="text-align:left">当栈顶int型数值等于0时跳转</td>
+</tr>
+<tr>
+<td>0x9a</td>
+<td style="text-align:left">ifne</td>
+<td style="text-align:left">当栈顶int型数值不等于0时跳转</td>
+</tr>
+<tr>
+<td>0x9b</td>
+<td style="text-align:left">iflt</td>
+<td style="text-align:left">当栈顶int型数值小于0时跳转</td>
+</tr>
+<tr>
+<td>0x9c</td>
+<td style="text-align:left">ifge</td>
+<td style="text-align:left">当栈顶int型数值大于等于0时跳转</td>
+</tr>
+<tr>
+<td>0x9d</td>
+<td style="text-align:left">ifgt</td>
+<td style="text-align:left">当栈顶int型数值大于0时跳转</td>
+</tr>
+<tr>
+<td>0x9e</td>
+<td style="text-align:left">ifle</td>
+<td style="text-align:left">当栈顶int型数值小于等于0时跳转</td>
+</tr>
+<tr>
+<td>0x9f</td>
+<td style="text-align:left">if_icmpeq</td>
+<td style="text-align:left">比较栈顶两int型数值大小，当结果等于0时跳转</td>
+</tr>
+<tr>
+<td>0xa0</td>
+<td style="text-align:left">if_icmpne</td>
+<td style="text-align:left">比较栈顶两int型数值大小，当结果不等于0时跳转</td>
+</tr>
+<tr>
+<td>0xa1</td>
+<td style="text-align:left">if_icmplt</td>
+<td style="text-align:left">比较栈顶两int型数值大小，当结果小于0时跳转</td>
+</tr>
+<tr>
+<td>0xa2</td>
+<td style="text-align:left">if_icmpge</td>
+<td style="text-align:left">比较栈顶两int型数值大小，当结果大于等于0时跳转</td>
+</tr>
+<tr>
+<td>0xa3</td>
+<td style="text-align:left">if_icmpgt</td>
+<td style="text-align:left">比较栈顶两int型数值大小，当结果大于0时跳转</td>
+</tr>
+<tr>
+<td>0xa4</td>
+<td style="text-align:left">if_icmple</td>
+<td style="text-align:left">比较栈顶两int型数值大小，当结果小于等于0时跳转</td>
+</tr>
+<tr>
+<td>0xa5</td>
+<td style="text-align:left">if_acmpeq</td>
+<td style="text-align:left">比较栈顶两引用型数值，当结果相等时跳转</td>
+</tr>
+<tr>
+<td>0xa6</td>
+<td style="text-align:left">if_acmpne</td>
+<td style="text-align:left">比较栈顶两引用型数值，当结果不相等时跳转</td>
+</tr>
+<tr>
+<td>0xa7</td>
+<td style="text-align:left">goto</td>
+<td style="text-align:left">无条件跳转</td>
+</tr>
+<tr>
+<td>0xa8</td>
+<td style="text-align:left">jsr</td>
+<td style="text-align:left">跳转至指定16位offset位置，并将jsr下一条指令地址压入栈顶</td>
+</tr>
+<tr>
+<td>0xa9</td>
+<td style="text-align:left">ret</td>
+<td style="text-align:left">返回至本地变量指定的index的指令位置（一般与jsr, jsr_w联合使用）</td>
+</tr>
+<tr>
+<td>0xaa</td>
+<td style="text-align:left">tableswitch</td>
+<td style="text-align:left">用于switch条件跳转，case值连续（可变长度指令）</td>
+</tr>
+<tr>
+<td>0xab</td>
+<td style="text-align:left">lookupswitch</td>
+<td style="text-align:left">用于switch条件跳转，case值不连续（可变长度指令）</td>
+</tr>
+<tr>
+<td>0xac</td>
+<td style="text-align:left">ireturn</td>
+<td style="text-align:left">从当前方法返回int</td>
+</tr>
+<tr>
+<td>0xad</td>
+<td style="text-align:left">lreturn</td>
+<td style="text-align:left">从当前方法返回long</td>
+</tr>
+<tr>
+<td>0xae</td>
+<td style="text-align:left">freturn</td>
+<td style="text-align:left">从当前方法返回float</td>
+</tr>
+<tr>
+<td>0xaf</td>
+<td style="text-align:left">dreturn</td>
+<td style="text-align:left">从当前方法返回double</td>
+</tr>
+<tr>
+<td>0xb0</td>
+<td style="text-align:left">areturn</td>
+<td style="text-align:left">从当前方法返回对象引用</td>
+</tr>
+<tr>
+<td>0xb1</td>
+<td style="text-align:left">return</td>
+<td style="text-align:left">从当前方法返回void</td>
+</tr>
+<tr>
+<td>0xb2</td>
+<td style="text-align:left">getstatic</td>
+<td style="text-align:left">获取指定类的静态域，并将其值压入栈顶</td>
+</tr>
+<tr>
+<td>0xb3</td>
+<td style="text-align:left">putstatic</td>
+<td style="text-align:left">为指定的类的静态域赋值</td>
+</tr>
+<tr>
+<td>0xb4</td>
+<td style="text-align:left">getfield</td>
+<td style="text-align:left">获取指定类的实例域，并将其值压入栈顶</td>
+</tr>
+<tr>
+<td>0xb5</td>
+<td style="text-align:left">putfield</td>
+<td style="text-align:left">为指定的类的实例域赋值</td>
+</tr>
+<tr>
+<td>0xb6</td>
+<td style="text-align:left">invokevirtual</td>
+<td style="text-align:left">调用实例方法</td>
+</tr>
+<tr>
+<td>0xb7</td>
+<td style="text-align:left">invokespecial</td>
+<td style="text-align:left">调用超类构造方法，实例初始化方法，私有方法</td>
+</tr>
+<tr>
+<td>0xb8</td>
+<td style="text-align:left">invokestatic</td>
+<td style="text-align:left">调用静态方法</td>
+</tr>
+<tr>
+<td>0xb9</td>
+<td style="text-align:left">invokeinterface</td>
+<td style="text-align:left">调用接口方法</td>
+</tr>
+<tr>
+<td>0xba</td>
+<td style="text-align:left">–</td>
+</tr>
+<tr>
+<td>0xbb</td>
+<td style="text-align:left">new</td>
+<td style="text-align:left">创建一个对象，并将其引用值压入栈顶</td>
+</tr>
+<tr>
+<td>0xbc</td>
+<td style="text-align:left">newarray</td>
+<td style="text-align:left">创建一个指定原始类型（如int, float, char…）的数组，并将其引用值压入栈顶</td>
+</tr>
+<tr>
+<td>0xbd</td>
+<td style="text-align:left">anewarray</td>
+<td style="text-align:left">创建一个引用型（如类，接口，数组）的数组，并将其引用值压入栈顶</td>
+</tr>
+<tr>
+<td>0xbe</td>
+<td style="text-align:left">arraylength</td>
+<td style="text-align:left">获得数组的长度值并压入栈顶</td>
+</tr>
+<tr>
+<td>0xbf</td>
+<td style="text-align:left">athrow</td>
+<td style="text-align:left">将栈顶的异常抛出</td>
+</tr>
+<tr>
+<td>0xc0</td>
+<td style="text-align:left">checkcast</td>
+<td style="text-align:left">检验类型转换，检验未通过将抛出ClassCastException</td>
+</tr>
+<tr>
+<td>0xc1</td>
+<td style="text-align:left">instanceof</td>
+<td style="text-align:left">检验对象是否是指定的类的实例，如果是将1压入栈顶，否则将0压入栈顶</td>
+</tr>
+<tr>
+<td>0xc2</td>
+<td style="text-align:left">monitorenter</td>
+<td style="text-align:left">获得对象的锁，用于同步方法或同步块</td>
+</tr>
+<tr>
+<td>0xc3</td>
+<td style="text-align:left">monitorexit</td>
+<td style="text-align:left">释放对象的锁，用于同步方法或同步块</td>
+</tr>
+<tr>
+<td>0xc4</td>
+<td style="text-align:left">wide</td>
+<td style="text-align:left">当本地变量的索引超过255时使用该指令扩展索引宽度。</td>
+</tr>
+<tr>
+<td>0xc5</td>
+<td style="text-align:left">multianewarray</td>
+<td style="text-align:left">create a new array of dimensions dimensions with elements of type identified by class reference in constant pool index (indexbyte1 &lt;&lt; 8 + indexbyte2); the sizes of each dimension is identified by count1, [count2, etc.]</td>
+</tr>
+<tr>
+<td>0xc6</td>
+<td style="text-align:left">ifnull</td>
+<td style="text-align:left">if value is null, branch to instruction at branchoffset (signed short constructed from unsigned bytes branchbyte1 &lt;&lt; 8 + branchbyte2)</td>
+</tr>
+<tr>
+<td>0xc7</td>
+<td style="text-align:left">ifnonnull</td>
+<td style="text-align:left">if value is not null, branch to instruction at branchoffset (signed short constructed from unsigned bytes branchbyte1 &lt;&lt; 8 + branchbyte2)</td>
+</tr>
+<tr>
+<td>0xc8</td>
+<td style="text-align:left">goto_w</td>
+<td style="text-align:left">goes to another instruction at branchoffset (signed int constructed from unsigned bytes branchbyte1 &lt;&lt; 24 + branchbyte2 &lt;&lt; 16 + branchbyte3 &lt;&lt; 8 + branchbyte4)</td>
+</tr>
+<tr>
+<td>0xc9</td>
+<td style="text-align:left">jsr_w</td>
+<td style="text-align:left">jump to subroutine at branchoffset (signed int constructed from unsigned bytes branchbyte1 &lt;&lt; 24 + branchbyte2 &lt;&lt; 16 + branchbyte3 &lt;&lt; 8 + branchbyte4) and place the return address on the stack</td>
+</tr>
+<tr>
+<td>0xca</td>
+<td style="text-align:left">breakpoint</td>
+<td style="text-align:left">reserved for breakpoints in Java debuggers; should not appear in any class file</td>
+</tr>
+<tr>
+<td>0xcb-0xfd</td>
+<td style="text-align:left">未命名</td>
+<td style="text-align:left">these values are currently unassigned for opcodes and are reserved for future use</td>
+</tr>
+<tr>
+<td>0xfe</td>
+<td style="text-align:left">impdep1</td>
+<td style="text-align:left">reserved for implementation-dependent operations within debuggers; should not appear in any class file</td>
+</tr>
+<tr>
+<td>0xff</td>
+<td style="text-align:left">impdep2</td>
+<td style="text-align:left">reserved for implementation-dependent operations within debuggers; should not appear in any class file</td>
+</tr>
+</tbody>
+</table>
+<p>有了以上指令集表，那么在查看字节码就方便多了。</p>
+<p>对应英文 =&gt; <a href="https://en.wikipedia.org/wiki/Java_bytecode_instruction_listings" target="_blank" rel="external">https://en.wikipedia.org/wiki/Java_bytecode_instruction_listings</a> </p>
+<p>来几个sample:</p>
+<h4 id="sample1"><a href="#sample1" class="headerlink" title="sample1"></a>sample1</h4><ul>
+<li>java</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sample1</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="keyword">int</span> num = <span class="number">5</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>javap -c 查看字节码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public void sample1();</div><div class="line">    Code:</div><div class="line">       0: iconst_5</div><div class="line">       1: istore_1</div><div class="line">       2: return</div></pre></td></tr></table></figure>
+<ul>
+<li>解释</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">iconst_5    //将int型5推送至栈顶</div><div class="line">istore_1    //将栈顶int型数值存入第1个本地变量</div><div class="line">return    //从当前方法返回void</div></pre></td></tr></table></figure>
+<h4 id="sample2"><a href="#sample2" class="headerlink" title="sample2"></a>sample2</h4><ul>
+<li>java</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sample2</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> a + b;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>字节码及解释</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public int sample2(int, int);</div><div class="line">    Code:</div><div class="line">       0: iload_1    //将第1个int型本地变量推送至栈顶</div><div class="line">       1: iload_2    //将第2个int型本地变量推送至栈顶</div><div class="line">       2: iadd       //将栈顶两int型数值相加并将结果压入栈顶</div><div class="line">       3: ireturn    //从当前方法返回int</div></pre></td></tr></table></figure>
+<h4 id="sample3"><a href="#sample3" class="headerlink" title="sample3"></a>sample3</h4><ul>
+<li>java</li>
+</ul>
+<p>稍稍复杂点</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">float</span> <span class="title">sample3</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">float</span> num = <span class="number">0</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</div><div class="line">        num *= i;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> num;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>字节码及解释</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">public float sample3();</div><div class="line">    Code:</div><div class="line">       0: fconst_0    //将float型0推送至栈顶</div><div class="line">       1: fstore_1    //将栈顶float型数值存入第1个本地变量</div><div class="line">       2: iconst_0    //将int型0推送至栈顶，也就是for循环中的i = 0</div><div class="line">       3: istore_2    //将栈顶int型数值存入第2个本地变量</div><div class="line">       4: iload_2     //将第2个int型本地变量推送至栈顶</div><div class="line">       5: iconst_5    //将int型5推送至栈顶，也就是for循环中的 最大值5 </div><div class="line">       6: if_icmpge     20    //比较栈顶两int型数值大小，当结果大于等于0时跳转，</div><div class="line">//也就是比较0是否大于等于5，(cpmge指compare larger equals)，如果是跳转到到第20条指令</div><div class="line">       9: fload_1    //将第1个float型本地变量推送至栈顶，也就是变量num</div><div class="line">      10: iload_2    //将第2个int型本地变量推送至栈顶，也就是for循环中的变量i</div><div class="line">      11: i2f        //int型强转为float型，也就是把变量i强转成float</div><div class="line">      12: fmul       //将栈顶两float型数值相乘并将结果压入栈顶，也就是i与num相乘</div><div class="line">      13: fstore_1    //将栈顶float型数值存入第1个本地变量，也就是之前i与num的乘积</div><div class="line">      14: iinc          2, 1    //将指定int型变量增加指定值，将第2个int型本地变量增加1，</div><div class="line">//可以看到，第2个int型本地变量就是之前的变量i</div><div class="line">      17: goto          4    //无条件跳转到指令4，实现循环效果</div><div class="line">      20: fload_1      //将第1个float型本地变量推送至栈顶</div><div class="line">      21: freturn    //从当前方法返回float</div></pre></td></tr></table></figure>
+<p>以上是三个比较简单的例子，读者看懂后可以从字节码为切入点，去着手分析下为何switch比if else效率高。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/16/undefined/undefined/undefined/" rel="next" title="手摸手一起hook点击事件">
+                <i class="fa fa-chevron-left"></i> 手摸手一起hook点击事件
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/20/undefined/undefined/undefined/" rel="prev" title="ASM 操作字节码初探">
+                ASM 操作字节码初探 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/01/19/undefined/undefined/undefined/"
+     data-title="JVM指令集整理"
+     data-content=""
+     data-url="https://github.com/JeasonWong/JeasonWong.github.io/2017/01/19/undefined/undefined/undefined/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/01/19/undefined/undefined/undefined/"
+           data-title="JVM指令集整理" data-url="https://github.com/JeasonWong/JeasonWong.github.io/2017/01/19/undefined/undefined/undefined/">
+      </div>
+    
+  </div>
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="JeasonWong" />
+          <p class="site-author-name" itemprop="name">JeasonWong</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/JeasonWong" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/WongYuwei" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#sample1"><span class="nav-number">1.</span> <span class="nav-text">sample1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sample2"><span class="nav-number">2.</span> <span class="nav-text">sample2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sample3"><span class="nav-number">3.</span> <span class="nav-text">sample3</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JeasonWong</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wangyuwei"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("mYvvgL0PzbOqyPpwIf48D1VT-gzGzoHsz", "4xDzVUWBfHximEB6PP1sx16u");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+  
+
+</body>
+</html>

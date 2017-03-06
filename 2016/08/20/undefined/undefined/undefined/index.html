@@ -1,0 +1,802 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="wangyuwei" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="项目地址：https://github.com/JeasonWong/SignUpTransition
+老规矩，先上效果。
+
+先说下实现细节
+
+『SIGN UP』字符的位移
+圆圈扩散动画
+注册-&amp;gt;登录的动画
+背景上升顶部图标渐变
+
+此处插一下嘴~ 动画效果我是在materialup上看到的，实现后在设计师的效果后留言说我实现了他的效果，然后他也回应了下，我相信这样的结果也会是设计师和程序员感">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手摸手教你用Scene实现炫酷的注册登录动画">
+<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2016/08/20/undefined/undefined/undefined/index.html">
+<meta property="og:site_name" content="巴巴巴巴巴巴掌">
+<meta property="og:description" content="项目地址：https://github.com/JeasonWong/SignUpTransition
+老规矩，先上效果。
+
+先说下实现细节
+
+『SIGN UP』字符的位移
+圆圈扩散动画
+注册-&amp;gt;登录的动画
+背景上升顶部图标渐变
+
+此处插一下嘴~ 动画效果我是在materialup上看到的，实现后在设计师的效果后留言说我实现了他的效果，然后他也回应了下，我相信这样的结果也会是设计师和程序员感">
+<meta property="og:image" content="https://raw.githubusercontent.com/jeasonwong/signuptransition/master/screenshots/scene.gif">
+<meta property="og:image" content="https://raw.githubusercontent.com/jeasonwong/signuptransition/master/screenshots/chat.png">
+<meta property="og:image" content="http://i1.piimg.com/1070/f101a594f7ce04b6.png">
+<meta property="og:updated_time" content="2016-08-20T09:02:31.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="手摸手教你用Scene实现炫酷的注册登录动画">
+<meta name="twitter:description" content="项目地址：https://github.com/JeasonWong/SignUpTransition
+老规矩，先上效果。
+
+先说下实现细节
+
+『SIGN UP』字符的位移
+圆圈扩散动画
+注册-&amp;gt;登录的动画
+背景上升顶部图标渐变
+
+此处插一下嘴~ 动画效果我是在materialup上看到的，实现后在设计师的效果后留言说我实现了他的效果，然后他也回应了下，我相信这样的结果也会是设计师和程序员感">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/jeasonwong/signuptransition/master/screenshots/scene.gif">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 9125510,
+      author: '巴掌（作者）'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="https://github.com/JeasonWong/JeasonWong.github.io/2016/08/20/undefined/undefined/undefined/"/>
+
+  <title> 手摸手教你用Scene实现炫酷的注册登录动画 | 巴巴巴巴巴巴掌 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?a1124557c8347bcc3f0d292e1395b686";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">巴巴巴巴巴巴掌</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">菜比成长记</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                手摸手教你用Scene实现炫酷的注册登录动画
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-20T13:48:08+08:00" content="2016-08-20">
+              2016-08-20
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/20/undefined/undefined/undefined/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/20/undefined/undefined/undefined/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>项目地址：<a href="https://github.com/JeasonWong/SignUpTransition">https://github.com/JeasonWong/SignUpTransition</a></p>
+<p>老规矩，先上效果。</p>
+<p><img src="https://raw.githubusercontent.com/jeasonwong/signuptransition/master/screenshots/scene.gif" alt="效果"></p>
+<p><strong>先说下实现细节</strong></p>
+<ul>
+<li>『SIGN UP』字符的位移</li>
+<li>圆圈扩散动画</li>
+<li>注册-&gt;登录的动画</li>
+<li>背景上升顶部图标渐变</li>
+</ul>
+<p>此处插一下嘴~ 动画效果我是在materialup上看到的，实现后在设计师的效果后留言说我实现了他的效果，然后他也回应了下，我相信这样的结果也会是设计师和程序员感到最欣慰的结果。</p>
+<p><img src="https://raw.githubusercontent.com/jeasonwong/signuptransition/master/screenshots/chat.png" width="425" height="388" align="center"></p>
+<p><strong>整个过度动画只要实现这些就好了，然后再说下我使用到的技术</strong></p>
+<ul>
+<li>字符唯一、背景上升使用Scene</li>
+<li>登录动画使用属性动画</li>
+<li>圆圈扩散使用的ViewAnimationUtils</li>
+</ul>
+<p><strong>登录动画就是一个简单的Loading效果，在这篇文章中不是重点，我不会赘述，如果想学习，可以看我之前写的两篇手摸手来学习做Loading动画。</strong></p>
+<ul>
+<li><p><a href="http://www.wangyuwei.me/2016/08/07/%E6%89%8B%E6%91%B8%E6%89%8B%E6%95%99%E4%BD%A0%E5%86%99%E7%82%AB%E9%85%B7%E6%8E%A7%E4%BB%B6/" target="_blank" rel="external">手摸手教你写炫酷控件</a></p>
+</li>
+<li><p><a href="http://www.wangyuwei.me/2016/08/15/%E6%89%8B%E6%91%B8%E6%89%8B%E6%95%99%E4%BD%A0%E5%86%99Slack%E7%9A%84Loading%E5%8A%A8%E7%94%BB/" target="_blank" rel="external">手摸手教你写Slack的Loading动画</a></p>
+</li>
+</ul>
+<p>好的，手摸手开始了。</p>
+<p>创建三个Scene，对应着：</p>
+<ul>
+<li>注册静态页面</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">RelativeLayout</span></span></div><div class="line">    <span class="attr">android:id</span>=<span class="string">"@+id/rlt_bg"</span></div><div class="line">    <span class="attr">android:layout_width</span>=<span class="string">"150dp"</span></div><div class="line">    <span class="attr">android:layout_height</span>=<span class="string">"@dimen/bar_height"</span></div><div class="line">    <span class="attr">android:layout_gravity</span>=<span class="string">"center_horizontal"</span></div><div class="line">    <span class="attr">android:layout_marginTop</span>=<span class="string">"40dp"</span></div><div class="line">    <span class="attr">android:background</span>=<span class="string">"@color/colorBg"</span>&gt;</div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">me.wangyuwei.signuptransition.LoginLoadingView</span></span></div><div class="line">        <span class="attr">android:id</span>=<span class="string">"@+id/login_view"</span></div><div class="line">        <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">        <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span></div><div class="line">        <span class="attr">android:layout_centerInParent</span>=<span class="string">"true"</span> /&gt;</div><div class="line"></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">RelativeLayout</span>&gt;</span></div></pre></td></tr></table></figure>
+<ul>
+<li>登录页面</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">RelativeLayout</span></span></div><div class="line">    <span class="attr">android:id</span>=<span class="string">"@+id/rlt_bg"</span></div><div class="line">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span></div><div class="line">    <span class="attr">android:background</span>=<span class="string">"@color/colorBg"</span>&gt;</div><div class="line"></div><div class="line">    <span class="tag">&lt;<span class="name">me.wangyuwei.signuptransition.LoginLoadingView</span></span></div><div class="line">        <span class="attr">android:id</span>=<span class="string">"@+id/login_view"</span></div><div class="line">        <span class="attr">android:layout_width</span>=<span class="string">"150dp"</span></div><div class="line">        <span class="attr">android:layout_height</span>=<span class="string">"@dimen/bar_height"</span></div><div class="line">        <span class="attr">android:layout_centerInParent</span>=<span class="string">"true"</span> /&gt;</div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">RelativeLayout</span>&gt;</span></div></pre></td></tr></table></figure>
+<ul>
+<li>主页面</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">RelativeLayout</span></span></div><div class="line">    <span class="attr">android:id</span>=<span class="string">"@+id/rlt_bg"</span></div><div class="line">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">    <span class="attr">android:layout_height</span>=<span class="string">"@dimen/bar_height"</span></div><div class="line">    <span class="attr">android:background</span>=<span class="string">"@color/colorBg"</span>&gt;</div><div class="line"></div><div class="line">    ...</div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">RelativeLayout</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>三个Scene中RelativeLayout的id取为一样，这样在之后操作Transition时才会有效果，这里很容易理解。</p>
+<p>在ManActivity中有个用来展示各个Scene的ViewGroup，我这里用的FramLayout。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">FrameLayout</span></span></div><div class="line">    <span class="attr">android:id</span>=<span class="string">"@+id/frt_content"</span></div><div class="line">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span> /&gt;</div></pre></td></tr></table></figure>
+<p>那么在xml中该干的事我们都干完了，再回顾一下，分别是创建Scenes，创建展示Scene的ViewGroup。</p>
+<p>显然接下来就是逻辑控制各个Scene的转换了。</p>
+<p>MainActivity中初始化三个Scene：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line"><span class="keyword">private</span> Scene mSceneSignUp;</div><div class="line"><span class="keyword">private</span> Scene mSceneLogging;</div><div class="line"><span class="keyword">private</span> Scene mSceneMain;</div><div class="line">...</div><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">    setContentView(R.layout.activity_main);</div><div class="line"></div><div class="line">    mFrtContent = (FrameLayout) findViewById(R.id.frt_content);</div><div class="line"></div><div class="line">    mSceneSignUp = Scene.getSceneForLayout(mFrtContent, R.layout.scene_sign_up, <span class="keyword">this</span>);</div><div class="line">    mSceneSignUp.setEnterAction(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="keyword">final</span> LoginLoadingView loginView = (LoginLoadingView) mFrtContent.findViewById(R.id.login_view);</div><div class="line">            <span class="comment">//计算LiginView的宽高</span></div><div class="line">            ViewTreeObserver vto = loginView.getViewTreeObserver();</div><div class="line">            vto.addOnGlobalLayoutListener(<span class="keyword">new</span> ViewTreeObserver.OnGlobalLayoutListener() &#123;</div><div class="line">                <span class="meta">@Override</span></div><div class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onGlobalLayout</span><span class="params">()</span> </span>&#123;</div><div class="line">                    setSize(loginView.getMeasuredWidth(), loginView.getMeasuredHeight());</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">            <span class="comment">//绑定点击事件</span></div><div class="line">            loginView.setOnClickListener(MainActivity.<span class="keyword">this</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line"></div><div class="line"></div><div class="line">    mSceneLogging = Scene.getSceneForLayout(mFrtContent, R.layout.scene_logging, <span class="keyword">this</span>);</div><div class="line">    mSceneLogging.setEnterAction(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="keyword">final</span> LoginLoadingView loginView = (LoginLoadingView) mFrtContent.findViewById(R.id.login_view);</div><div class="line">            <span class="comment">//省略控制LoginView的状态代码</span></div><div class="line">            ...</div><div class="line">            loginView.postDelayed(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">                <span class="meta">@Override</span></div><div class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                    TransitionManager.go(mSceneMain, <span class="keyword">new</span> ChangeBounds().setDuration(mDuration).setInterpolator(<span class="keyword">new</span> DecelerateInterpolator()));</div><div class="line">                &#125;</div><div class="line">            &#125;, <span class="number">6000</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    mSceneMain = Scene.getSceneForLayout(mFrtContent, R.layout.scene_main, <span class="keyword">this</span>);</div><div class="line">    mSceneMain.setEnterAction(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="keyword">final</span> ImageView imgMenu = (ImageView) mFrtContent.findViewById(R.id.img_menu);</div><div class="line">            <span class="keyword">final</span> ImageView imgUser = (ImageView) mFrtContent.findViewById(R.id.img_user);</div><div class="line">            <span class="comment">//属性动画完成顶部图标的渐变</span></div><div class="line">            ValueAnimator animator = ValueAnimator.ofInt(<span class="number">0</span>, <span class="number">255</span>);</div><div class="line">            animator.setDuration(mDuration);</div><div class="line">            animator.setInterpolator(<span class="keyword">new</span> LinearInterpolator());</div><div class="line">            animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.AnimatorUpdateListener() &#123;</div><div class="line">                <span class="meta">@Override</span></div><div class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationUpdate</span><span class="params">(ValueAnimator animation)</span> </span>&#123;</div><div class="line">                    <span class="keyword">int</span> alpha = (<span class="keyword">int</span>) animation.getAnimatedValue();</div><div class="line">                    imgMenu.setImageAlpha(alpha);</div><div class="line">                    imgUser.setImageAlpha(alpha);</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">            animator.start();</div><div class="line"></div><div class="line">            <span class="comment">//展示RecyclerView</span></div><div class="line">            <span class="keyword">final</span> RecyclerView recyclerView = (RecyclerView) mFrtContent.findViewById(R.id.rv_common);</div><div class="line">            CommonAdapter adapter = <span class="keyword">new</span> CommonAdapter(MainActivity.<span class="keyword">this</span>);</div><div class="line">            recyclerView.setLayoutManager(<span class="keyword">new</span> GridLayoutManager(MainActivity.<span class="keyword">this</span>, <span class="number">3</span>));</div><div class="line">            recyclerView.setAdapter(adapter);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    <span class="comment">//进入Activity后默认展示场景mSceneSignUp</span></div><div class="line">    TransitionManager.go(mSceneSignUp);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>重点</strong></p>
+<ul>
+<li>使用Scene.getSceneForLayout创建Scene</li>
+<li>使用TransitionManager.go()来控制Scene之间的转换</li>
+<li>过渡Transition直接使用的ChangeBounds</li>
+<li>使用Scene.setEnterAction()来做一些进入Scene时的操作</li>
+<li>属性动画哪里都有需求 = =</li>
+</ul>
+<p>以上就是Scene过渡的关键。</p>
+<p>关于Scene的补充学习，可以看下Google放出来的官方demo，他还实现了一个自定义的Transition，<a href="https://github.com/googlesamples/android-CustomTransition">android-CustomTransition</a>。</p>
+<p>打造一个这样炫酷的效果其实并不难，我也是现学现用，只要把已知知识点进行组合，一定能发挥大能量。</p>
+<blockquote>
+<p>如果有更好的思路，欢迎交流，开源本身就是大家互相喷喷，互相进步嘛，<br>对各种动画感兴趣的朋友欢迎加群479729938进行交流，<br>期待各种好看，好玩，实用的动画~</p>
+</blockquote>
+<p><img src="http://i1.piimg.com/1070/f101a594f7ce04b6.png" alt="Markdown"></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/13/undefined/undefined/undefined/" rel="next" title="手摸手教你写Slack的Loading动画">
+                <i class="fa fa-chevron-left"></i> 手摸手教你写Slack的Loading动画
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/08/24/undefined/undefined/undefined/" rel="prev" title="手摸手带你用VideoView实现英语流利说炫酷引导页">
+                手摸手带你用VideoView实现英语流利说炫酷引导页 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/08/20/undefined/undefined/undefined/"
+     data-title="手摸手教你用Scene实现炫酷的注册登录动画"
+     data-content=""
+     data-url="https://github.com/JeasonWong/JeasonWong.github.io/2016/08/20/undefined/undefined/undefined/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/08/20/undefined/undefined/undefined/"
+           data-title="手摸手教你用Scene实现炫酷的注册登录动画" data-url="https://github.com/JeasonWong/JeasonWong.github.io/2016/08/20/undefined/undefined/undefined/">
+      </div>
+    
+  </div>
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="JeasonWong" />
+          <p class="site-author-name" itemprop="name">JeasonWong</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/JeasonWong" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/WongYuwei" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JeasonWong</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wangyuwei"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("mYvvgL0PzbOqyPpwIf48D1VT-gzGzoHsz", "4xDzVUWBfHximEB6PP1sx16u");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+  
+
+</body>
+</html>

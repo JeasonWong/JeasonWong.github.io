@@ -1,0 +1,749 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="wangyuwei" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="本文动态增加字节码是直接使用的ASM，有关ASM的内容可以看下我之前的一篇文章：ASM 操作字节码初探
+话不多说，先看本次想实现怎样的效果：
+12345678910111213141516171819 public static class Bazhang &amp;#123;    private long f(int n, String s, int[] arr) &amp;#123;        retu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手摸手增加字节码往方法体内插代码">
+<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2017/01/22/undefined/undefined/undefined/index.html">
+<meta property="og:site_name" content="巴巴巴巴巴巴掌">
+<meta property="og:description" content="本文动态增加字节码是直接使用的ASM，有关ASM的内容可以看下我之前的一篇文章：ASM 操作字节码初探
+话不多说，先看本次想实现怎样的效果：
+12345678910111213141516171819 public static class Bazhang &amp;#123;    private long f(int n, String s, int[] arr) &amp;#123;        retu">
+<meta property="og:updated_time" content="2017-01-22T06:19:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="手摸手增加字节码往方法体内插代码">
+<meta name="twitter:description" content="本文动态增加字节码是直接使用的ASM，有关ASM的内容可以看下我之前的一篇文章：ASM 操作字节码初探
+话不多说，先看本次想实现怎样的效果：
+12345678910111213141516171819 public static class Bazhang &amp;#123;    private long f(int n, String s, int[] arr) &amp;#123;        retu">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 9125510,
+      author: '巴掌（作者）'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/01/22/undefined/undefined/undefined/"/>
+
+  <title> 手摸手增加字节码往方法体内插代码 | 巴巴巴巴巴巴掌 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?a1124557c8347bcc3f0d292e1395b686";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">巴巴巴巴巴巴掌</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">菜比成长记</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                手摸手增加字节码往方法体内插代码
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-01-22T10:41:56+08:00" content="2017-01-22">
+              2017-01-22
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/01/22/undefined/undefined/undefined/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/22/undefined/undefined/undefined/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文动态增加字节码是直接使用的ASM，有关ASM的内容可以看下我之前的一篇文章：<a href="http://www.wangyuwei.me/2017/01/20/ASM-%E6%93%8D%E4%BD%9C%E5%AD%97%E8%8A%82%E7%A0%81%E5%88%9D%E6%8E%A2/" target="_blank" rel="external">ASM 操作字节码初探</a></p>
+<p>话不多说，先看本次想实现怎样的效果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"> <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Bazhang</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">long</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> n, String s, <span class="keyword">int</span>[] arr)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">hi</span><span class="params">(<span class="keyword">double</span> a, List&lt;String&gt; b)</span> </span>&#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">newFunc</span><span class="params">(String str)</span> </span>&#123;</div><div class="line">        System.out.println(str);</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</div><div class="line">            <span class="keyword">if</span> (i % <span class="number">10</span> == <span class="number">0</span>) &#123;</div><div class="line">                System.out.println(i);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这是一个自定义的类，里面有三个方法，我需要在不改变原有写好的代码的基础上，往<strong>newFunc(String str)</strong>这个方法内收尾增加两个方法，打印输入start和end，也就是如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">newFunc</span><span class="params">(String str)</span> </span>&#123;</div><div class="line">    System.out.println(<span class="string">"========start========="</span>);</div><div class="line">    System.out.println(str);</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</div><div class="line">        <span class="keyword">if</span> (i % <span class="number">10</span> == <span class="number">0</span>) &#123;</div><div class="line">            System.out.println(i);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    System.out.println(<span class="string">"========end========="</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>那么我们直接操作字节码，往方法体内首尾增加相应字节码就好了。</p>
+<p>这里先安利一个IntelliJ的插件，叫做ASM Bytecode Outline，他可以直接显示java代码对应的字节码和ASM相应的操作代码，这个插件一定程度上帮助我们写接下来的代码。</p>
+<p>下面进入正题，手摸手开始：</p>
+<h4 id="自定义一个ClassVisitor"><a href="#自定义一个ClassVisitor" class="headerlink" title="自定义一个ClassVisitor"></a>自定义一个ClassVisitor</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">TestClassVisitor</span> <span class="keyword">extends</span> <span class="title">ClassVisitor</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TestClassVisitor</span><span class="params">(<span class="keyword">final</span> ClassVisitor cv)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>(Opcodes.ASM5, cv);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">visit</span><span class="params">(<span class="keyword">int</span> version, <span class="keyword">int</span> access, String name, String signature, String superName, String[] interfaces)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (cv != <span class="keyword">null</span>) &#123;</div><div class="line">            cv.visit(version, access, name, signature, superName, interfaces);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> MethodVisitor <span class="title">visitMethod</span><span class="params">(<span class="keyword">int</span> access, String name, String desc, String signature, String[] exceptions)</span> </span>&#123;</div><div class="line">        <span class="comment">//如果methodName是newFunc，则返回我们自定义的TestMethodVisitor</span></div><div class="line">        <span class="keyword">if</span> (<span class="string">"newFunc"</span>.equals(name)) &#123;</div><div class="line">            MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);</div><div class="line">            <span class="keyword">return</span> <span class="keyword">new</span> TestMethodVisitor(mv);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (cv != <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">return</span> cv.visitMethod(access, name, desc, signature, exceptions);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>确保只有newFunc方法才会走我们的套路。</p>
+<h4 id="自定义TestMethodVisitor"><a href="#自定义TestMethodVisitor" class="headerlink" title="自定义TestMethodVisitor"></a>自定义TestMethodVisitor</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">TestMethodVisitor</span> <span class="keyword">extends</span> <span class="title">MethodVisitor</span> </span>&#123;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">TestMethodVisitor</span><span class="params">(MethodVisitor mv)</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>(Opcodes.ASM5, mv);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">visitCode</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="comment">//方法体内开始时调用</span></div><div class="line">            <span class="keyword">super</span>.visitCode();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">visitInsn</span><span class="params">(<span class="keyword">int</span> opcode)</span> </span>&#123;</div><div class="line">            <span class="comment">//每执行一个指令都会调用</span></div><div class="line">            <span class="keyword">super</span>.visitInsn(opcode);</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>我们注释了两个方法，一个是<strong>visitCode()</strong>，一个是<strong>visitInsn(int opcode)</strong>，这两个方法一个为我们接下来插入start，一个插入end。</p>
+<h4 id="使用ASM-Bytecode-Outline插件做简单分析"><a href="#使用ASM-Bytecode-Outline插件做简单分析" class="headerlink" title="使用ASM Bytecode Outline插件做简单分析"></a>使用ASM Bytecode Outline插件做简单分析</h4><p>这一步并不是必须的，如果你对字节码足够的熟练，完全可以随便撸。</p>
+<p>先随便写个类，然后实现我们最后需要变成的<strong>newFunc(String str)</strong>方法，然后用插件查看ASMifield，可以得到如下片段：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">// 1</div><div class="line">mv.visitFieldInsn(GETSTATIC, &quot;java/lang/System&quot;, &quot;out&quot;, &quot;Ljava/io/PrintStream;&quot;);</div><div class="line">mv.visitLdcInsn(&quot;========start=========&quot;);</div><div class="line">mv.visitMethodInsn(INVOKEVIRTUAL, &quot;java/io/PrintStream&quot;, &quot;println&quot;, &quot;(Ljava/lang/String;)V&quot;, false);</div><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line">// 2</div><div class="line">mv.visitFieldInsn(GETSTATIC, &quot;java/lang/System&quot;, &quot;out&quot;, &quot;Ljava/io/PrintStream;&quot;);</div><div class="line">mv.visitVarInsn(ALOAD, 0);</div><div class="line">mv.visitMethodInsn(INVOKEVIRTUAL, &quot;java/io/PrintStream&quot;, &quot;println&quot;, &quot;(Ljava/lang/String;)V&quot;, false);</div><div class="line"></div><div class="line">...</div><div class="line">   </div><div class="line">// 3</div><div class="line">mv.visitFieldInsn(GETSTATIC, &quot;java/lang/System&quot;, &quot;out&quot;, &quot;Ljava/io/PrintStream;&quot;);</div><div class="line">mv.visitLdcInsn(&quot;========end=========&quot;);</div><div class="line">mv.visitMethodInsn(INVOKEVIRTUAL, &quot;java/io/PrintStream&quot;, &quot;println&quot;, &quot;(Ljava/lang/String;)V&quot;, false);</div><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line">// 4</div><div class="line">mv.visitInsn(RETURN);</div></pre></td></tr></table></figure>
+<p>我把中间很多代码给删掉了，这样结构就很清楚了，可以看到我留下了四个部分：</p>
+<p>注释1：这是我们要插入的<strong>System.out.println(“========start=========”);</strong>转成相对应的ASM提供的方法，其中visitLdcInsn可以在JVM指令表中查到Ldc表示<strong>将int, float或String型常量值从常量池中推送至栈顶</strong>，那么其实ASM提供了方法让我们继续通过java代码转成相对应的字节码，那么注释1中的三行代码所对应的字节码就是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">GETSTATIC java/lang/System.out : Ljava/io/PrintStream;</div><div class="line">LDC &quot;========start=========&quot;</div><div class="line">INVOKEVIRTUAL java/io/PrintStream.println (Ljava/lang/String;)V</div></pre></td></tr></table></figure>
+<p>注释2：这是原方法内的代码<strong>System.out.println(str);</strong>，表明我们注释1确实是插在了newFunc方法体的最上方，其中<strong>mv.visitVarInsn(ALOAD, 0);</strong>的ALOAD对应JVM指令的意思是<strong>将指定的引用类型本地变量推送至栈顶</strong>，因为这个String是参数传过来的。</p>
+<p>注释3：显而易见，转换前的java代码就是我们的<strong>System.out.println(“========end=========”);</strong>，这里不再赘述。</p>
+<p>注释4：RETURN对应着<strong>从当前方法返回void</strong></p>
+<p>这样一来，ASM Bytecode Outline插件帮我们直接生成了相对应的ASM代码，那么我们接下来粘贴复制就行了。</p>
+<h4 id="插头"><a href="#插头" class="headerlink" title="插头"></a>插头</h4><p>先从简单的开始，插头部。我们在之前的<strong>自定义TestMethodVisitor</strong>中已经复写了<strong>visitCode</strong>方法，那么我们就在代码注释的地方插入ASM代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">visitCode</span><span class="params">()</span> </span>&#123;</div><div class="line">    mv.visitFieldInsn(GETSTATIC, <span class="string">"java/lang/System"</span>, <span class="string">"out"</span>, <span class="string">"Ljava/io/PrintStream;"</span>);</div><div class="line">    mv.visitLdcInsn(<span class="string">"========start========="</span>);</div><div class="line">    mv.visitMethodInsn(INVOKEVIRTUAL, <span class="string">"java/io/PrintStream"</span>, <span class="string">"println"</span>, <span class="string">"(Ljava/lang/String;)V"</span>, <span class="keyword">false</span>);</div><div class="line">    <span class="keyword">super</span>.visitCode();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="插尾"><a href="#插尾" class="headerlink" title="插尾"></a>插尾</h4><p>这个比插头复杂点，但是也很简单，<strong>visitInsn</strong>方法会在每个指令被执行时都会调用，所以我们需要判断指令是否到了<strong>RETURN</strong>即可，在<strong>RETURN</strong>前插入我们的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (opcode == Opcodes.RETURN) &#123;</div><div class="line">    mv.visitFieldInsn(GETSTATIC, <span class="string">"java/lang/System"</span>, <span class="string">"out"</span>, <span class="string">"Ljava/io/PrintStream;"</span>);</div><div class="line">    mv.visitLdcInsn(<span class="string">"========end========="</span>);</div><div class="line">    mv.visitMethodInsn(INVOKEVIRTUAL, <span class="string">"java/io/PrintStream"</span>, <span class="string">"println"</span>, <span class="string">"(Ljava/lang/String;)V"</span>, <span class="keyword">false</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="校验"><a href="#校验" class="headerlink" title="校验"></a>校验</h4><p>这样一来，我们的头尾的插好了，校验一番：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">    ClassReader cr = <span class="keyword">new</span> ClassReader(Bazhang.class.getName());</div><div class="line">    ClassWriter cw = <span class="keyword">new</span> ClassWriter(cr, ClassWriter.COMPUTE_MAXS);</div><div class="line">    ClassVisitor cv = <span class="keyword">new</span> TestClassVisitor(cw);</div><div class="line"></div><div class="line">    cr.accept(cv, Opcodes.ASM5);</div><div class="line"></div><div class="line">    <span class="comment">// 获取生成的class文件对应的二进制流</span></div><div class="line">    <span class="keyword">byte</span>[] code = cw.toByteArray();</div><div class="line"></div><div class="line">    <span class="comment">//将二进制流写到out/下</span></div><div class="line">    FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(<span class="string">"out/Bazhang223.class"</span>);</div><div class="line">    fos.write(code);</div><div class="line">    fos.close();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到如下结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">// Source code recreated from a .class file by IntelliJ IDEA</span></div><div class="line"><span class="comment">// (powered by Fernflower decompiler)</span></div><div class="line"><span class="comment">//</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> java.util.List;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span>$<span class="title">Bazhang</span> </span>&#123;</div><div class="line">    <span class="keyword">public</span> Test$Bazhang() &#123;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">long</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> n, String s, <span class="keyword">int</span>[] arr)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">0L</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">hi</span><span class="params">(<span class="keyword">double</span> a, List&lt;String&gt; b)</span> </span>&#123;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">newFunc</span><span class="params">(String str)</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"========start========="</span>);</div><div class="line">        System.out.println(str);</div><div class="line"></div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; ++i) &#123;</div><div class="line">            <span class="keyword">if</span>(i % <span class="number">10</span> == <span class="number">0</span>) &#123;</div><div class="line">                System.out.println(i);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        System.out.println(<span class="string">"========end========="</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>看来导出的.class是没问题了，那么利用反射来执行一下我们的修改类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Test loader = <span class="keyword">new</span> Test();</div><div class="line">Class hw = loader.defineClass(<span class="string">"Test$Bazhang"</span>, code, <span class="number">0</span>, code.length);</div><div class="line">Object o = hw.newInstance();</div><div class="line">Method method = o.getClass().getMethod(<span class="string">"newFunc"</span>, String.class);</div><div class="line">method.invoke(o, <span class="string">"巴掌菜比"</span>);</div></pre></td></tr></table></figure>
+<p>最后控制台打印出来的结果是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">========start=========</div><div class="line">巴掌菜比</div><div class="line">0</div><div class="line">10</div><div class="line">20</div><div class="line">30</div><div class="line">40</div><div class="line">50</div><div class="line">60</div><div class="line">70</div><div class="line">80</div><div class="line">90</div><div class="line">========end=========</div></pre></td></tr></table></figure>
+<h4 id="尾语"><a href="#尾语" class="headerlink" title="尾语"></a>尾语</h4><p>这样一来我们的目的都达到了，之后便可以更加进一步做点有意思的事，比如统计方法耗时。</p>
+<p>整的来说，修改字节码达到本次想要的效果是个很cool的方式，很多时候我们是可以通过hook或者动态代理来做一些类似本文的操作，那么就要结合实际情况进行选择了。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/20/undefined/undefined/undefined/" rel="next" title="ASM 操作字节码初探">
+                <i class="fa fa-chevron-left"></i> ASM 操作字节码初探
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/09/undefined/undefined/undefined/" rel="prev" title="Mess详解（关于Activity、自定义View等的混淆）">
+                Mess详解（关于Activity、自定义View等的混淆） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/01/22/undefined/undefined/undefined/"
+     data-title="手摸手增加字节码往方法体内插代码"
+     data-content=""
+     data-url="https://github.com/JeasonWong/JeasonWong.github.io/2017/01/22/undefined/undefined/undefined/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/01/22/undefined/undefined/undefined/"
+           data-title="手摸手增加字节码往方法体内插代码" data-url="https://github.com/JeasonWong/JeasonWong.github.io/2017/01/22/undefined/undefined/undefined/">
+      </div>
+    
+  </div>
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="JeasonWong" />
+          <p class="site-author-name" itemprop="name">JeasonWong</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/JeasonWong" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/WongYuwei" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#自定义一个ClassVisitor"><span class="nav-number">1.</span> <span class="nav-text">自定义一个ClassVisitor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自定义TestMethodVisitor"><span class="nav-number">2.</span> <span class="nav-text">自定义TestMethodVisitor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用ASM-Bytecode-Outline插件做简单分析"><span class="nav-number">3.</span> <span class="nav-text">使用ASM Bytecode Outline插件做简单分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#插头"><span class="nav-number">4.</span> <span class="nav-text">插头</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#插尾"><span class="nav-number">5.</span> <span class="nav-text">插尾</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#校验"><span class="nav-number">6.</span> <span class="nav-text">校验</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#尾语"><span class="nav-number">7.</span> <span class="nav-text">尾语</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JeasonWong</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wangyuwei"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("mYvvgL0PzbOqyPpwIf48D1VT-gzGzoHsz", "4xDzVUWBfHximEB6PP1sx16u");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+  
+
+</body>
+</html>
