@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>手摸手教你写炫酷控件 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="项目地址：https://github.com/JeasonWong/JikeGallery
+话不多说，先上效果。
+
+这个效果是在即刻app上看到，觉得很不错，遂仿之。
+先说下我的实现思路（以上方的图片滚动为例，下方的文字实现效果类似）：
+
+自定义ViewGroup
+装载两个ImageView和一个阴影View
+通过一定规律交替控制两个ImageView和它们的marginTop，在onLayou">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手摸手教你写炫酷控件">
+<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2016/08/07/手摸手教你写炫酷控件/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="项目地址：https://github.com/JeasonWong/JikeGallery
+话不多说，先上效果。
+
+这个效果是在即刻app上看到，觉得很不错，遂仿之。
+先说下我的实现思路（以上方的图片滚动为例，下方的文字实现效果类似）：
+
+自定义ViewGroup
+装载两个ImageView和一个阴影View
+通过一定规律交替控制两个ImageView和它们的marginTop，在onLayou">
+<meta property="og:image" content="http://i4.piimg.com/1070/a43444182f677b1d.gif">
+<meta property="og:image" content="http://i1.piimg.com/1070/275930be6e9efb87.jpg">
+<meta property="og:image" content="http://i4.piimg.com/1070/77799de59b06330d.jpg">
+<meta property="og:image" content="http://i1.piimg.com/1070/f101a594f7ce04b6.png">
+<meta property="og:updated_time" content="2016-08-07T05:12:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="手摸手教你写炫酷控件">
+<meta name="twitter:description" content="项目地址：https://github.com/JeasonWong/JikeGallery
+话不多说，先上效果。
+
+这个效果是在即刻app上看到，觉得很不错，遂仿之。
+先说下我的实现思路（以上方的图片滚动为例，下方的文字实现效果类似）：
+
+自定义ViewGroup
+装载两个ImageView和一个阴影View
+通过一定规律交替控制两个ImageView和它们的marginTop，在onLayou">
+<meta name="twitter:image" content="http://i4.piimg.com/1070/a43444182f677b1d.gif">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://github.com/JeasonWong/JeasonWong.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-手摸手教你写炫酷控件" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/07/手摸手教你写炫酷控件/" class="article-date">
+  <time datetime="2016-08-07T01:23:56.000Z" itemprop="datePublished">2016-08-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      手摸手教你写炫酷控件
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>项目地址：<a href="https://github.com/JeasonWong/JikeGallery" target="_blank" rel="external">https://github.com/JeasonWong/JikeGallery</a></p>
+<p>话不多说，先上效果。</p>
+<p><img src="http://i4.piimg.com/1070/a43444182f677b1d.gif" alt="图二福利"></p>
+<p>这个效果是在<strong>即刻app</strong>上看到，觉得很不错，遂仿之。</p>
+<p>先说下我的实现思路（以上方的图片滚动为例，下方的文字实现效果类似）：</p>
+<ul>
+<li>自定义ViewGroup</li>
+<li>装载两个ImageView和一个阴影View</li>
+<li>通过一定规律交替控制两个ImageView和它们的marginTop，在onLayout()中实现</li>
+<li>marginTop的具体值由属性动画控制，不断调用requestLayout()</li>
+</ul>
+<p>接下来依次说明</p>
+<p>###<strong>一、自定义ViewGroup</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//滑动状态</span></div><div class="line"><span class="keyword">protected</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> STATUS_SMOOTHING = <span class="number">0</span>;</div><div class="line"><span class="comment">//停止状态</span></div><div class="line"><span class="keyword">protected</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> STATUS_STOP = <span class="number">1</span>;</div><div class="line"></div><div class="line"><span class="comment">//ViewGroup宽高</span></div><div class="line"><span class="keyword">protected</span> <span class="keyword">int</span> mWidth, mHeight;</div><div class="line"><span class="comment">//变化的marginTop值</span></div><div class="line"><span class="keyword">protected</span> <span class="keyword">int</span> mSmoothMarginTop;</div><div class="line"><span class="comment">//默认状态</span></div><div class="line"><span class="keyword">protected</span> <span class="keyword">int</span> mStatus = STATUS_STOP;</div><div class="line"><span class="comment">//滚动时间间隔</span></div><div class="line"><span class="keyword">protected</span> <span class="keyword">int</span> mDuration = <span class="number">500</span>;</div><div class="line"><span class="comment">//重复次数</span></div><div class="line"><span class="keyword">protected</span> <span class="keyword">int</span> mRepeatTimes = <span class="number">0</span>;</div><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onSizeChanged</span><span class="params">(<span class="keyword">int</span> w, <span class="keyword">int</span> h, <span class="keyword">int</span> oldw, <span class="keyword">int</span> oldh)</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>.onSizeChanged(w, h, oldw, oldh);</div><div class="line">    mWidth = w;</div><div class="line">    mHeight = h;</div><div class="line">    mSmoothMarginTop = -h;</div><div class="line">    initView();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">initView</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 是否是奇数圈</div><div class="line"> *</div><div class="line"> * <span class="doctag">@return</span> 结果</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">isOddCircle</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> mRepeatTimes % <span class="number">2</span> == <span class="number">1</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>先了解下成员变量，其中最重要的一个就是mSmoothMarginTop，相信很多人都知道一个View的marginTop可以设为负数，这个负数可以给我们带来太多的方便。</p>
+<p><img src="http://i1.piimg.com/1070/275930be6e9efb87.jpg" alt="pic0"></p>
+<p>上图的图0就是我们展现在屏幕上的ImageView，图1则是屏幕外marginTop为-height的ImageView，<strong>这个一定要明白，接下来才好继续实现</strong>。</p>
+<p>###<strong>二、装载两个ImageView和一个阴影View</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> List&lt;String&gt; mImgList = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line"><span class="keyword">private</span> ImageView[] mImgs = <span class="keyword">new</span> ImageView[<span class="number">2</span>];</div><div class="line"><span class="keyword">private</span> View mShadowView;</div><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initView</span><span class="params">()</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">//如果没有内容，则不进行初始化操作</span></div><div class="line">    <span class="keyword">if</span> (mImgList.size() == <span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    removeAllViews();</div><div class="line"></div><div class="line">    MarginLayoutParams params = <span class="keyword">new</span> MarginLayoutParams(mWidth, mHeight);</div><div class="line"></div><div class="line">    <span class="comment">//两个ImageView加载前两张图</span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; mImgs.length; i++) &#123;</div><div class="line">        mImgs[i] = <span class="keyword">new</span> ImageView(getContext());</div><div class="line">        addViewInLayout(mImgs[i], -<span class="number">1</span>, params, <span class="keyword">true</span>);</div><div class="line">        Glide.with(getContext()).load(getImgPath(i)).centerCrop().into(mImgs[i]);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//创建阴影View</span></div><div class="line">    mShadowView = <span class="keyword">new</span> View(getContext());</div><div class="line">    mShadowView.setBackgroundColor(Color.parseColor(<span class="string">"#60000000"</span>));</div><div class="line">    mShadowView.setAlpha(<span class="number">0</span>);</div><div class="line">    addViewInLayout(mShadowView, -<span class="number">1</span>, params, <span class="keyword">true</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 获取图片地址</div><div class="line"> * </div><div class="line"> * <span class="doctag">@param</span> position 位置</div><div class="line"> * <span class="doctag">@return</span>  图片地址</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">private</span> String <span class="title">getImgPath</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</div><div class="line">    position = position % mImgList.size();</div><div class="line">    <span class="keyword">return</span> mImgList.get(position);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>关键点说明：</strong></p>
+<ul>
+<li>MarginLayoutParams 为了之后方便取出margin值</li>
+<li>addViewInLayout() 为了对requestLayout的绝对控制</li>
+<li>getImgPath() 为了实现循环滚动</li>
+</ul>
+<p>这样一来，我们需要的View都已经创建好了。</p>
+<p>###<strong>三、通过一定规律交替控制两个ImageView和它们的marginTop，在onLayout()中实现</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onLayout</span><span class="params">(<span class="keyword">boolean</span> changed, <span class="keyword">int</span> l, <span class="keyword">int</span> t, <span class="keyword">int</span> r, <span class="keyword">int</span> b)</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> cCount = getChildCount();</div><div class="line">    MarginLayoutParams cParams;</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; cCount; i++) &#123;</div><div class="line">        View childView = getChildAt(i);</div><div class="line">        cParams = (MarginLayoutParams) childView.getLayoutParams();</div><div class="line"></div><div class="line">        <span class="keyword">int</span> cl = <span class="number">0</span>, ct = <span class="number">0</span>, cr, cb;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (isOddCircle()) &#123;</div><div class="line">            <span class="keyword">if</span> (i == <span class="number">1</span>) &#123;</div><div class="line">                cl = cParams.leftMargin;</div><div class="line">                ct = mSmoothMarginTop + mHeight;</div><div class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i == <span class="number">0</span>) &#123;</div><div class="line">                cl = cParams.leftMargin;</div><div class="line">                ct = mSmoothMarginTop;</div><div class="line">            &#125;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">if</span> (i == <span class="number">0</span>) &#123;</div><div class="line">                cl = cParams.leftMargin;</div><div class="line">                ct = mSmoothMarginTop + mHeight;</div><div class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i == <span class="number">1</span>) &#123;</div><div class="line">                cl = cParams.leftMargin;</div><div class="line">                ct = mSmoothMarginTop;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//控制shadowView</span></div><div class="line">        <span class="keyword">if</span> (i == <span class="number">2</span>) &#123;</div><div class="line">            cl = cParams.leftMargin;</div><div class="line">            ct = mSmoothMarginTop + mHeight;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        cr = cl + mWidth;</div><div class="line">        cb = ct + mHeight;</div><div class="line">        childView.layout(cl, ct, cr, cb);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以上实现的就是不断的替换图1和图2谁上谁下，阴影和下方的图保持同步。</p>
+<p>###<strong>四、marginTop的具体值由属性动画控制，不断调用requestLayout()</strong></p>
+<p>先看基类ViewGroup</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 开启滑动</div><div class="line"> *</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startSmooth</span><span class="params">()</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (mStatus != STATUS_STOP) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    ValueAnimator animator = ValueAnimator.ofFloat(-mHeight, <span class="number">0</span>);</div><div class="line">    animator.setDuration(mDuration);</div><div class="line">    animator.setInterpolator(<span class="keyword">new</span> AccelerateDecelerateInterpolator());</div><div class="line">    animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.AnimatorUpdateListener() &#123;</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationUpdate</span><span class="params">(ValueAnimator animation)</span> </span>&#123;</div><div class="line"></div><div class="line">            <span class="keyword">float</span> marginTop = (<span class="keyword">float</span>) animation.getAnimatedValue();</div><div class="line">            mSmoothMarginTop = (<span class="keyword">int</span>) marginTop;</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (marginTop == <span class="number">0</span>) &#123;</div><div class="line"></div><div class="line">                postDelayed(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">                    <span class="meta">@Override</span></div><div class="line">                    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line"></div><div class="line">                        mRepeatTimes++;</div><div class="line"></div><div class="line">                        mSmoothMarginTop = -mHeight;</div><div class="line"></div><div class="line">                        doAnimFinish();</div><div class="line"></div><div class="line">                        mStatus = STATUS_STOP;</div><div class="line"></div><div class="line">                    &#125;</div><div class="line">                &#125;, <span class="number">50</span>);</div><div class="line"></div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                doAnim();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">    animator.start();</div><div class="line">    mStatus = STATUS_SMOOTHING;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//动画结束</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">doAnimFinish</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line"><span class="comment">//动画进行时</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">doAnim</span><span class="params">()</span></span>;</div></pre></td></tr></table></figure>
+<p><strong>关键点说明：</strong></p>
+<ul>
+<li>属性动画控制着mSmoothMarginTop在[-mHeight, 0]中变化</li>
+<li>每完成一圈，mRepeatTimes自增1</li>
+</ul>
+<p>再来看看Gallery实现类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doAnimFinish</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (isOddCircle()) &#123;</div><div class="line">        Glide.with(getContext()).load(getImgPath(mRepeatTimes + <span class="number">1</span>)).centerCrop().into(mImgs[<span class="number">0</span>]);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        Glide.with(getContext()).load(getImgPath(mRepeatTimes + <span class="number">1</span>)).centerCrop().into(mImgs[<span class="number">1</span>]);</div><div class="line">    &#125;</div><div class="line">    mShadowView.setAlpha(<span class="number">0</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doAnim</span><span class="params">()</span> </span>&#123;</div><div class="line">    mShadowView.setAlpha(((<span class="number">1</span> - (-mSmoothMarginTop) / (<span class="keyword">float</span>) mHeight)));</div><div class="line">    requestLayout();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>关键点说明：</strong></p>
+<ul>
+<li>通过mSmoothMarginTop与mHeight的比值控制阴影View的透明度</li>
+<li>每次动画完成时，下方的图（此时下方的图已经超出屏幕了，而上方图显示在屏幕内）需要加载第三张图，使用getImgPath()取出</li>
+</ul>
+<p><img src="http://i4.piimg.com/1070/77799de59b06330d.jpg" alt="pic1"></p>
+<p><strong>以上就是图片的滚动实现，文字的滚动90%是一样的，有点区别的就是需要文字需要控制下垂直居中，我就不赘述了</strong></p>
+<blockquote>
+<p>如果有更好的思路，欢迎交流，开源本身就是大家互相喷喷，互相进步嘛，<br>对各种动画感兴趣的朋友欢迎加群479729938进行交流，<br>期待各种好看，好玩，实用的动画~</p>
+</blockquote>
+<p><img src="http://i1.piimg.com/1070/f101a594f7ce04b6.png" alt="Markdown"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://github.com/JeasonWong/JeasonWong.github.io/2016/08/07/手摸手教你写炫酷控件/" data-id="cizxo1khd000fgu46dwg7hcoy" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/08/13/手摸手教你写Slack的Loading动画/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          手摸手教你写Slack的Loading动画
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/05/09/一些不错的Android相关导图/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">一些不错的Android相关导图</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/03/06/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/05/ASM实战统计方法耗时/">ASM实战统计方法耗时</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/09/Mess详解（关于Activity、自定义View等的混淆）/">Mess详解（关于Activity、自定义View等的混淆）</a>
+          </li>
+        
+          <li>
+            <a href="/2017/01/22/手摸手增加字节码往方法体内插代码/">手摸手增加字节码往方法体内插代码</a>
+          </li>
+        
+          <li>
+            <a href="/2017/01/20/ASM-操作字节码初探/">ASM 操作字节码初探</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 JeasonWong<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
