@@ -84,34 +84,34 @@
 
 
 
-<meta name="description" content="一般来说JSON的Key是已知的，如下所示：
-{
-    &amp;quot;results&amp;quot;: [
-           {
-            &amp;quot;id&amp;quot;: 1,
-            &amp;quot;name&amp;quot;: &amp;quot;wangyuwei&amp;quot;,
-            &amp;quot;sexuality&amp;quot;: &amp;quot;male&amp;quot;">
+<meta name="description" content="项目地址：https://github.com/JeasonWong/FlipShare
+效果图：
+
+这段时间做了蛮多动画效果，那就趁热打铁，停不下来~
+我发现开源的分享控件很稀少，大部分要么就是直接一个Dialog，要么就是简单的PopupWindow，于是决定撸一发。效果略浮夸，但是用来学习Camera和Matrix也是勉强可以的。为了重拾Matrix，特意看了下线性代数的60页PPT。
+使用">
 <meta property="og:type" content="article">
-<meta property="og:title" content="解析特殊结构的JSON">
-<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2015/09/11/undefined/mm/undefined">
+<meta property="og:title" content="FlipShare分享控件">
+<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2016/09/07/undefined/mm/undefined/index.html">
 <meta property="og:site_name" content="巴巴巴巴巴巴掌">
-<meta property="og:description" content="一般来说JSON的Key是已知的，如下所示：
-{
-    &amp;quot;results&amp;quot;: [
-           {
-            &amp;quot;id&amp;quot;: 1,
-            &amp;quot;name&amp;quot;: &amp;quot;wangyuwei&amp;quot;,
-            &amp;quot;sexuality&amp;quot;: &amp;quot;male&amp;quot;">
-<meta property="og:updated_time" content="2015-09-11T12:51:54.000Z">
+<meta property="og:description" content="项目地址：https://github.com/JeasonWong/FlipShare
+效果图：
+
+这段时间做了蛮多动画效果，那就趁热打铁，停不下来~
+我发现开源的分享控件很稀少，大部分要么就是直接一个Dialog，要么就是简单的PopupWindow，于是决定撸一发。效果略浮夸，但是用来学习Camera和Matrix也是勉强可以的。为了重拾Matrix，特意看了下线性代数的60页PPT。
+使用">
+<meta property="og:image" content="https://raw.githubusercontent.com/jeasonwong/FlipShare/master/screenshots/flipshare.gif">
+<meta property="og:image" content="http://i1.piimg.com/1070/f101a594f7ce04b6.png">
+<meta property="og:updated_time" content="2016-09-07T13:41:08.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="解析特殊结构的JSON">
-<meta name="twitter:description" content="一般来说JSON的Key是已知的，如下所示：
-{
-    &amp;quot;results&amp;quot;: [
-           {
-            &amp;quot;id&amp;quot;: 1,
-            &amp;quot;name&amp;quot;: &amp;quot;wangyuwei&amp;quot;,
-            &amp;quot;sexuality&amp;quot;: &amp;quot;male&amp;quot;">
+<meta name="twitter:title" content="FlipShare分享控件">
+<meta name="twitter:description" content="项目地址：https://github.com/JeasonWong/FlipShare
+效果图：
+
+这段时间做了蛮多动画效果，那就趁热打铁，停不下来~
+我发现开源的分享控件很稀少，大部分要么就是直接一个Dialog，要么就是简单的PopupWindow，于是决定撸一发。效果略浮夸，但是用来学习Camera和Matrix也是勉强可以的。为了重拾Matrix，特意看了下线性代数的60页PPT。
+使用">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/jeasonwong/FlipShare/master/screenshots/flipshare.gif">
 
 
 
@@ -132,9 +132,9 @@
 
 
 
-  <link rel="canonical" href="https://github.com/JeasonWong/JeasonWong.github.io/2015/09/11/undefined/mm/undefined"/>
+  <link rel="canonical" href="https://github.com/JeasonWong/JeasonWong.github.io/2016/09/07/undefined/mm/undefined/"/>
 
-  <title> 解析特殊结构的JSON | 巴巴巴巴巴巴掌 </title>
+  <title> FlipShare分享控件 | 巴巴巴巴巴巴掌 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -264,7 +264,7 @@
             
             
               
-                解析特殊结构的JSON
+                FlipShare分享控件
               
             
           </h1>
@@ -276,8 +276,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-09-11T19:40:29+08:00" content="2015-09-11">
-              2015-09-11
+            <time itemprop="dateCreated" datetime="2016-09-07T21:27:03+08:00" content="2016-09-07">
+              2016-09-07
             </time>
           </span>
 
@@ -287,8 +287,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/09/11/undefined/mm/undefined#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/11/undefined/mm/undefined" itemprop="commentsCount"></span>
+                <a href="/2016/09/07/undefined/mm/undefined/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/07/undefined/mm/undefined/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -311,92 +311,25 @@
       
 
       
-        <p>一般来说JSON的Key是已知的，如下所示：</p>
-<pre><code>{
-    &quot;results&quot;: [
-           {
-            &quot;id&quot;: 1,
-            &quot;name&quot;: &quot;wangyuwei&quot;,
-            &quot;sexuality&quot;: &quot;male&quot;
-        },
-        {
-            &quot;id&quot;: 2,
-            &quot;name&quot;: &quot;JeasonWong&quot;,
-            &quot;sexuality&quot;: &quot;female&quot;
-        }
-    ]
-}
-</code></pre><p>这样的JSON太容易解析了，但是有性能上的缺点，比如”id”,”name”,”sexuality”这些Key一直重复出现，一定程度上成为了冗余数据，那么问题来了，如何解决呢？参考以下JSON格式。</p>
-<pre><code>{
-    data: {
-        snapshot: {
-            fields: [
-                &quot;open_px&quot;,
-                &quot;high_px&quot;,
-                &quot;low_px&quot;
-            ],
-            600570.SS: [
-                47.08,
-                48.38,
-                45.88
-            ],
-            000001.SZ: [
-                11.02,
-                11.12,
-                10.88
-            ]
-        }
-    }
-}
-</code></pre><p>这种JSON格式并不是很常见，但是我认为性能确实很强悍的。没有多余的Key，除了”fields”外，其余的Key都不是事先知道的，而”fields”里的Value确是与”fields”同级Key的Value一一对应，成为这些Value的Key。多么好的一个想法！</p>
-<p>那么问题来了，对于这种未知Key的JSON数组我们该如何下手呢？</p>
-<p>虽然不知道Key，但我们可以使用Iterator遍历一遍就行了。</p>
-<pre><code>JSONObject jsonObj = new JSONObject(json).getJSONObject(&quot;data&quot;).getJSONObject(&quot;snapshot&quot;);
-Iterator keyIter = jsonObj.keys();
-</code></pre><p>这样一来，所有的Key都拿到了，但这个时候我们只拿到了最外层的Key，即”fields”,”600570.SS”,”000001.SZ”，而”fileds”里的Value还没取出，这些Value即将作为”600570.SS”,”000001.SZ”中Value的Key了（前面已经说了，又啰嗦一遍:)）</p>
-<pre><code>List list = new ArrayList();
-JSONArray fields = jsonObj.getJSONArray(&quot;fields&quot;);
-for (int i = 0; i &lt; fields.length(); i++) {
-    list.add(i, fields.getString(i));
-}
-</code></pre><p>现在”fields”中的Value全都取出来放到了list里。接着就是遍历刚才的keyIter了。</p>
-<pre><code>while (keyIter.hasNext()) {
-    String keys = (String) keyIter.next();
-    JSONArray jsonArray = jsonObj.getJSONArray(keys);
-    Map map = new HashMap();
-    if (keys.equals(&quot;fields&quot;)) {
-        continue;
-    } else {
-        for (int i = 0; i &lt; jsonArray.length(); i++) {
-            map.put(list.get(i), jsonArray.get(i));
-        }
-        HSStockEntity hsStockEntity = new HSStockEntity();
-        hsStockEntity.setSymbol(keys);
-        hsStockEntity.setOpen_px(Double.parseDouble(map.get(&quot;open_px&quot;).toString()));
-        hsStockEntity.setHigh_px(Double.parseDouble(map.get(&quot;high_px&quot;).toString()));
-        hsStockEntity.setLow_px(Double.parseDouble(map.get(&quot;low_px&quot;).toString()));
-        listEntity.add(hsStockEntity);
-    }
-}
-</code></pre><p>从以上代码可以看到，我按照keyIter的顺序拿到”600570.SS”,”000001.SZ”中的Value，然后把他们放到了map里，map的Key是”fields”的Value，而map的Value则是”600570.SS”或”000001.SZ”对应的Value。</p>
-<p>HSStockEntity我的一个Model，这样最后能把所有的hsStockEntity都放在listEntity的集合中了。</p>
-<p>需要特别注意的一点是keyIter取到的Key并一定与你看到的顺序是一样的，也就是”fields”,”600570.SS”,”000001.SZ”三个的顺序是不一定的，那么假如你的JSON数据源必须要按照一定的顺序显示，那你就得需要自己写一下Comparator了。比如我这里对high_px进行降序排序，如果相等时根据symbol再排。</p>
-<pre><code>System.setProperty(&quot;java.util.Arrays.useLegacyMergeSort&quot;, &quot;true&quot;);
-Collections.sort(listEntity, new Comparator&lt;HSStockEntity&gt;() {
-    @Override
-    public int compare(HSStockEntity entity, HSStockEntity t1) {
-        if ((float) entity.getHigh_px() - (float) t1.getHigh_px() ==0) {
-            return entity.getSymbol().compareTo(t1.getSymbol());
-           } else if ((float) entity.getHigh_px() - (float) t1.getHigh_px() &gt; 0) {;
-           if (isRise) return -1;
-            return 1;
-         } else {
-              if (isRise) return 1;
-                  return -1;
-            }
-        }
-});
-</code></pre><p>这样以来，对这种特殊结构的JSON解析就完成了。</p>
+        <p>项目地址：<a href="https://github.com/JeasonWong/FlipShare">https://github.com/JeasonWong/FlipShare</a></p>
+<p>效果图：</p>
+<p><img src="https://raw.githubusercontent.com/jeasonwong/FlipShare/master/screenshots/flipshare.gif" alt="Markdown"></p>
+<p>这段时间做了蛮多动画效果，那就趁热打铁，停不下来~</p>
+<p>我发现开源的分享控件很稀少，大部分要么就是直接一个Dialog，要么就是简单的PopupWindow，于是决定撸一发。效果略浮夸，但是用来学习Camera和Matrix也是勉强可以的。为了重拾Matrix，特意看了下线性代数的60页PPT。</p>
+<p>使用方式很简单，通过Builder模式构造。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">FlipShareView share = <span class="keyword">new</span> FlipShareView.Builder(<span class="keyword">this</span>, mBtnLeftTop)</div><div class="line">                        .addItem(<span class="keyword">new</span> ShareItem(<span class="string">"Facebook"</span>, Color.WHITE, <span class="number">0xff43549C</span>, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_facebook)))</div><div class="line">                        .addItem(<span class="keyword">new</span> ShareItem(<span class="string">"Twitter"</span>, Color.WHITE, <span class="number">0xff4999F0</span>, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_twitter)))</div><div class="line">                        .addItem(<span class="keyword">new</span> ShareItem(<span class="string">"Google+"</span>, Color.WHITE, <span class="number">0xffD9392D</span>, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_google)))</div><div class="line">                        .addItem(<span class="keyword">new</span> ShareItem(<span class="string">"http://www.wangyuwei.me"</span>, Color.WHITE, <span class="number">0xff57708A</span>))</div><div class="line">                        .setBackgroundColor(<span class="number">0x60000000</span>)</div><div class="line">                        .setItemDuration(<span class="number">500</span>)</div><div class="line">                        .setSeparateLineColor(<span class="number">0x30000000</span>)</div><div class="line">                        .setAnimType(FlipShareView.TYPE_SLIDE)</div><div class="line">                        .create();</div></pre></td></tr></table></figure>
+<p>目前支持三种动画方式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@IntDef</span>(flag = <span class="keyword">true</span>, value = &#123;TYPE_VERTICLE, TYPE_HORIZONTAL, TYPE_SLIDE&#125;)</div><div class="line"><span class="keyword">public</span> <span class="meta">@interface</span> AnimType &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以设置每个Item的动画时长；<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">.setItemDuration(<span class="number">500</span>)</div></pre></td></tr></table></figure></p>
+<p>可以设置背景色（部分需求是透明色背景）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">.setBackgroundColor(<span class="number">0x60000000</span>)</div></pre></td></tr></table></figure></p>
+<p>可以设置每个item的分割线色<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">.setSeparateLineColor(<span class="number">0x30000000</span>)</div></pre></td></tr></table></figure></p>
+<p>添加item也很简单，来看看item的实体类。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ShareItem</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> String title;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">int</span> titleColor = Color.BLACK;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">int</span> bgColor = Color.WHITE;</div><div class="line">    <span class="keyword">public</span> Bitmap icon;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ShareItem</span><span class="params">(String title)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.title = title;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ShareItem</span><span class="params">(String title, Bitmap icon)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.title = title;</div><div class="line">        <span class="keyword">this</span>.icon = icon;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ShareItem</span><span class="params">(String title, <span class="keyword">int</span> bgColor)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.title = title;</div><div class="line">        <span class="keyword">this</span>.bgColor = bgColor;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ShareItem</span><span class="params">(String title, <span class="keyword">int</span> titleColor, <span class="keyword">int</span> bgColor)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.title = title;</div><div class="line">        <span class="keyword">this</span>.titleColor = titleColor;</div><div class="line">        <span class="keyword">this</span>.bgColor = bgColor;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ShareItem</span><span class="params">(String title, <span class="keyword">int</span> bgColor, Bitmap icon)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.title = title;</div><div class="line">        <span class="keyword">this</span>.bgColor = bgColor;</div><div class="line">        <span class="keyword">this</span>.icon = icon;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ShareItem</span><span class="params">(String title, <span class="keyword">int</span> titleColor, <span class="keyword">int</span> bgColor, Bitmap icon)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.title = title;</div><div class="line">        <span class="keyword">this</span>.titleColor = titleColor;</div><div class="line">        <span class="keyword">this</span>.bgColor = bgColor;</div><div class="line">        <span class="keyword">this</span>.icon = icon;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>纯文案、文案+图片都可以。</p>
+<p>目前暂时支持这些内容，欢迎各位提交pr，或者多多开源一些关于分享的控件~</p>
+<blockquote>
+<p>如果有更好的思路，欢迎交流，开源本身就是大家互相喷喷，互相进步嘛，<br>对各种动画感兴趣的朋友欢迎加群479729938进行交流，<br>期待各种好看，好玩，实用的动画~</p>
+</blockquote>
+<p><img src="http://i1.piimg.com/1070/f101a594f7ce04b6.png" alt="Markdown"></p>
 
       
     </div>
@@ -422,12 +355,16 @@ Collections.sort(listEntity, new Comparator&lt;HSStockEntity&gt;() {
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2016/08/29/undefined/mm/undefined/" rel="next" title="手摸手教你用Canvas实现简单粒子动画">
+                <i class="fa fa-chevron-left"></i> 手摸手教你用Canvas实现简单粒子动画
+              </a>
+            
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/01/24/undefined/mm/undefined" rel="prev" title="app推送消息发错后该如何处理">
-                app推送消息发错后该如何处理 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/09/30/undefined/mm/undefined/" rel="prev" title="手摸手教你做动态壁纸">
+                手摸手教你做动态壁纸 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -443,10 +380,10 @@ Collections.sort(listEntity, new Comparator&lt;HSStockEntity&gt;() {
 
     <div class="post-spread">
       
-        <div class="ds-share flat" data-thread-key="2015/09/11/undefined/mm/undefined"
-     data-title="解析特殊结构的JSON"
+        <div class="ds-share flat" data-thread-key="2016/09/07/undefined/mm/undefined/"
+     data-title="FlipShare分享控件"
      data-content=""
-     data-url="https://github.com/JeasonWong/JeasonWong.github.io/2015/09/11/undefined/mm/undefined">
+     data-url="https://github.com/JeasonWong/JeasonWong.github.io/2016/09/07/undefined/mm/undefined/">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -473,8 +410,8 @@ Collections.sort(listEntity, new Comparator&lt;HSStockEntity&gt;() {
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2015/09/11/undefined/mm/undefined"
-           data-title="解析特殊结构的JSON" data-url="https://github.com/JeasonWong/JeasonWong.github.io/2015/09/11/undefined/mm/undefined">
+      <div class="ds-thread" data-thread-key="2016/09/07/undefined/mm/undefined/"
+           data-title="FlipShare分享控件" data-url="https://github.com/JeasonWong/JeasonWong.github.io/2016/09/07/undefined/mm/undefined/">
       </div>
     
   </div>
