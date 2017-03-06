@@ -84,12 +84,31 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="巴巴巴巴巴巴掌">
-<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/archives/2015/09/index.html">
+<meta name="description" content="昨天我司有个管理员帐号被盗，导致被不法分子恶意发了多条推送，针对此次事故，给大家带来了深刻的教训，那么app端对这种情况应该做怎样的处理呢？
+1、针对已经送达到用户手机的推送
+
+Android自带的NotificationManager是可以对通知栏进行接管的，以下代码可以清掉通知栏内有关该app的推送消息。
+String ns = Context.NOTIFICATION_SERVICE;
+No">
+<meta property="og:type" content="article">
+<meta property="og:title" content="app推送消息发错后该如何处理">
+<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2016/01/24/undefined/mm/undefined">
 <meta property="og:site_name" content="巴巴巴巴巴巴掌">
+<meta property="og:description" content="昨天我司有个管理员帐号被盗，导致被不法分子恶意发了多条推送，针对此次事故，给大家带来了深刻的教训，那么app端对这种情况应该做怎样的处理呢？
+1、针对已经送达到用户手机的推送
+
+Android自带的NotificationManager是可以对通知栏进行接管的，以下代码可以清掉通知栏内有关该app的推送消息。
+String ns = Context.NOTIFICATION_SERVICE;
+No">
+<meta property="og:updated_time" content="2016-01-24T13:15:46.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="巴巴巴巴巴巴掌">
+<meta name="twitter:title" content="app推送消息发错后该如何处理">
+<meta name="twitter:description" content="昨天我司有个管理员帐号被盗，导致被不法分子恶意发了多条推送，针对此次事故，给大家带来了深刻的教训，那么app端对这种情况应该做怎样的处理呢？
+1、针对已经送达到用户手机的推送
+
+Android自带的NotificationManager是可以对通知栏进行接管的，以下代码可以清掉通知栏内有关该app的推送消息。
+String ns = Context.NOTIFICATION_SERVICE;
+No">
 
 
 
@@ -110,9 +129,9 @@
 
 
 
-  <link rel="canonical" href="https://github.com/JeasonWong/JeasonWong.github.io/archives/2015/09/"/>
+  <link rel="canonical" href="https://github.com/JeasonWong/JeasonWong.github.io/2016/01/24/undefined/mm/undefined"/>
 
-  <title> 归档 | 巴巴巴巴巴巴掌 </title>
+  <title> app推送消息发错后该如何处理 | 巴巴巴巴巴巴掌 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -143,7 +162,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  page-archive  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -221,66 +240,160 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
-
-    <span class="archive-page-counter">
-      
-      
-      
-        
-      
-      嗯..! 目前共计 17 篇日志。 继续努力。
-    </span>
-
+  <div id="posts" class="posts-expand">
     
 
-      
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                app推送消息发错后该如何处理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-01-24T20:28:37+08:00" content="2016-01-24">
+              2016-01-24
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/24/undefined/mm/undefined#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/24/undefined/mm/undefined" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
       
 
       
+        <p>昨天我司有个管理员帐号被盗，导致被不法分子恶意发了多条推送，针对此次事故，给大家带来了深刻的教训，那么app端对这种情况应该做怎样的处理呢？</p>
+<h3>1、针对已经送达到用户手机的推送</h3>
+
+<p>Android自带的NotificationManager是可以对通知栏进行接管的，以下代码可以清掉通知栏内有关该app的推送消息。</p>
+<pre><code>String ns = Context.NOTIFICATION_SERVICE;
+NotificationManager mNotificationManager;
+mNotificationManager = (NotificationManager) context.getSystemService(ns);
+mNotificationManager.cancelAll();
+</code></pre><p>那么问题来了，这段代码又该在什么时候触发呢？</p>
+<p>我司接的推送系统是友盟推送，该推送系统提供【自定义消息】的推送，那么只需要使用自定义消息对app再次进行推送即可告知app删除掉之前留在通知栏内的推送消息了。</p>
+<p><code>Tips</code>：<font color="red"><em>通知</em></font>是指发送后会在系统通知栏收到展现，同时响铃或振动提醒用户。<font color="red"><em>自定义消息</em></font>是指发送后不会在系统通知栏展现，消息传到应用后需要开发者写展现代码才能看到。 自定义消息不对该消息进行展示和提醒，消息内容全部都传递给应用处理。</p>
+<h3>2、针对未送达到用户手机的推送</h3>
+
+<p>该类用户手机有可能处于关机、网络不稳定或者消息仍处于未发出的队列中等情况，此时需要将推送后台的消息全部撤回。</p>
+<p><strong>以上两点仅是对已发出的错误推送进行相关补救办法，根本上还是应该对推送系统进行有效的管理，另外很多第三方推送系统并没有清除已送达到通知栏的推送消息的功能，希望后续接入。</strong></p>
+
+      
+    </div>
+
+    <div>
+      
         
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2015">2015</h2>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/09/11/undefined/mm/undefined" rel="next" title="解析特殊结构的JSON">
+                <i class="fa fa-chevron-left"></i> 解析特殊结构的JSON
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/08/07/undefined/mm/undefined" rel="prev" title="手摸手教你写炫酷控件">
+                手摸手教你写炫酷控件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
         </div>
       
-      
 
       
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2015/09/11/undefined/mm/undefined" itemprop="url">
-              
-                <span itemprop="name">解析特殊结构的JSON</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2015-09-11T19:40:29+08:00"
-              content="2015-09-11" >
-          09-11
-        </time>
-      </div>
-
-    </header>
+      
+    </footer>
   </article>
 
 
 
-    
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/01/24/undefined/mm/undefined"
+     data-title="app推送消息发错后该如何处理"
+     data-content=""
+     data-url="https://github.com/JeasonWong/JeasonWong.github.io/2016/01/24/undefined/mm/undefined">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
 
-  </section>
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
 
-  
-
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
 
 
           </div>
@@ -288,6 +401,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/01/24/undefined/mm/undefined"
+           data-title="app推送消息发错后该如何处理" data-url="https://github.com/JeasonWong/JeasonWong.github.io/2016/01/24/undefined/mm/undefined">
+      </div>
+    
+  </div>
+
 
 
         </div>
@@ -308,8 +429,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -365,6 +495,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">1、针对已经送达到用户手机的推送</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">2、针对未送达到用户手机的推送</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -461,11 +602,9 @@
   
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
 
 
   

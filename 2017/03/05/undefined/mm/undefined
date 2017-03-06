@@ -1,0 +1,794 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="wangyuwei" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="先上demo地址：https://github.com/JeasonWong/CostTime
+需求实际业务开发中有很多需要不改变原业务代码，而需额外增加一些包括各种统计的需求，如APM、无数据埋点等，也就是耳熟能详的AOP，本文以统计方法耗时为例，不使用Aspectj，采用原生态的方式进行实践。
+使用者所需要做的就是对所需要统计耗时的方法头部加指定注解@Cost就可以使用了。
+目标
+不影响现有逻">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ASM实战统计方法耗时">
+<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2017/03/05/undefined/mm/undefined">
+<meta property="og:site_name" content="巴巴巴巴巴巴掌">
+<meta property="og:description" content="先上demo地址：https://github.com/JeasonWong/CostTime
+需求实际业务开发中有很多需要不改变原业务代码，而需额外增加一些包括各种统计的需求，如APM、无数据埋点等，也就是耳熟能详的AOP，本文以统计方法耗时为例，不使用Aspectj，采用原生态的方式进行实践。
+使用者所需要做的就是对所需要统计耗时的方法头部加指定注解@Cost就可以使用了。
+目标
+不影响现有逻">
+<meta property="og:updated_time" content="2017-03-06T05:13:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ASM实战统计方法耗时">
+<meta name="twitter:description" content="先上demo地址：https://github.com/JeasonWong/CostTime
+需求实际业务开发中有很多需要不改变原业务代码，而需额外增加一些包括各种统计的需求，如APM、无数据埋点等，也就是耳熟能详的AOP，本文以统计方法耗时为例，不使用Aspectj，采用原生态的方式进行实践。
+使用者所需要做的就是对所需要统计耗时的方法头部加指定注解@Cost就可以使用了。
+目标
+不影响现有逻">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 9125510,
+      author: '巴掌（作者）'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/03/05/undefined/mm/undefined"/>
+
+  <title> ASM实战统计方法耗时 | 巴巴巴巴巴巴掌 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?a1124557c8347bcc3f0d292e1395b686";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">巴巴巴巴巴巴掌</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">菜比成长记</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                ASM实战统计方法耗时
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-05T11:04:43+08:00" content="2017-03-05">
+              2017-03-05
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/03/05/undefined/mm/undefined#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/05/undefined/mm/undefined" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>先上demo地址：<a href="https://github.com/JeasonWong/CostTime">https://github.com/JeasonWong/CostTime</a></p>
+<h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><p>实际业务开发中有很多需要不改变原业务代码，而需额外增加一些包括各种统计的需求，如APM、无数据埋点等，也就是耳熟能详的AOP，本文以统计方法耗时为例，不使用Aspectj，采用原生态的方式进行实践。</p>
+<p>使用者所需要做的就是对所需要统计耗时的方法头部加指定注解@Cost就可以使用了。</p>
+<h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><ul>
+<li><p>不影响现有逻辑</p>
+</li>
+<li><p>需要统计耗时的方法头部加上注解</p>
+</li>
+<li><p>支持混淆</p>
+</li>
+</ul>
+<h3 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h3><p>方案分两部分，一部分针对JVM，一部分针对Android平台。</p>
+<h4 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h4><ul>
+<li><p>自定义注解</p>
+</li>
+<li><p>使用ASM增加字节码</p>
+</li>
+<li><p>反射实例化</p>
+</li>
+<li><p>使用Instrumentation构建代理</p>
+</li>
+</ul>
+<h4 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h4><ul>
+<li>gradle plugin 自定义Transform Api</li>
+</ul>
+<h3 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h3><p>先让我们的方案能在JVM上运行起来。</p>
+<h4 id="自定义注解"><a href="#自定义注解" class="headerlink" title="自定义注解"></a>自定义注解</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Target</span>(ElementType.METHOD)</div><div class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Cost &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们先只对方法进行耗时统计，因此Target设为Method。</p>
+<h4 id="使用ASM增加字节码"><a href="#使用ASM增加字节码" class="headerlink" title="使用ASM增加字节码"></a>使用ASM增加字节码</h4><p>首先自定义一个<strong>ClassVisitor</strong>，然后重载<strong>visitMethod</strong>方法，这样我们便可以遍历所有类文件的方法了，然后利用<strong>AdviceAdapter</strong>类来重新实例化一个MethodVisitor，并且重载它的<strong>visitAnnotation</strong>、<strong>onMethodEnter</strong>、<strong>onMethodExit</strong>方法，其中含义就如方法名一样简单明了。</p>
+<p>然后我们通过visitAnnotation方法来判断当前方法注解是否为我们自定义的注解，如果是指定注解，则插入代码，具体插入代码的内容我们接下来再讲，自定义<strong>ClassVisitor</strong>的代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CostClassVisitor</span> <span class="keyword">extends</span> <span class="title">ClassVisitor</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CostClassVisitor</span><span class="params">(ClassVisitor classVisitor)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>(Opcodes.ASM5, classVisitor);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> MethodVisitor <span class="title">visitMethod</span><span class="params">(<span class="keyword">int</span> access, String name, String desc, String signature, String[] exceptions)</span> </span>&#123;</div><div class="line">        MethodVisitor mv = cv.visitMethod(access, name, desc, signature, exceptions);</div><div class="line">        mv = <span class="keyword">new</span> AdviceAdapter(Opcodes.ASM5, mv, access, name, desc) &#123;</div><div class="line"></div><div class="line">            <span class="keyword">private</span> <span class="keyword">boolean</span> inject = <span class="keyword">false</span>;</div><div class="line"></div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> AnnotationVisitor <span class="title">visitAnnotation</span><span class="params">(String desc, <span class="keyword">boolean</span> visible)</span> </span>&#123;</div><div class="line">                <span class="keyword">if</span> (Type.getDescriptor(Cost.class).equals(desc)) &#123;</div><div class="line">                    inject = <span class="keyword">true</span>;</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">return</span> <span class="keyword">super</span>.visitAnnotation(desc, visible);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onMethodEnter</span><span class="params">()</span> </span>&#123;</div><div class="line">                <span class="keyword">if</span> (inject) &#123;</div><div class="line">                    <span class="comment">//坐等插代码</span></div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onMethodExit</span><span class="params">(<span class="keyword">int</span> opcode)</span> </span>&#123;</div><div class="line">                <span class="keyword">if</span> (inject) &#123;</div><div class="line">                    <span class="comment">//坐等插代码</span></div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;;</div><div class="line">        <span class="keyword">return</span> mv;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再写ASM插入代码前，我们必须意识到一件事，那就是得知道我们会在<strong>onMethodEnter</strong>中存一个方法开始时间，再在<strong>onMethodExit</strong>中存一个方法结束时间，再去相减，那么问题来了，这个时间我们存哪呢？肯定不能是局部变量，因为两个方法间并不会共享局部变量，那么本文是将变量存为静态，方便不同方法间调用，具体可见<strong>TimeCache.java</strong>，代码比较简单，不多加介绍：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TimeCache</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Map&lt;String, Long&gt; sStartTime = <span class="keyword">new</span> HashMap&lt;&gt;();</div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Map&lt;String, Long&gt; sEndTime = <span class="keyword">new</span> HashMap&lt;&gt;();</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setStartTime</span><span class="params">(String methodName, <span class="keyword">long</span> time)</span> </span>&#123;</div><div class="line">        sStartTime.put(methodName, time);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setEndTime</span><span class="params">(String methodName, <span class="keyword">long</span> time)</span> </span>&#123;</div><div class="line">        sEndTime.put(methodName, time);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getCostTime</span><span class="params">(String methodName)</span> </span>&#123;</div><div class="line">        <span class="keyword">long</span> start = sStartTime.get(methodName);</div><div class="line">        <span class="keyword">long</span> end = sEndTime.get(methodName);</div><div class="line">        <span class="keyword">return</span> <span class="string">"method: "</span> + methodName + <span class="string">" main "</span> + Long.valueOf(end - start) + <span class="string">" ns"</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后便是插入时间统计代码了，我在之前的一篇文章就有介绍过 <a href="http://www.wangyuwei.me/2017/01/22/%E6%89%8B%E6%91%B8%E6%89%8B%E5%A2%9E%E5%8A%A0%E5%AD%97%E8%8A%82%E7%A0%81%E5%BE%80%E6%96%B9%E6%B3%95%E4%BD%93%E5%86%85%E6%8F%92%E4%BB%A3%E7%A0%81/" target="_blank" rel="external">手摸手增加字节码往方法体内插代码</a> ，我们可以借助一个intelliJ plugin –<br><strong>ASM Bytecode Outline</strong>来方便我们写ASM代码，先把原java代码写好：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">System.out.println(<span class="string">"========start========="</span>);</div><div class="line">TimeUtil.setsStartTime(<span class="string">"newFunc"</span>, System.nanoTime());</div><div class="line">        </div><div class="line">TimeUtil.setEndTime(<span class="string">"newFunc"</span>, System.nanoTime());</div><div class="line">System.out.println(TimeCache.getCostTime(<span class="string">"newFunc"</span>));</div><div class="line">System.out.println(<span class="string">"========end========="</span>);</div></pre></td></tr></table></figure>
+<p>然后利用插件，生成对应ASM代码，删除掉无用信息后，可得到：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">mv.visitFieldInsn(GETSTATIC, <span class="string">"java/lang/System"</span>, <span class="string">"out"</span>, <span class="string">"Ljava/io/PrintStream;"</span>);</div><div class="line">mv.visitLdcInsn(<span class="string">"========start========="</span>);</div><div class="line">mv.visitMethodInsn(INVOKEVIRTUAL, <span class="string">"java/io/PrintStream"</span>, <span class="string">"println"</span>, <span class="string">"(Ljava/lang/String;)V"</span>, <span class="keyword">false</span>);</div><div class="line"></div><div class="line">mv.visitLdcInsn(name);</div><div class="line">mv.visitMethodInsn(INVOKESTATIC, <span class="string">"java/lang/System"</span>, <span class="string">"nanoTime"</span>, <span class="string">"()J"</span>, <span class="keyword">false</span>);</div><div class="line">mv.visitMethodInsn(INVOKESTATIC, <span class="string">"main/java/TimeCache"</span>, <span class="string">"setStartTime"</span>, <span class="string">"(Ljava/lang/String;J)V"</span>, <span class="keyword">false</span>);</div><div class="line"></div><div class="line">...</div><div class="line"></div><div class="line">mv.visitLdcInsn(name);</div><div class="line">mv.visitMethodInsn(INVOKESTATIC, <span class="string">"java/lang/System"</span>, <span class="string">"nanoTime"</span>, <span class="string">"()J"</span>, <span class="keyword">false</span>);</div><div class="line">mv.visitMethodInsn(INVOKESTATIC, <span class="string">"main/java/TimeCache"</span>, <span class="string">"setEndTime"</span>, <span class="string">"(Ljava/lang/String;J)V"</span>, <span class="keyword">false</span>);</div><div class="line"></div><div class="line">mv.visitFieldInsn(GETSTATIC, <span class="string">"java/lang/System"</span>, <span class="string">"out"</span>, <span class="string">"Ljava/io/PrintStream;"</span>);</div><div class="line">mv.visitLdcInsn(name);</div><div class="line">mv.visitMethodInsn(INVOKESTATIC, <span class="string">"main/java/TimeCache"</span>, <span class="string">"getCostTime"</span>, <span class="string">"(Ljava/lang/String;)Ljava/lang/String;"</span>, <span class="keyword">false</span>);</div><div class="line">mv.visitMethodInsn(INVOKEVIRTUAL, <span class="string">"java/io/PrintStream"</span>, <span class="string">"println"</span>, <span class="string">"(Ljava/lang/String;)V"</span>, <span class="keyword">false</span>);</div><div class="line"></div><div class="line">mv.visitFieldInsn(GETSTATIC, <span class="string">"java/lang/System"</span>, <span class="string">"out"</span>, <span class="string">"Ljava/io/PrintStream;"</span>);</div><div class="line">mv.visitLdcInsn(<span class="string">"========end========="</span>);</div><div class="line">mv.visitMethodInsn(INVOKEVIRTUAL, <span class="string">"java/io/PrintStream"</span>, <span class="string">"println"</span>, <span class="string">"(Ljava/lang/String;)V"</span>, <span class="keyword">false</span>);</div></pre></td></tr></table></figure>
+<p>那么我们将这部分ASM代码填充到刚刚遗留下来的<strong>CostClassVisitor.java</strong>里便可。</p>
+<p>这样一来，我们的ASM工作已经结束，接下来就是来让插入的方法运行起来。</p>
+<h4 id="反射实例化"><a href="#反射实例化" class="headerlink" title="反射实例化"></a>反射实例化</h4><p>先来一种简单的方案，就是将我们插入代码后二进制流手动生成.class文件并利用反射实例化它。</p>
+<p>首先来看看插入前的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Bazhang</span> </span>&#123;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">newFunc1</span><span class="params">(String str)</span> </span>&#123;</div><div class="line">    System.out.println(str);</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</div><div class="line">      <span class="keyword">if</span> (i % <span class="number">10</span> == <span class="number">0</span>) &#123;</div><div class="line">        System.out.println(i);</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">if</span> (i == <span class="number">50</span>) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="meta">@Cost</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">newFunc2</span><span class="params">(String str)</span> </span>&#123;</div><div class="line">    System.out.println(str);</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</div><div class="line">      <span class="keyword">if</span> (i % <span class="number">8</span> == <span class="number">0</span>) &#123;</div><div class="line">        System.out.println(i);</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">if</span> (i &gt; <span class="number">50</span>) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我给<strong>newFunc2</strong>方法增加了@Cost注解，但没给<strong>newFunc1</strong>方法增加，然后开始用ASM提供的类生成插入代码后的二进制流：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">ClassReader cr = <span class="keyword">new</span> ClassReader(Bazhang.class.getName());</div><div class="line">ClassWriter cw = <span class="keyword">new</span> ClassWriter(cr, ClassWriter.COMPUTE_MAXS);</div><div class="line">ClassVisitor cv = <span class="keyword">new</span> CostClassVisitor(cw);</div><div class="line"></div><div class="line">cr.accept(cv, EXPAND_FRAMES);</div><div class="line"></div><div class="line"><span class="comment">// 获取生成的class文件对应的二进制流</span></div><div class="line"><span class="keyword">byte</span>[] code = cw.toByteArray();</div><div class="line"></div><div class="line"><span class="comment">//将二进制流写到out/下</span></div><div class="line">FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(System.getProperty(<span class="string">"user.dir"</span>)</div><div class="line">            + <span class="string">"/javademo/build/classes/main/wangyuwei/demo/Bazhang.class"</span>);</div><div class="line">fos.write(code);</div><div class="line">fos.close();</div><div class="line"></div><div class="line">Demo loader = <span class="keyword">new</span> Demo();</div><div class="line">Class hw = loader.defineClass(<span class="string">"wangyuwei.demo.Bazhang"</span>, code, <span class="number">0</span>, code.length);</div><div class="line">Object o = hw.newInstance();</div><div class="line">Method method1 = o.getClass().getMethod(<span class="string">"newFunc1"</span>, String.class);</div><div class="line">method1.invoke(o, <span class="string">"巴掌菜比"</span>);</div><div class="line">Method method2 = o.getClass().getMethod(<span class="string">"newFunc2"</span>, String.class);</div><div class="line">method2.invoke(o, <span class="string">"巴掌菜比22"</span>);</div></pre></td></tr></table></figure>
+<p>然后run一下，可以得到：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">巴掌菜比</div><div class="line"><span class="number">0</span></div><div class="line"><span class="number">10</span></div><div class="line"><span class="number">20</span></div><div class="line"><span class="number">30</span></div><div class="line"><span class="number">40</span></div><div class="line"><span class="number">50</span></div><div class="line">========start=========</div><div class="line">巴掌菜比<span class="number">22</span></div><div class="line"><span class="number">0</span></div><div class="line"><span class="number">8</span></div><div class="line"><span class="number">16</span></div><div class="line"><span class="number">24</span></div><div class="line"><span class="number">32</span></div><div class="line"><span class="number">40</span></div><div class="line"><span class="number">48</span></div><div class="line">method: newFunc2 main <span class="number">1647919</span> ns</div><div class="line">========end=========</div></pre></td></tr></table></figure>
+<p>只对newFunc2做了方法耗时统计。</p>
+<h4 id="使用Instrumentation构建代理"><a href="#使用Instrumentation构建代理" class="headerlink" title="使用Instrumentation构建代理"></a>使用Instrumentation构建代理</h4><p>Instrumentation是Java5提供的新特性，关于详细介绍，可以查看这篇文章：<a href="https://www.ibm.com/developerworks/cn/java/j-lo-instrumentation/" target="_blank" rel="external">Java 5 特性 Instrumentation 实践</a>，简单点说就是我们得在JVM执行main函数前动点手脚，自己实现一个代理，在得到虚拟机载入的正常的类的字节码后通过ASM提供的类生成一个插入代码后的字节流再丢给虚拟机，自定义的代理得实现ClassFileTransformer，并且提供<strong>premain()</strong>方法，写有premain方法的类得在MANIFEST.MF中显示调用，首先来看看我们自定义的代理类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CostClassFileTransformer</span> <span class="keyword">implements</span> <span class="title">ClassFileTransformer</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">premain</span><span class="params">(String args, Instrumentation inst)</span> </span>&#123;</div><div class="line">        inst.addTransformer(<span class="keyword">new</span> CostClassFileTransformer());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">byte</span>[] transform(ClassLoader loader, String className, Class&lt;?&gt; classBeingRedefined, ProtectionDomain protectionDomain, <span class="keyword">byte</span>[] classfileBuffer) <span class="keyword">throws</span> IllegalClassFormatException &#123;</div><div class="line">        ClassReader reader = <span class="keyword">new</span> ClassReader(classfileBuffer);</div><div class="line">        ClassWriter writer = <span class="keyword">new</span> ClassWriter(reader, ClassWriter.COMPUTE_MAXS);</div><div class="line">        reader.accept(<span class="keyword">new</span> CostClassVisitor(writer), <span class="number">8</span>);</div><div class="line">        <span class="keyword">return</span> writer.toByteArray();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再看看<strong>MANIFEST.MF</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Manifest-Version: 1.0</div><div class="line">Premain-Class: wangyuwei.costtime.CostClassFileTransformer</div></pre></td></tr></table></figure>
+<p>这样写好代理类之后，我们便可以生成一个代理jar，之后为我们运行代码使用，进入module <strong>javademo</strong>，生成jar可直接使用命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">jar -cvfm lib/cost-time.jar src/main/META-INF/MANIFEST.MF src/main/java/wangyuwei/costtime/CostClassFileTransformer.class</div></pre></td></tr></table></figure>
+<p>得到代理jar后，再使用命令行java -javaagent:lib的绝对地址/cost-time.jar Demo2.java运行即可，如果在使用命令行运行时带来了问题，可以直接通过对IntelliJ IDE进行修改：</p>
+<p><strong>Windows, Linux, some Macs:</strong></p>
+<p>ALT+SHIFT+F10-&gt;Right-&gt;E-&gt;Enter-&gt;Tab-&gt;enter your command line parameters-&gt;Enter.</p>
+<p><strong>Mac with “OS X 10.5” key schema:</strong></p>
+<p>CTRL+ALT+R-&gt;Right-&gt;E-&gt;Enter-&gt;Tab-&gt;enter your command line parameters-&gt;Enter.</p>
+<p>在VM options一栏填入-javaagent:lib/cost-time.jar即可。</p>
+<p>以上便是运行在JVM上的操作，然而我们最终的目标是为Android平台所用。</p>
+<h4 id="gradle-plugin-自定义Transform-Api"><a href="#gradle-plugin-自定义Transform-Api" class="headerlink" title="gradle plugin 自定义Transform Api"></a>gradle plugin 自定义Transform Api</h4><p>Transform API允许第三方插件在class文件转为为dex文件前操作编译好的class文件，那么这就是我们的入口，拿到正常的class后再经过ASM插入字节码后得到新的class，再被dx转成dex。</p>
+<p>首先自定义个plugin–<strong>CostTimePlugin.groovy</strong>：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CostTimePlugin</span> <span class="keyword">extends</span> <span class="title">Transform</span> <span class="keyword">implements</span> <span class="title">Plugin</span>&lt;<span class="title">Project</span>&gt; &#123;</span></div><div class="line">  <span class="meta">@Override</span> <span class="keyword">public</span> <span class="keyword">void</span> apply(Project project) &#123;</div><div class="line"></div><div class="line">    <span class="keyword">def</span> android = project.extensions.getByType(AppExtension)</div><div class="line">    android.registerTransform(<span class="keyword">this</span>)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  String getName() &#123;</div><div class="line">    <span class="keyword">return</span> <span class="string">"bazhang"</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  Set&lt;QualifiedContent.ContentType&gt; getInputTypes() &#123;</div><div class="line">    <span class="keyword">return</span> TransformManager.CONTENT_CLASS</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  Set&lt;QualifiedContent.Scope&gt; getScopes() &#123;</div><div class="line">    <span class="keyword">return</span> TransformManager.SCOPE_FULL_PROJECT</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="keyword">boolean</span> isIncremental() &#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="keyword">void</span> transform(Context context, Collection&lt;TransformInput&gt; inputs,</div><div class="line">      Collection&lt;TransformInput&gt; referencedInputs, TransformOutputProvider outputProvider,</div><div class="line">      <span class="keyword">boolean</span> isIncremental) <span class="keyword">throws</span> IOException, TransformException, InterruptedException &#123;</div><div class="line">    println <span class="string">'//===============asm visit start===============//'</span></div><div class="line"></div><div class="line">    <span class="keyword">def</span> startTime = System.currentTimeMillis()</div><div class="line"></div><div class="line">    inputs.each &#123; TransformInput input -&gt;</div><div class="line"></div><div class="line">      input.directoryInputs.each &#123; DirectoryInput directoryInput -&gt;</div><div class="line"></div><div class="line">        <span class="comment">//坐等遍历class并被ASM操作</span></div><div class="line"></div><div class="line">        <span class="keyword">def</span> dest = outputProvider.getContentLocation(directoryInput.name,</div><div class="line">            directoryInput.contentTypes, directoryInput.scopes,</div><div class="line">            Format.DIRECTORY)</div><div class="line"></div><div class="line"></div><div class="line">        FileUtils.copyDirectory(directoryInput.file, dest)</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      input.jarInputs.each &#123; JarInput jarInput -&gt;</div><div class="line">        <span class="keyword">def</span> jarName = jarInput.name</div><div class="line">        <span class="keyword">def</span> md5Name = DigestUtils.md5Hex(jarInput.file.getAbsolutePath())</div><div class="line">        <span class="keyword">if</span> (jarName.endsWith(<span class="string">".jar"</span>)) &#123;</div><div class="line">          jarName = jarName.substring(<span class="number">0</span>, jarName.length() - <span class="number">4</span>)</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">def</span> dest = outputProvider.getContentLocation(jarName + md5Name,</div><div class="line">            jarInput.contentTypes, jarInput.scopes, Format.JAR)</div><div class="line"></div><div class="line">        FileUtils.copyFile(jarInput.file, dest)</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">def</span> cost = (System.currentTimeMillis() - startTime) / <span class="number">1000</span></div><div class="line"></div><div class="line">    println <span class="string">"plugin cost $cost secs"</span></div><div class="line">    println <span class="string">'//===============asm visit end===============//'</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们预留了一行注释，去遍历build/intermediates/classes/release/下面生成的所有class，当然R.class、BuildConfig.class这些我们就可以直接跳过，ASM过滤一遍插入新代码之后再去覆盖原class，代码如下：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (directoryInput.file.isDirectory()) &#123;</div><div class="line">    directoryInput.file.eachFileRecurse &#123; File file -&gt;</div><div class="line">        <span class="keyword">def</span> name = file.name</div><div class="line">        <span class="keyword">if</span> (name.endsWith(<span class="string">".class"</span>) &amp;&amp; !name.startsWith(<span class="string">"R\$"</span>) &amp;&amp;</div><div class="line">            !<span class="string">"R.class"</span>.equals(name) &amp;&amp; !<span class="string">"BuildConfig.class"</span>.equals(name)) &#123;</div><div class="line"></div><div class="line">            println name + <span class="string">' is changing...'</span></div><div class="line"></div><div class="line">            ClassReader cr = <span class="keyword">new</span> ClassReader(file.bytes);</div><div class="line">            ClassWriter cw = <span class="keyword">new</span> ClassWriter(cr, ClassWriter.COMPUTE_MAXS);</div><div class="line">            ClassVisitor cv = <span class="keyword">new</span> CostClassVisitor(cw);</div><div class="line"></div><div class="line">            cr.accept(cv, EXPAND_FRAMES);</div><div class="line"></div><div class="line">            <span class="keyword">byte</span>[] code = cw.toByteArray();</div><div class="line"></div><div class="line">            FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(</div><div class="line">                file.parentFile.absolutePath + File.separator + name);</div><div class="line">            fos.write(code);</div><div class="line">            fos.close();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样一来，我们可以看看新生成的class是不是有被插入代码。</p>
+<p>这是源代码MainActivity.java：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</div><div class="line"></div><div class="line">  <span class="meta">@Override</span></div><div class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</div><div class="line">    setContentView(R.layout.activity_main);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="meta">@Cost</span></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这是build/intermediates/classes/release/里的MainActivity.class：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">public class MainActivity extends AppCompatActivity &#123;</div><div class="line">  public MainActivity() &#123;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  protected void onCreate(Bundle savedInstanceState) &#123;</div><div class="line">    super.onCreate(savedInstanceState);</div><div class="line">    this.setContentView(2130968603);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  @Cost</div><div class="line">  public void show() &#123;</div><div class="line">    System.out.println(&quot;========start=========&quot;);</div><div class="line">    TimeCache.setStartTime(&quot;show&quot;, System.nanoTime());</div><div class="line"></div><div class="line">    for(int i = 0; i &lt; 100; ++i) &#123;</div><div class="line">      ;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    TimeCache.setEndTime(&quot;show&quot;, System.nanoTime());</div><div class="line">    System.out.println(TimeCache.getCostTime(&quot;show&quot;));</div><div class="line">    System.out.println(&quot;========end=========&quot;);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>而且我们可以看下build过程：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">:app:transformClassesWithBazhangForRelease</div><div class="line">//===============asm visit start===============//</div><div class="line">Demo.class is changing...</div><div class="line">MainActivity.class is changing...</div><div class="line">plugin cost 0.148 secs</div><div class="line">//===============asm visit end===============//</div><div class="line">:app:processReleaseJavaRes </div><div class="line">:app:transformResourcesWithMergeJavaResForRelease</div><div class="line">:app:transformClassesAndResourcesWithProguardForRelease</div></pre></td></tr></table></figure>
+<p>我们的class操作是在混淆前的，那么此次AOP也完全不影响正常的混淆，可看混淆后的MainActivity.java：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">f</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle bundle)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>.onCreate(bundle);</div><div class="line">        setContentView((<span class="keyword">int</span>) R.layout.activity_main);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@a</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">p</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"========start========="</span>);</div><div class="line">        b.a(<span class="string">"show"</span>, System.nanoTime());</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</div><div class="line">        &#125;</div><div class="line">        b.b(<span class="string">"show"</span>, System.nanoTime());</div><div class="line">        System.out.println(b.a(<span class="string">"show"</span>));</div><div class="line">        System.out.println(<span class="string">"========end========="</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="尾语"><a href="#尾语" class="headerlink" title="尾语"></a>尾语</h3><p>我们采取的方案其实大有可为，计算方法耗时只是冰山一角，包括无数据埋点、性能的监控都是可以继续拓展的。以上方案难免有些漏洞，欢迎指出，有兴趣的朋友可以一起探讨。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/09/undefined/mm/undefined" rel="next" title="Mess详解（关于Activity、自定义View等的混淆）">
+                <i class="fa fa-chevron-left"></i> Mess详解（关于Activity、自定义View等的混淆）
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/06/undefined/mm/undefined" rel="prev" title="我好我好">
+                我好我好 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/03/05/undefined/mm/undefined"
+     data-title="ASM实战统计方法耗时"
+     data-content=""
+     data-url="https://github.com/JeasonWong/JeasonWong.github.io/2017/03/05/undefined/mm/undefined">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/05/undefined/mm/undefined"
+           data-title="ASM实战统计方法耗时" data-url="https://github.com/JeasonWong/JeasonWong.github.io/2017/03/05/undefined/mm/undefined">
+      </div>
+    
+  </div>
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="JeasonWong" />
+          <p class="site-author-name" itemprop="name">JeasonWong</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/JeasonWong" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/WongYuwei" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#需求"><span class="nav-number">1.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目标"><span class="nav-number">2.</span> <span class="nav-text">目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方案"><span class="nav-number">3.</span> <span class="nav-text">方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#JVM"><span class="nav-number">3.1.</span> <span class="nav-text">JVM</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Android"><span class="nav-number">3.2.</span> <span class="nav-text">Android</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实践"><span class="nav-number">4.</span> <span class="nav-text">实践</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#自定义注解"><span class="nav-number">4.1.</span> <span class="nav-text">自定义注解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用ASM增加字节码"><span class="nav-number">4.2.</span> <span class="nav-text">使用ASM增加字节码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#反射实例化"><span class="nav-number">4.3.</span> <span class="nav-text">反射实例化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用Instrumentation构建代理"><span class="nav-number">4.4.</span> <span class="nav-text">使用Instrumentation构建代理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gradle-plugin-自定义Transform-Api"><span class="nav-number">4.5.</span> <span class="nav-text">gradle plugin 自定义Transform Api</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#尾语"><span class="nav-number">5.</span> <span class="nav-text">尾语</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JeasonWong</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wangyuwei"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("mYvvgL0PzbOqyPpwIf48D1VT-gzGzoHsz", "4xDzVUWBfHximEB6PP1sx16u");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+  
+
+</body>
+</html>

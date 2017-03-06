@@ -1,0 +1,744 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="wangyuwei" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="项目地址：https://github.com/JeasonWong/FlipShare
+效果图：
+
+这段时间做了蛮多动画效果，那就趁热打铁，停不下来~
+我发现开源的分享控件很稀少，大部分要么就是直接一个Dialog，要么就是简单的PopupWindow，于是决定撸一发。效果略浮夸，但是用来学习Camera和Matrix也是勉强可以的。为了重拾Matrix，特意看了下线性代数的60页PPT。
+使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FlipShare分享控件">
+<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2016/09/07/undefined/mm/undefined">
+<meta property="og:site_name" content="巴巴巴巴巴巴掌">
+<meta property="og:description" content="项目地址：https://github.com/JeasonWong/FlipShare
+效果图：
+
+这段时间做了蛮多动画效果，那就趁热打铁，停不下来~
+我发现开源的分享控件很稀少，大部分要么就是直接一个Dialog，要么就是简单的PopupWindow，于是决定撸一发。效果略浮夸，但是用来学习Camera和Matrix也是勉强可以的。为了重拾Matrix，特意看了下线性代数的60页PPT。
+使用">
+<meta property="og:image" content="https://raw.githubusercontent.com/jeasonwong/FlipShare/master/screenshots/flipshare.gif">
+<meta property="og:image" content="http://i1.piimg.com/1070/f101a594f7ce04b6.png">
+<meta property="og:updated_time" content="2016-09-07T13:41:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FlipShare分享控件">
+<meta name="twitter:description" content="项目地址：https://github.com/JeasonWong/FlipShare
+效果图：
+
+这段时间做了蛮多动画效果，那就趁热打铁，停不下来~
+我发现开源的分享控件很稀少，大部分要么就是直接一个Dialog，要么就是简单的PopupWindow，于是决定撸一发。效果略浮夸，但是用来学习Camera和Matrix也是勉强可以的。为了重拾Matrix，特意看了下线性代数的60页PPT。
+使用">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/jeasonwong/FlipShare/master/screenshots/flipshare.gif">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 9125510,
+      author: '巴掌（作者）'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="https://github.com/JeasonWong/JeasonWong.github.io/2016/09/07/undefined/mm/undefined"/>
+
+  <title> FlipShare分享控件 | 巴巴巴巴巴巴掌 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?a1124557c8347bcc3f0d292e1395b686";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">巴巴巴巴巴巴掌</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">菜比成长记</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                FlipShare分享控件
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-07T21:27:03+08:00" content="2016-09-07">
+              2016-09-07
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/07/undefined/mm/undefined#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/07/undefined/mm/undefined" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>项目地址：<a href="https://github.com/JeasonWong/FlipShare">https://github.com/JeasonWong/FlipShare</a></p>
+<p>效果图：</p>
+<p><img src="https://raw.githubusercontent.com/jeasonwong/FlipShare/master/screenshots/flipshare.gif" alt="Markdown"></p>
+<p>这段时间做了蛮多动画效果，那就趁热打铁，停不下来~</p>
+<p>我发现开源的分享控件很稀少，大部分要么就是直接一个Dialog，要么就是简单的PopupWindow，于是决定撸一发。效果略浮夸，但是用来学习Camera和Matrix也是勉强可以的。为了重拾Matrix，特意看了下线性代数的60页PPT。</p>
+<p>使用方式很简单，通过Builder模式构造。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">FlipShareView share = <span class="keyword">new</span> FlipShareView.Builder(<span class="keyword">this</span>, mBtnLeftTop)</div><div class="line">                        .addItem(<span class="keyword">new</span> ShareItem(<span class="string">"Facebook"</span>, Color.WHITE, <span class="number">0xff43549C</span>, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_facebook)))</div><div class="line">                        .addItem(<span class="keyword">new</span> ShareItem(<span class="string">"Twitter"</span>, Color.WHITE, <span class="number">0xff4999F0</span>, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_twitter)))</div><div class="line">                        .addItem(<span class="keyword">new</span> ShareItem(<span class="string">"Google+"</span>, Color.WHITE, <span class="number">0xffD9392D</span>, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_google)))</div><div class="line">                        .addItem(<span class="keyword">new</span> ShareItem(<span class="string">"http://www.wangyuwei.me"</span>, Color.WHITE, <span class="number">0xff57708A</span>))</div><div class="line">                        .setBackgroundColor(<span class="number">0x60000000</span>)</div><div class="line">                        .setItemDuration(<span class="number">500</span>)</div><div class="line">                        .setSeparateLineColor(<span class="number">0x30000000</span>)</div><div class="line">                        .setAnimType(FlipShareView.TYPE_SLIDE)</div><div class="line">                        .create();</div></pre></td></tr></table></figure>
+<p>目前支持三种动画方式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@IntDef</span>(flag = <span class="keyword">true</span>, value = &#123;TYPE_VERTICLE, TYPE_HORIZONTAL, TYPE_SLIDE&#125;)</div><div class="line"><span class="keyword">public</span> <span class="meta">@interface</span> AnimType &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以设置每个Item的动画时长；<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">.setItemDuration(<span class="number">500</span>)</div></pre></td></tr></table></figure></p>
+<p>可以设置背景色（部分需求是透明色背景）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">.setBackgroundColor(<span class="number">0x60000000</span>)</div></pre></td></tr></table></figure></p>
+<p>可以设置每个item的分割线色<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">.setSeparateLineColor(<span class="number">0x30000000</span>)</div></pre></td></tr></table></figure></p>
+<p>添加item也很简单，来看看item的实体类。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ShareItem</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> String title;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">int</span> titleColor = Color.BLACK;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">int</span> bgColor = Color.WHITE;</div><div class="line">    <span class="keyword">public</span> Bitmap icon;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ShareItem</span><span class="params">(String title)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.title = title;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ShareItem</span><span class="params">(String title, Bitmap icon)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.title = title;</div><div class="line">        <span class="keyword">this</span>.icon = icon;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ShareItem</span><span class="params">(String title, <span class="keyword">int</span> bgColor)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.title = title;</div><div class="line">        <span class="keyword">this</span>.bgColor = bgColor;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ShareItem</span><span class="params">(String title, <span class="keyword">int</span> titleColor, <span class="keyword">int</span> bgColor)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.title = title;</div><div class="line">        <span class="keyword">this</span>.titleColor = titleColor;</div><div class="line">        <span class="keyword">this</span>.bgColor = bgColor;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ShareItem</span><span class="params">(String title, <span class="keyword">int</span> bgColor, Bitmap icon)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.title = title;</div><div class="line">        <span class="keyword">this</span>.bgColor = bgColor;</div><div class="line">        <span class="keyword">this</span>.icon = icon;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ShareItem</span><span class="params">(String title, <span class="keyword">int</span> titleColor, <span class="keyword">int</span> bgColor, Bitmap icon)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.title = title;</div><div class="line">        <span class="keyword">this</span>.titleColor = titleColor;</div><div class="line">        <span class="keyword">this</span>.bgColor = bgColor;</div><div class="line">        <span class="keyword">this</span>.icon = icon;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>纯文案、文案+图片都可以。</p>
+<p>目前暂时支持这些内容，欢迎各位提交pr，或者多多开源一些关于分享的控件~</p>
+<blockquote>
+<p>如果有更好的思路，欢迎交流，开源本身就是大家互相喷喷，互相进步嘛，<br>对各种动画感兴趣的朋友欢迎加群479729938进行交流，<br>期待各种好看，好玩，实用的动画~</p>
+</blockquote>
+<p><img src="http://i1.piimg.com/1070/f101a594f7ce04b6.png" alt="Markdown"></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/29/undefined/mm/undefined" rel="next" title="手摸手教你用Canvas实现简单粒子动画">
+                <i class="fa fa-chevron-left"></i> 手摸手教你用Canvas实现简单粒子动画
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/30/undefined/mm/undefined" rel="prev" title="手摸手教你做动态壁纸">
+                手摸手教你做动态壁纸 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/09/07/undefined/mm/undefined"
+     data-title="FlipShare分享控件"
+     data-content=""
+     data-url="https://github.com/JeasonWong/JeasonWong.github.io/2016/09/07/undefined/mm/undefined">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/07/undefined/mm/undefined"
+           data-title="FlipShare分享控件" data-url="https://github.com/JeasonWong/JeasonWong.github.io/2016/09/07/undefined/mm/undefined">
+      </div>
+    
+  </div>
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="JeasonWong" />
+          <p class="site-author-name" itemprop="name">JeasonWong</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/JeasonWong" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/WongYuwei" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JeasonWong</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wangyuwei"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("mYvvgL0PzbOqyPpwIf48D1VT-gzGzoHsz", "4xDzVUWBfHximEB6PP1sx16u");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+  
+
+</body>
+</html>
