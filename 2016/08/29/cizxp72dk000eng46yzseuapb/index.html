@@ -1,0 +1,811 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="wangyuwei" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="项目地址：
+https://github.com/JeasonWong/Particle
+效果图：
+
+使用场景：
+
+SplashActivity？
+…
+好像真的不多 = =
+
+效果看着还可以，有那么几个点一定需要知道实现。
+
+粒子效果
+几个坐标的计算方式
+文字从左往右像素级显示
+
+只要想清楚以上三点的实现过程，这个动画就没问题了。
+一、粒子效果简单四个字概括：二维数组。
+12345private">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手摸手教你用Canvas实现简单粒子动画">
+<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2016/08/29/cizxp72dk000eng46yzseuapb/index.html">
+<meta property="og:site_name" content="巴巴巴巴巴巴掌">
+<meta property="og:description" content="项目地址：
+https://github.com/JeasonWong/Particle
+效果图：
+
+使用场景：
+
+SplashActivity？
+…
+好像真的不多 = =
+
+效果看着还可以，有那么几个点一定需要知道实现。
+
+粒子效果
+几个坐标的计算方式
+文字从左往右像素级显示
+
+只要想清楚以上三点的实现过程，这个动画就没问题了。
+一、粒子效果简单四个字概括：二维数组。
+12345private">
+<meta property="og:image" content="https://raw.githubusercontent.com/jeasonwong/Particle/master/screenshots/particle.gif">
+<meta property="og:image" content="http://i1.piimg.com/1070/f101a594f7ce04b6.png">
+<meta property="og:updated_time" content="2016-08-29T13:17:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="手摸手教你用Canvas实现简单粒子动画">
+<meta name="twitter:description" content="项目地址：
+https://github.com/JeasonWong/Particle
+效果图：
+
+使用场景：
+
+SplashActivity？
+…
+好像真的不多 = =
+
+效果看着还可以，有那么几个点一定需要知道实现。
+
+粒子效果
+几个坐标的计算方式
+文字从左往右像素级显示
+
+只要想清楚以上三点的实现过程，这个动画就没问题了。
+一、粒子效果简单四个字概括：二维数组。
+12345private">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/jeasonwong/Particle/master/screenshots/particle.gif">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 9125510,
+      author: '巴掌（作者）'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="https://github.com/JeasonWong/JeasonWong.github.io/2016/08/29/cizxp72dk000eng46yzseuapb/"/>
+
+  <title> 手摸手教你用Canvas实现简单粒子动画 | 巴巴巴巴巴巴掌 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?a1124557c8347bcc3f0d292e1395b686";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">巴巴巴巴巴巴掌</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">菜比成长记</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                手摸手教你用Canvas实现简单粒子动画
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-29T20:40:00+08:00" content="2016-08-29">
+              2016-08-29
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/29/cizxp72dk000eng46yzseuapb/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/29/cizxp72dk000eng46yzseuapb/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>项目地址：</strong></p>
+<p><a href="https://github.com/JeasonWong/Particle">https://github.com/JeasonWong/Particle</a></p>
+<p><strong>效果图：</strong></p>
+<p><img src="https://raw.githubusercontent.com/jeasonwong/Particle/master/screenshots/particle.gif" alt="Markdown"></p>
+<p><strong>使用场景：</strong></p>
+<ul>
+<li>SplashActivity？</li>
+<li>…</li>
+<li>好像真的不多 = =</li>
+</ul>
+<p>效果看着还可以，有那么几个点一定需要知道实现。</p>
+<ul>
+<li>粒子效果</li>
+<li>几个坐标的计算方式</li>
+<li>文字从左往右像素级显示</li>
+</ul>
+<p>只要想清楚以上三点的实现过程，这个动画就没问题了。</p>
+<h3 id="一、粒子效果"><a href="#一、粒子效果" class="headerlink" title="一、粒子效果"></a>一、粒子效果</h3><p>简单四个字概括：<strong>二维数组</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> ROW_NUM = <span class="number">10</span>;</div><div class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> COLUMN_NUM = <span class="number">10</span>;</div><div class="line"></div><div class="line"><span class="keyword">private</span> Particle[][] mParticles = <span class="keyword">new</span> Particle[ROW_NUM][COLUMN_NUM];</div><div class="line"><span class="keyword">private</span> Particle[][] mMinParticles = <span class="keyword">new</span> Particle[ROW_NUM][COLUMN_NUM];</div></pre></td></tr></table></figure>
+<p>为何会有两个二维数组？</p>
+<p>因为粒子有个从大到小的过程，那么就需要有个起始particle[][]和一个终点particle[][]咯，来看看Particle的结构：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Particle</span> </span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">float</span> x;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">float</span> y;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">float</span> radius;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Particle</span><span class="params">()</span> </span>&#123;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Particle</span><span class="params">(<span class="keyword">float</span> x, <span class="keyword">float</span> y, <span class="keyword">float</span> radius)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.x = x;</div><div class="line">        <span class="keyword">this</span>.y = y;</div><div class="line">        <span class="keyword">this</span>.radius = radius;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>由x坐标，y坐标和半径构成，那么Particle究竟由起点到终点经过了怎样的转换呢？来看看TypeEvaluator的实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LineEvaluator</span> <span class="keyword">implements</span> <span class="title">TypeEvaluator</span>&lt;<span class="title">Particle</span>&gt; </span>&#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Particle <span class="title">evaluate</span><span class="params">(<span class="keyword">float</span> fraction, Particle startValue, Particle endValue)</span> </span>&#123;</div><div class="line">        Particle particle = <span class="keyword">new</span> Particle();</div><div class="line">        particle.x = startValue.x + (endValue.x - startValue.x) * fraction;</div><div class="line">        particle.y = startValue.y + (endValue.y - startValue.y) * fraction;</div><div class="line">        particle.radius = startValue.radius + (endValue.radius - startValue.radius) * fraction;</div><div class="line">        <span class="keyword">return</span> particle;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>就是根据插值进行了一个简单的线性计算。</p>
+<p>这样一来由二维数组构成的粒子实现方案已经有了，那么问题来了，动画中那种类似书本翻页的效果是如何实现的呢？</p>
+<p>我用了一个很巧妙的方法，那就是对每个粒子设置的Duration都不同。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; ROW_NUM; i++) &#123;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; COLUMN_NUM; j++) &#123;</div><div class="line">        <span class="keyword">final</span> <span class="keyword">int</span> tempI = i;</div><div class="line">        <span class="keyword">final</span> <span class="keyword">int</span> tempJ = j;</div><div class="line">        ValueAnimator animator = ValueAnimator.ofObject(<span class="keyword">new</span> LineEvaluator(), mParticles[i][j], mMinParticles[i][j]);</div><div class="line">        animator.setDuration(<span class="number">1000</span> + <span class="number">20</span> * i + <span class="number">30</span> * j);</div><div class="line">        animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.AnimatorUpdateListener() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationUpdate</span><span class="params">(ValueAnimator animation)</span> </span>&#123;</div><div class="line">                mParticles[tempI][tempJ] = (Particle) animation.getAnimatedValue();</div><div class="line">                <span class="keyword">if</span> (tempI == ROW_NUM - <span class="number">1</span> &amp;&amp; tempJ == COLUMN_NUM - <span class="number">1</span>) &#123;</div><div class="line">                    invalidate();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">        animList.add(animator);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>关键代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">animator.setDuration(<span class="number">1000</span> + <span class="number">20</span> * i + <span class="number">30</span> * j);</div></pre></td></tr></table></figure>
+<p>这样一来，所有粒子同一时间开始，动画的duration不同，那自然类似翻书效果就达到了。</p>
+<p>细心的朋友看出来了，我还对粒子做了渐变处理。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">Shader linearGradient = <span class="keyword">new</span> LinearGradient(mWidth / <span class="number">2</span> - getTextWidth(mParticleText, mCirclePaint) / <span class="number">2f</span>,</div><div class="line">                mHeight / <span class="number">2</span> - getTextHeight(mParticleText, mCirclePaint) / <span class="number">2</span>,</div><div class="line">                mWidth / <span class="number">2</span> - getTextWidth(mParticleText, mCirclePaint) / <span class="number">2</span>,</div><div class="line">                mHeight / <span class="number">2</span> + getTextHeight(mParticleText, mCirclePaint) / <span class="number">2</span>,</div><div class="line">                <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;mParticleColor, Color.argb(<span class="number">120</span>, getR(mParticleColor), getG(mParticleColor), getB(mParticleColor))&#125;, <span class="keyword">null</span>, Shader.TileMode.CLAMP);</div><div class="line">mCirclePaint.setShader(linearGradient);</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">getR</span><span class="params">(<span class="keyword">int</span> color)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> r = (color &gt;&gt; <span class="number">16</span>) &amp; <span class="number">0xFF</span>;</div><div class="line">    <span class="keyword">return</span> r;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">getG</span><span class="params">(<span class="keyword">int</span> color)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> g = (color &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xFF</span>;</div><div class="line">    <span class="keyword">return</span> g;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">getB</span><span class="params">(<span class="keyword">int</span> color)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> b = color &amp; <span class="number">0xFF</span>;</div><div class="line">    <span class="keyword">return</span> b;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="二、几个坐标的计算方式"><a href="#二、几个坐标的计算方式" class="headerlink" title="二、几个坐标的计算方式"></a>二、几个坐标的计算方式</h3><p>其实做任何动画这一点都尤为重要，整个Canvas都是你的，coordinate那一定得算好。在这个动画里我觉得比较复杂坐标计算的就是最后那个HostText的位移和ParticleText的位移，为什么这么说呢？因为两个Text的textSize不同，但是最终又要保证他俩动画后保持居中。</p>
+<p>我用的方案其实很简单，只要精准计算HostText和ParticleText的x坐标就好了，而不用去计算他们各自的偏移量这么复杂。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">ValueAnimator particleTextXAnim = ValueAnimator.ofFloat(mStartMinP.x + dip2px(<span class="number">4</span>), </div><div class="line">    mWidth / <span class="number">2</span> - (getTextWidth(mHostText, mHostTextPaint) + getTextWidth(mParticleText, mParticleTextPaint)) / <span class="number">2</span> + getTextWidth(mHostText, mHostTextPaint));</div><div class="line"></div><div class="line">ValueAnimator hostTextXAnim = ValueAnimator.ofFloat(mStartMinP.x, </div><div class="line">    mWidth / <span class="number">2</span> - (getTextWidth(mHostText, mHostTextPaint) + getTextWidth(mParticleText, mParticleTextPaint) + dip2px(<span class="number">20</span>)) / <span class="number">2</span>);</div></pre></td></tr></table></figure>
+<p>这两个属性动画的值域很重，各位看官可以仔细看下。</p>
+<h3 id="三、文字从左往右像素级显示"><a href="#三、文字从左往右像素级显示" class="headerlink" title="三、文字从左往右像素级显示"></a>三、文字从左往右像素级显示</h3><p>这也是此次动画需要解决的最后一个问题，各位朋友可以自己想想咋整。</p>
+<p>我这里也是用了一个很巧妙的方式，那就是先drawText，再drawRect进行覆盖，drawRect通过属性动画逐步变小，这样drawText就可以达到像素级的移动效果了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">canvas.drawText(mHostText, mHostTextX, mHeight / <span class="number">2</span> + getTextHeight(mHostText, mHostBgPaint) / <span class="number">2</span>, mHostBgPaint);</div><div class="line">canvas.drawRect(mHostTextX + mHostRectWidth, mHeight / <span class="number">2</span> - getTextHeight(mHostText, mHostBgPaint) / <span class="number">1.2f</span>, mHostTextX + getTextWidth(mHostText, mHostTextPaint), mHeight / <span class="number">2</span> + getTextHeight(mHostText, mHostBgPaint) / <span class="number">1.2f</span>, mHostTextPaint);</div></pre></td></tr></table></figure>
+<p>mHostRectWidth是通过属性动画变化的，范围就是0到整个hostText的长度咯。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ValueAnimator animator = ValueAnimator.ofFloat(<span class="number">0</span>, getTextWidth(mHostText, mHostTextPaint));</div></pre></td></tr></table></figure>
+<p>以上就是实现此次粒子动画的关键步骤，其余的相信各位同学看看代码一会就能领悟了。</p>
+<blockquote>
+<p>如果有更好的思路，欢迎交流，开源本身就是大家互相喷喷，互相进步嘛，<br>对各种动画感兴趣的朋友欢迎加群479729938进行交流，<br>期待各种好看，好玩，实用的动画~</p>
+</blockquote>
+<p><img src="http://i1.piimg.com/1070/f101a594f7ce04b6.png" alt="Markdown"></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/24/cizxp72de000ang46dlzljszb/" rel="next" title="手摸手带你用VideoView实现英语流利说炫酷引导页">
+                <i class="fa fa-chevron-left"></i> 手摸手带你用VideoView实现英语流利说炫酷引导页
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/07/cizxp72cw0002ng46wfyoatfa/" rel="prev" title="FlipShare分享控件">
+                FlipShare分享控件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/08/29/cizxp72dk000eng46yzseuapb/"
+     data-title="手摸手教你用Canvas实现简单粒子动画"
+     data-content=""
+     data-url="https://github.com/JeasonWong/JeasonWong.github.io/2016/08/29/cizxp72dk000eng46yzseuapb/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/08/29/cizxp72dk000eng46yzseuapb/"
+           data-title="手摸手教你用Canvas实现简单粒子动画" data-url="https://github.com/JeasonWong/JeasonWong.github.io/2016/08/29/cizxp72dk000eng46yzseuapb/">
+      </div>
+    
+  </div>
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="JeasonWong" />
+          <p class="site-author-name" itemprop="name">JeasonWong</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/JeasonWong" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/WongYuwei" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、粒子效果"><span class="nav-number">1.</span> <span class="nav-text">一、粒子效果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、几个坐标的计算方式"><span class="nav-number">2.</span> <span class="nav-text">二、几个坐标的计算方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、文字从左往右像素级显示"><span class="nav-number">3.</span> <span class="nav-text">三、文字从左往右像素级显示</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JeasonWong</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wangyuwei"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("mYvvgL0PzbOqyPpwIf48D1VT-gzGzoHsz", "4xDzVUWBfHximEB6PP1sx16u");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+  
+
+</body>
+</html>

@@ -1,0 +1,750 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="wangyuwei" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="前言hook一事看似神秘，其实并不是那么难，希望各位看官看过本文之后能有所收获。
+本次是hook Android的点击事件，也就是OnClickListener，hook的意义在于你能在调用setOnClickListener后做些其他的事，其他一些你想和所有点击事件一起处理的事，那么在这里，我就以埋点为例吧。
+先来展示下效果：
+1234567891011121314public void onC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手摸手一起hook点击事件">
+<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2017/01/16/cizxp72d60007ng462e0kj0ag/index.html">
+<meta property="og:site_name" content="巴巴巴巴巴巴掌">
+<meta property="og:description" content="前言hook一事看似神秘，其实并不是那么难，希望各位看官看过本文之后能有所收获。
+本次是hook Android的点击事件，也就是OnClickListener，hook的意义在于你能在调用setOnClickListener后做些其他的事，其他一些你想和所有点击事件一起处理的事，那么在这里，我就以埋点为例吧。
+先来展示下效果：
+1234567891011121314public void onC">
+<meta property="og:image" content="http://ojafgwnc4.bkt.clouddn.com/hook_effect.png?imageView2/1/w/269/h/490/format/jpg/interlace/0/q/100">
+<meta property="og:image" content="http://ojafgwnc4.bkt.clouddn.com/code1.png">
+<meta property="og:image" content="http://ojafgwnc4.bkt.clouddn.com/code2.png">
+<meta property="og:updated_time" content="2017-01-16T15:31:49.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="手摸手一起hook点击事件">
+<meta name="twitter:description" content="前言hook一事看似神秘，其实并不是那么难，希望各位看官看过本文之后能有所收获。
+本次是hook Android的点击事件，也就是OnClickListener，hook的意义在于你能在调用setOnClickListener后做些其他的事，其他一些你想和所有点击事件一起处理的事，那么在这里，我就以埋点为例吧。
+先来展示下效果：
+1234567891011121314public void onC">
+<meta name="twitter:image" content="http://ojafgwnc4.bkt.clouddn.com/hook_effect.png?imageView2/1/w/269/h/490/format/jpg/interlace/0/q/100">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 9125510,
+      author: '巴掌（作者）'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/01/16/cizxp72d60007ng462e0kj0ag/"/>
+
+  <title> 手摸手一起hook点击事件 | 巴巴巴巴巴巴掌 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?a1124557c8347bcc3f0d292e1395b686";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">巴巴巴巴巴巴掌</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">菜比成长记</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                手摸手一起hook点击事件
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-01-16T22:23:30+08:00" content="2017-01-16">
+              2017-01-16
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/01/16/cizxp72d60007ng462e0kj0ag/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/16/cizxp72d60007ng462e0kj0ag/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>hook一事看似神秘，其实并不是那么难，希望各位看官看过本文之后能有所收获。</p>
+<p>本次是hook Android的点击事件，也就是OnClickListener，hook的意义在于你能在调用setOnClickListener后做些其他的事，其他一些你想和所有点击事件一起处理的事，那么在这里，我就以埋点为例吧。</p>
+<p>先来展示下效果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View view)</span> </span>&#123;</div><div class="line">    Map map = <span class="keyword">new</span> HashMap();</div><div class="line">    <span class="keyword">switch</span> (view.getId()) &#123;</div><div class="line">      <span class="keyword">case</span> R.id.btn_hook1:</div><div class="line">        map.put(<span class="string">"巴"</span>, <span class="string">"掌"</span>);</div><div class="line">        map.put(<span class="string">"菜"</span>, <span class="string">"比"</span>);</div><div class="line">        <span class="keyword">break</span>;</div><div class="line">      <span class="keyword">case</span> R.id.btn_hook2:</div><div class="line">        map.put(<span class="string">"TF-Boys"</span>, <span class="string">"嘿嘿嘿"</span>);</div><div class="line">        map.put(<span class="string">"id"</span>, <span class="string">"111"</span>);</div><div class="line">        <span class="keyword">break</span>;</div><div class="line">    &#125;</div><div class="line">    view.setTag(R.id.id_hook, map);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我在onClick内干了三件事：</p>
+<p>1、new HashMap</p>
+<p>2、map塞你想埋点的数据</p>
+<p>3、把数据传到对应的view里</p>
+<p>然后点击按钮会弹出一个Toast，如下图：</p>
+<p><img src="http://ojafgwnc4.bkt.clouddn.com/hook_effect.png?imageView2/1/w/269/h/490/format/jpg/interlace/0/q/100" alt="hook"></p>
+<p>那么有意思的地方来了，我们并没有在点击事件里弹Toast，那这个Toast哪来的呢？嘿嘿嘿，当然是hook的啦。</p>
+<h3 id="Hook"><a href="#Hook" class="headerlink" title="Hook"></a>Hook</h3><p>下面开始hook过程：</p>
+<p>整个过程浓缩下来就是四个字–移花接木！</p>
+<h4 id="分析源代码"><a href="#分析源代码" class="headerlink" title="分析源代码"></a>分析源代码</h4><p><img src="http://ojafgwnc4.bkt.clouddn.com/code1.png" alt="static class"></p>
+<p>首先来看看android.view.View中的这块代码，mOnClickListener变量静静的在这里(这里还有别的事件哦，比如OnLongClickListener等，大家学完之后可以试着hook下别的)，我们需要做的就是移花接木，把自己的花替换掉这个木，mOnClickListener是ListenerInfo这个类的成员变量，那继续看看ListenerInfo在View的哪里被初始化了，因为我们最开始拿到的只有View这一个对象。</p>
+<p><img src="http://ojafgwnc4.bkt.clouddn.com/code2.png" alt="ListenerInfo"></p>
+<p>没错，找到了，getListenerInfo()干了这件事，我们从这个方法入手先把ListenerInfo拿下，然后再移花接木。</p>
+<p>技术方案已经有了，那么就开始着手撸码。</p>
+<h4 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h4><p>hook的过程就是充分利用java反射机制的过程，几行代码搞定，我们来看看：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//先拿下View的Class对象</span></div><div class="line">Class clazzView = Class.forName(<span class="string">"android.view.View"</span>);</div><div class="line"><span class="comment">//再把getListenerInfo拿到</span></div><div class="line">Method method = clazzView.getDeclaredMethod(<span class="string">"getListenerInfo"</span>);</div><div class="line"><span class="comment">//由于getListenerInfo并不是pulic方法，所以需要修改为可访问</span></div><div class="line">method.setAccessible(<span class="keyword">true</span>);</div><div class="line"><span class="comment">//继续拿下ListenerInfo内部类的Class对象</span></div><div class="line">Class clazzInfo = Class.forName(<span class="string">"android.view.View$ListenerInfo"</span>);</div><div class="line"><span class="comment">//拿到主角mOnClickListener成员变量</span></div><div class="line">Field field = clazzInfo.getDeclaredField(<span class="string">"mOnClickListener"</span>);</div><div class="line"><span class="comment">//截止到这，我们已经完成了百分之95了，只剩最后一步，那就是把我们的木接进来</span></div><div class="line"><span class="comment">//那么这里先暂时停留下，我们把木给创建好。</span></div><div class="line"><span class="comment">//挖个坑 --&gt; 待会填</span></div></pre></td></tr></table></figure>
+<p>由于移花接木有个本质不能忘，那就是尊重原有类型，因此，我们的木也得实现View.OnClickListener接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">HookListener</span> <span class="keyword">implements</span> <span class="title">View</span>.<span class="title">OnClickListener</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> View.OnClickListener mOriginalListener;</div><div class="line"></div><div class="line">    <span class="comment">//直接在构造函数中传进来原来的OnClickListener</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">HookListener</span><span class="params">(View.OnClickListener originalListener)</span> </span>&#123;</div><div class="line">      mOriginalListener = originalListener;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</div><div class="line">      <span class="keyword">if</span> (mOriginalListener != <span class="keyword">null</span>) &#123;</div><div class="line">        mOriginalListener.onClick(v);</div><div class="line">      &#125;</div><div class="line">      StringBuilder sb = <span class="keyword">new</span> StringBuilder();</div><div class="line">      sb.append(<span class="string">"hook succeed.\n"</span>);</div><div class="line">      <span class="comment">//拿到之前传递的参数</span></div><div class="line">      Object obj = v.getTag(R.id.id_hook);</div><div class="line">      <span class="comment">//下面的操作可以猥琐欲为了</span></div><div class="line">      <span class="keyword">if</span> (obj != <span class="keyword">null</span> &amp;&amp; obj <span class="keyword">instanceof</span> HashMap &amp;&amp; !((Map) obj).isEmpty()) &#123;</div><div class="line">        <span class="keyword">for</span> (Map.Entry&lt;String, String&gt; entry : ((Map&lt;String, String&gt;) obj).entrySet()) &#123;</div><div class="line">          sb.append(<span class="string">"key =&gt; "</span>)</div><div class="line">              .append(entry.getKey())</div><div class="line">              .append(<span class="string">" "</span>)</div><div class="line">              .append(<span class="string">"value =&gt; "</span>)</div><div class="line">              .append(entry.getValue())</div><div class="line">              .append(<span class="string">"\n"</span>);</div><div class="line">        &#125;</div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">        sb.append(<span class="string">"params =&gt; null\n"</span>);</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      Toast.makeText(v.getContext(), sb.toString(), Toast.LENGTH_LONG).show();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以上代码就是我们的木，为了看起来更简单，我直接通过构造函数把原来的花（OnClickListener）给传过来了，然后在新的HookListener的onClick()里把原来的事件继续完成，并加上自己想猥琐欲为的一些事情。</p>
+<p>那么继续填上之前埋的坑：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">field.set(listenerInfo, <span class="keyword">new</span> HookListener((View.OnClickListener) field.get(listenerInfo)));</div></pre></td></tr></table></figure>
+<p>接木的过程干了两件事，一个是把原有的OnClickListener传给HookListener，二是把新的HookListener替换进ListenerInfo，perfect。</p>
+<p>至此，移花接木就完成了，简单吧。</p>
+<h4 id="合适的调用hook"><a href="#合适的调用hook" class="headerlink" title="合适的调用hook"></a>合适的调用hook</h4><p>我们把hook方法都写好了，最后就是调用你需要hook的View了，在大多数情况下，你可以把hook这件事交给Base去做，遍历当前rootView所有的View，然后每个都调用hook，本文的重点不是这，我就不赘述了。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>本文仅仅以埋点为例，= = 其实我觉得埋点这个栗子并不太好，妹的都传了这么多参数过来了，还在乎在这里调用一下自己的tracker？不管了，没有栗子会让本次hook感觉很无力，希望各位同学看过后能对hook不再懵逼，其实和自定义View一样简单的啦。</p>
+<p>Sample代码已同步到github上，有问题可以提issue =&gt; <a href="https://github.com/JeasonWong/ClickTracker">https://github.com/JeasonWong/ClickTracker</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/04/cizxp72dd0009ng46815frh1t/" rel="next" title="手摸手带你mock api">
+                <i class="fa fa-chevron-left"></i> 手摸手带你mock api
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/19/cizxp72cy0003ng464puysmhi/" rel="prev" title="JVM指令集整理">
+                JVM指令集整理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/01/16/cizxp72d60007ng462e0kj0ag/"
+     data-title="手摸手一起hook点击事件"
+     data-content=""
+     data-url="https://github.com/JeasonWong/JeasonWong.github.io/2017/01/16/cizxp72d60007ng462e0kj0ag/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/01/16/cizxp72d60007ng462e0kj0ag/"
+           data-title="手摸手一起hook点击事件" data-url="https://github.com/JeasonWong/JeasonWong.github.io/2017/01/16/cizxp72d60007ng462e0kj0ag/">
+      </div>
+    
+  </div>
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="JeasonWong" />
+          <p class="site-author-name" itemprop="name">JeasonWong</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/JeasonWong" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/WongYuwei" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hook"><span class="nav-number">2.</span> <span class="nav-text">Hook</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分析源代码"><span class="nav-number">2.1.</span> <span class="nav-text">分析源代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现"><span class="nav-number">2.2.</span> <span class="nav-text">实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#合适的调用hook"><span class="nav-number">2.3.</span> <span class="nav-text">合适的调用hook</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">3.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JeasonWong</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wangyuwei"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("mYvvgL0PzbOqyPpwIf48D1VT-gzGzoHsz", "4xDzVUWBfHximEB6PP1sx16u");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+  
+
+</body>
+</html>

@@ -245,7 +245,154 @@
             
               
                 
-                <a class="post-title-link" href="/2016/08/24/手摸手带你用VideoView实现英语流利说炫酷引导页/" itemprop="url">
+                <a class="post-title-link" href="/2016/08/29/cizxp72dk000eng46yzseuapb/" itemprop="url">
+                  手摸手教你用Canvas实现简单粒子动画
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-29T20:40:00+08:00" content="2016-08-29">
+              2016-08-29
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/29/cizxp72dk000eng46yzseuapb/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/29/cizxp72dk000eng46yzseuapb/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>项目地址：</strong></p>
+<p><a href="https://github.com/JeasonWong/Particle">https://github.com/JeasonWong/Particle</a></p>
+<p><strong>效果图：</strong></p>
+<p><img src="https://raw.githubusercontent.com/jeasonwong/Particle/master/screenshots/particle.gif" alt="Markdown"></p>
+<p><strong>使用场景：</strong></p>
+<ul>
+<li>SplashActivity？</li>
+<li>…</li>
+<li>好像真的不多 = =</li>
+</ul>
+<p>效果看着还可以，有那么几个点一定需要知道实现。</p>
+<ul>
+<li>粒子效果</li>
+<li>几个坐标的计算方式</li>
+<li>文字从左往右像素级显示</li>
+</ul>
+<p>只要想清楚以上三点的实现过程，这个动画就没问题了。</p>
+<h3 id="一、粒子效果"><a href="#一、粒子效果" class="headerlink" title="一、粒子效果"></a>一、粒子效果</h3><p>简单四个字概括：<strong>二维数组</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> ROW_NUM = <span class="number">10</span>;</div><div class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> COLUMN_NUM = <span class="number">10</span>;</div><div class="line"></div><div class="line"><span class="keyword">private</span> Particle[][] mParticles = <span class="keyword">new</span> Particle[ROW_NUM][COLUMN_NUM];</div><div class="line"><span class="keyword">private</span> Particle[][] mMinParticles = <span class="keyword">new</span> Particle[ROW_NUM][COLUMN_NUM];</div></pre></td></tr></table></figure>
+<p>为何会有两个二维数组？</p>
+<p>因为粒子有个从大到小的过程，那么就需要有个起始particle[][]和一个终点particle[][]咯，来看看Particle的结构：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Particle</span> </span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">float</span> x;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">float</span> y;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">float</span> radius;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Particle</span><span class="params">()</span> </span>&#123;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Particle</span><span class="params">(<span class="keyword">float</span> x, <span class="keyword">float</span> y, <span class="keyword">float</span> radius)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.x = x;</div><div class="line">        <span class="keyword">this</span>.y = y;</div><div class="line">        <span class="keyword">this</span>.radius = radius;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>由x坐标，y坐标和半径构成，那么Particle究竟由起点到终点经过了怎样的转换呢？来看看TypeEvaluator的实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LineEvaluator</span> <span class="keyword">implements</span> <span class="title">TypeEvaluator</span>&lt;<span class="title">Particle</span>&gt; </span>&#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Particle <span class="title">evaluate</span><span class="params">(<span class="keyword">float</span> fraction, Particle startValue, Particle endValue)</span> </span>&#123;</div><div class="line">        Particle particle = <span class="keyword">new</span> Particle();</div><div class="line">        particle.x = startValue.x + (endValue.x - startValue.x) * fraction;</div><div class="line">        particle.y = startValue.y + (endValue.y - startValue.y) * fraction;</div><div class="line">        particle.radius = startValue.radius + (endValue.radius - startValue.radius) * fraction;</div><div class="line">        <span class="keyword">return</span> particle;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>就是根据插值进行了一个简单的线性计算。</p>
+<p>这样一来由二维数组构成的粒子实现方案已经有了，那么问题来了，动画中那种类似书本翻页的效果是如何实现的呢？</p>
+<p>我用了一个很巧妙的方法，那就是对每个粒子设置的Duration都不同。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; ROW_NUM; i++) &#123;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; COLUMN_NUM; j++) &#123;</div><div class="line">        <span class="keyword">final</span> <span class="keyword">int</span> tempI = i;</div><div class="line">        <span class="keyword">final</span> <span class="keyword">int</span> tempJ = j;</div><div class="line">        ValueAnimator animator = ValueAnimator.ofObject(<span class="keyword">new</span> LineEvaluator(), mParticles[i][j], mMinParticles[i][j]);</div><div class="line">        animator.setDuration(<span class="number">1000</span> + <span class="number">20</span> * i + <span class="number">30</span> * j);</div><div class="line">        animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.AnimatorUpdateListener() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationUpdate</span><span class="params">(ValueAnimator animation)</span> </span>&#123;</div><div class="line">                mParticles[tempI][tempJ] = (Particle) animation.getAnimatedValue();</div><div class="line">                <span class="keyword">if</span> (tempI == ROW_NUM - <span class="number">1</span> &amp;&amp; tempJ == COLUMN_NUM - <span class="number">1</span>) &#123;</div><div class="line">                    invalidate();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">        animList.add(animator);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>关键代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">animator.setDuration(<span class="number">1000</span> + <span class="number">20</span> * i + <span class="number">30</span> * j);</div></pre></td></tr></table></figure>
+<p>这样一来，所有粒子同一时间开始，动画的duration不同，那自然类似翻书效果就达到了。</p>
+<p>细心的朋友看出来了，我还对粒子做了渐变处理。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">Shader linearGradient = <span class="keyword">new</span> LinearGradient(mWidth / <span class="number">2</span> - getTextWidth(mParticleText, mCirclePaint) / <span class="number">2f</span>,</div><div class="line">                mHeight / <span class="number">2</span> - getTextHeight(mParticleText, mCirclePaint) / <span class="number">2</span>,</div><div class="line">                mWidth / <span class="number">2</span> - getTextWidth(mParticleText, mCirclePaint) / <span class="number">2</span>,</div><div class="line">                mHeight / <span class="number">2</span> + getTextHeight(mParticleText, mCirclePaint) / <span class="number">2</span>,</div><div class="line">                <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;mParticleColor, Color.argb(<span class="number">120</span>, getR(mParticleColor), getG(mParticleColor), getB(mParticleColor))&#125;, <span class="keyword">null</span>, Shader.TileMode.CLAMP);</div><div class="line">mCirclePaint.setShader(linearGradient);</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">getR</span><span class="params">(<span class="keyword">int</span> color)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> r = (color &gt;&gt; <span class="number">16</span>) &amp; <span class="number">0xFF</span>;</div><div class="line">    <span class="keyword">return</span> r;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">getG</span><span class="params">(<span class="keyword">int</span> color)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> g = (color &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xFF</span>;</div><div class="line">    <span class="keyword">return</span> g;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">getB</span><span class="params">(<span class="keyword">int</span> color)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> b = color &amp; <span class="number">0xFF</span>;</div><div class="line">    <span class="keyword">return</span> b;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="二、几个坐标的计算方式"><a href="#二、几个坐标的计算方式" class="headerlink" title="二、几个坐标的计算方式"></a>二、几个坐标的计算方式</h3><p>其实做任何动画这一点都尤为重要，整个Canvas都是你的，coordinate那一定得算好。在这个动画里我觉得比较复杂坐标计算的就是最后那个HostText的位移和ParticleText的位移，为什么这么说呢？因为两个Text的textSize不同，但是最终又要保证他俩动画后保持居中。</p>
+<p>我用的方案其实很简单，只要精准计算HostText和ParticleText的x坐标就好了，而不用去计算他们各自的偏移量这么复杂。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">ValueAnimator particleTextXAnim = ValueAnimator.ofFloat(mStartMinP.x + dip2px(<span class="number">4</span>), </div><div class="line">    mWidth / <span class="number">2</span> - (getTextWidth(mHostText, mHostTextPaint) + getTextWidth(mParticleText, mParticleTextPaint)) / <span class="number">2</span> + getTextWidth(mHostText, mHostTextPaint));</div><div class="line"></div><div class="line">ValueAnimator hostTextXAnim = ValueAnimator.ofFloat(mStartMinP.x, </div><div class="line">    mWidth / <span class="number">2</span> - (getTextWidth(mHostText, mHostTextPaint) + getTextWidth(mParticleText, mParticleTextPaint) + dip2px(<span class="number">20</span>)) / <span class="number">2</span>);</div></pre></td></tr></table></figure>
+<p>这两个属性动画的值域很重，各位看官可以仔细看下。</p>
+<h3 id="三、文字从左往右像素级显示"><a href="#三、文字从左往右像素级显示" class="headerlink" title="三、文字从左往右像素级显示"></a>三、文字从左往右像素级显示</h3><p>这也是此次动画需要解决的最后一个问题，各位朋友可以自己想想咋整。</p>
+<p>我这里也是用了一个很巧妙的方式，那就是先drawText，再drawRect进行覆盖，drawRect通过属性动画逐步变小，这样drawText就可以达到像素级的移动效果了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">canvas.drawText(mHostText, mHostTextX, mHeight / <span class="number">2</span> + getTextHeight(mHostText, mHostBgPaint) / <span class="number">2</span>, mHostBgPaint);</div><div class="line">canvas.drawRect(mHostTextX + mHostRectWidth, mHeight / <span class="number">2</span> - getTextHeight(mHostText, mHostBgPaint) / <span class="number">1.2f</span>, mHostTextX + getTextWidth(mHostText, mHostTextPaint), mHeight / <span class="number">2</span> + getTextHeight(mHostText, mHostBgPaint) / <span class="number">1.2f</span>, mHostTextPaint);</div></pre></td></tr></table></figure>
+<p>mHostRectWidth是通过属性动画变化的，范围就是0到整个hostText的长度咯。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ValueAnimator animator = ValueAnimator.ofFloat(<span class="number">0</span>, getTextWidth(mHostText, mHostTextPaint));</div></pre></td></tr></table></figure>
+<p>以上就是实现此次粒子动画的关键步骤，其余的相信各位同学看看代码一会就能领悟了。</p>
+<blockquote>
+<p>如果有更好的思路，欢迎交流，开源本身就是大家互相喷喷，互相进步嘛，<br>对各种动画感兴趣的朋友欢迎加群479729938进行交流，<br>期待各种好看，好玩，实用的动画~</p>
+</blockquote>
+<p><img src="http://i1.piimg.com/1070/f101a594f7ce04b6.png" alt="Markdown"></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/24/cizxp72de000ang46dlzljszb/" itemprop="url">
                   手摸手带你用VideoView实现英语流利说炫酷引导页
                 </a>
               
@@ -270,8 +417,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/08/24/手摸手带你用VideoView实现英语流利说炫酷引导页/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/24/手摸手带你用VideoView实现英语流利说炫酷引导页/" itemprop="commentsCount"></span>
+                <a href="/2016/08/24/cizxp72de000ang46dlzljszb/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/24/cizxp72de000ang46dlzljszb/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -386,7 +533,7 @@
             
               
                 
-                <a class="post-title-link" href="/2016/08/20/手摸手教你用Scene实现炫酷的注册登录动画/" itemprop="url">
+                <a class="post-title-link" href="/2016/08/20/cizxp72dm000fng46ihmohdxp/" itemprop="url">
                   手摸手教你用Scene实现炫酷的注册登录动画
                 </a>
               
@@ -411,8 +558,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/08/20/手摸手教你用Scene实现炫酷的注册登录动画/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/20/手摸手教你用Scene实现炫酷的注册登录动画/" itemprop="commentsCount"></span>
+                <a href="/2016/08/20/cizxp72dm000fng46ihmohdxp/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/20/cizxp72dm000fng46ihmohdxp/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -547,7 +694,7 @@
             
               
                 
-                <a class="post-title-link" href="/2016/08/13/手摸手教你写Slack的Loading动画/" itemprop="url">
+                <a class="post-title-link" href="/2016/08/13/cizxp72dh000cng4659po49kl/" itemprop="url">
                   手摸手教你写Slack的Loading动画
                 </a>
               
@@ -572,8 +719,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/08/13/手摸手教你写Slack的Loading动画/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/13/手摸手教你写Slack的Loading动画/" itemprop="commentsCount"></span>
+                <a href="/2016/08/13/cizxp72dh000cng4659po49kl/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/13/cizxp72dh000cng4659po49kl/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -708,7 +855,7 @@
             
               
                 
-                <a class="post-title-link" href="/2016/08/07/手摸手教你写炫酷控件/" itemprop="url">
+                <a class="post-title-link" href="/2016/08/07/cizxp72dj000dng46xgiyk8v2/" itemprop="url">
                   手摸手教你写炫酷控件
                 </a>
               
@@ -733,8 +880,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/08/07/手摸手教你写炫酷控件/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/07/手摸手教你写炫酷控件/" itemprop="commentsCount"></span>
+                <a href="/2016/08/07/cizxp72dj000dng46xgiyk8v2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/07/cizxp72dj000dng46xgiyk8v2/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -858,7 +1005,7 @@
             
               
                 
-                <a class="post-title-link" href="/2016/01/24/app推送消息发错后该如何处理/" itemprop="url">
+                <a class="post-title-link" href="/2016/01/24/cizxp72d30005ng46ulzx51w6/" itemprop="url">
                   app推送消息发错后该如何处理
                 </a>
               
@@ -883,8 +1030,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/01/24/app推送消息发错后该如何处理/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/24/app推送消息发错后该如何处理/" itemprop="commentsCount"></span>
+                <a href="/2016/01/24/cizxp72d30005ng46ulzx51w6/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/24/cizxp72d30005ng46ulzx51w6/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -973,7 +1120,7 @@ mNotificationManager.cancelAll();
             
               
                 
-                <a class="post-title-link" href="/2015/09/11/解析特殊结构的JSON/" itemprop="url">
+                <a class="post-title-link" href="/2015/09/11/cizxp72dn000gng46nrgrxdm7/" itemprop="url">
                   解析特殊结构的JSON
                 </a>
               
@@ -998,8 +1145,8 @@ mNotificationManager.cancelAll();
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/09/11/解析特殊结构的JSON/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/11/解析特殊结构的JSON/" itemprop="commentsCount"></span>
+                <a href="/2015/09/11/cizxp72dn000gng46nrgrxdm7/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/11/cizxp72dn000gng46nrgrxdm7/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -1184,7 +1331,7 @@ Collections.sort(listEntity, new Comparator&lt;HSStockEntity&gt;() {
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
