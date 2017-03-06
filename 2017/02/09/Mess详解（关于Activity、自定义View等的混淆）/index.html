@@ -91,7 +91,7 @@ Mess介绍众所周知，我们开混淆打包后生成的apk里，Activity、�
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Mess ：<a href="https://github.com/JackCho/Mess" target="_blank" rel="external">https://github.com/JackCho/Mess</a></p>
+        <p>Mess ：<a href="https://github.com/JackCho/Mess">https://github.com/JackCho/Mess</a></p>
 <h3 id="Mess介绍"><a href="#Mess介绍" class="headerlink" title="Mess介绍"></a>Mess介绍</h3><p>众所周知，我们开混淆打包后生成的apk里，Activity、自定义View、Service等出现在xml里的相关Java类默认都会被keep住，那么这对于app的保护是不足够好的，Mess就是来解决这个问题，把即使出现在xml文件中的Java类照样混淆。</p>
 <h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">   ...</div><div class="line">   classpath &apos;me.ele:mess-plugin:1.0.1&apos;</div><div class="line"> &#125;</div><div class="line"></div><div class="line">apply plugin: &apos;com.android.library&apos;</div><div class="line">apply plugin: &apos;me.ele.mess&apos;</div></pre></td></tr></table></figure>
 <p>此外，Mess还提供一个可选配置，<strong>ignoreProguard</strong>，由于有些依赖库本身也配置了相关混淆配置，如<strong>com.android.support:recyclerview-v7</strong>、<strong>com.jakewharton:butterknife</strong>等，那么这些文件都将会被添加到<strong>proguardFiles</strong>中，导致依赖库无法被混淆，所以<strong>ignoreProguard</strong>配置就是来解决这个问题的。</p>
@@ -142,12 +142,12 @@ Mess介绍众所周知，我们开混淆打包后生成的apk里，Activity、�
 <h3 id="尾语"><a href="#尾语" class="headerlink" title="尾语"></a>尾语</h3><p>想要写出Mess这样的plugin，对Android整个打包流程是要相当熟悉的，这样才能知道什么时候该hook什么task，平常开发过程中尽量不要直接点击run按钮，应该直接通过gradle assemble** 构建，这样无数次的看构建过程中经历哪些task，然后去阅读相关task源码，这样对整个打包流程才会越来越胸有成竹。</p>
 <p>Mess有个小遗憾，那就是ButterKnife这个库在绝大多数app中都使用了，但是ButterKnife的混淆规则中有对使用注解的方法名和变量名做保护，这样就比较尴尬了，会导致Mess对使用ButterKnife库的app而言是没多大作用的。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">-keepclasseswithmembernames class * &#123; @butterknife.* &lt;methods&gt;; &#125;</div><div class="line">-keepclasseswithmembernames class * &#123; @butterknife.* &lt;fields&gt;; &#125;</div></pre></td></tr></table></figure>
-<p>但是不要灰心，ButterMess这个Lib就来解决这个问题，接下来会写篇详解ButterMess的文章，先放个ButterMess的链接：<a href="https://github.com/peacepassion/ButterMess" target="_blank" rel="external">https://github.com/peacepassion/ButterMess</a></p>
+<p>但是不要灰心，ButterMess这个Lib就来解决这个问题，接下来会写篇详解ButterMess的文章，先放个ButterMess的链接：<a href="https://github.com/peacepassion/ButterMess">https://github.com/peacepassion/ButterMess</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://github.com/JeasonWong/JeasonWong.github.io/2017/02/09/Mess详解（关于Activity、自定义View等的混淆）/" data-id="cizxo1kgy0006gu46h7rl0e6v" class="article-share-link">Share</a>
+      <a data-url="https://github.com/JeasonWong/JeasonWong.github.io/2017/02/09/Mess详解（关于Activity、自定义View等的混淆）/" data-id="cizxom3db0006a546s6l3egfc" class="article-share-link">Share</a>
       
       
     </footer>
@@ -192,7 +192,7 @@ Mess介绍众所周知，我们开混淆打包后生成的apk里，Activity、�
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/01/">January 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li></ul>
     </div>
   </div>
 
@@ -203,10 +203,6 @@ Mess介绍众所周知，我们开混淆打包后生成的apk里，Activity、�
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
-        
-          <li>
-            <a href="/2017/03/06/hello-world/">Hello World</a>
-          </li>
         
           <li>
             <a href="/2017/03/05/ASM实战统计方法耗时/">ASM实战统计方法耗时</a>
@@ -222,6 +218,10 @@ Mess介绍众所周知，我们开混淆打包后生成的apk里，Activity、�
         
           <li>
             <a href="/2017/01/20/ASM-操作字节码初探/">ASM 操作字节码初探</a>
+          </li>
+        
+          <li>
+            <a href="/2017/01/19/JVM指令集整理/">JVM指令集整理</a>
           </li>
         
       </ul>
