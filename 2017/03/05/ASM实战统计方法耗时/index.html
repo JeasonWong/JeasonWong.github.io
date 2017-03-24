@@ -89,26 +89,20 @@
 
 <meta name="description" content="先上demo地址：https://github.com/JeasonWong/CostTime
 需求实际业务开发中有很多需要不改变原业务代码，而需额外增加一些包括各种统计的需求，如APM、无数据埋点等，也就是耳熟能详的AOP，本文以统计方法耗时为例，不使用Aspectj，采用原生态的方式进行实践。
-使用者所需要做的就是对所需要统计耗时的方法头部加指定注解@Cost就可以使用了。
-目标
-不影响现有逻">
+使用者所需要做的就是对所需要统计耗时的方法头部加指定注解@Cost就可以使用了。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ASM实战统计方法耗时">
 <meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2017/03/05/ASM实战统计方法耗时/index.html">
 <meta property="og:site_name" content="巴巴巴巴巴巴掌">
 <meta property="og:description" content="先上demo地址：https://github.com/JeasonWong/CostTime
 需求实际业务开发中有很多需要不改变原业务代码，而需额外增加一些包括各种统计的需求，如APM、无数据埋点等，也就是耳熟能详的AOP，本文以统计方法耗时为例，不使用Aspectj，采用原生态的方式进行实践。
-使用者所需要做的就是对所需要统计耗时的方法头部加指定注解@Cost就可以使用了。
-目标
-不影响现有逻">
-<meta property="og:updated_time" content="2017-03-06T05:13:35.000Z">
+使用者所需要做的就是对所需要统计耗时的方法头部加指定注解@Cost就可以使用了。">
+<meta property="og:updated_time" content="2017-03-24T02:53:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ASM实战统计方法耗时">
 <meta name="twitter:description" content="先上demo地址：https://github.com/JeasonWong/CostTime
 需求实际业务开发中有很多需要不改变原业务代码，而需额外增加一些包括各种统计的需求，如APM、无数据埋点等，也就是耳熟能详的AOP，本文以统计方法耗时为例，不使用Aspectj，采用原生态的方式进行实践。
-使用者所需要做的就是对所需要统计耗时的方法头部加指定注解@Cost就可以使用了。
-目标
-不影响现有逻">
+使用者所需要做的就是对所需要统计耗时的方法头部加指定注解@Cost就可以使用了。">
 
 
 
@@ -117,7 +111,7 @@
   var CONFIG = {
     root: '/',
     scheme: 'Mist',
-    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
     motion: true,
     duoshuo: {
@@ -356,6 +350,7 @@
         <p>先上demo地址：<a href="https://github.com/JeasonWong/CostTime">https://github.com/JeasonWong/CostTime</a></p>
 <h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><p>实际业务开发中有很多需要不改变原业务代码，而需额外增加一些包括各种统计的需求，如APM、无数据埋点等，也就是耳熟能详的AOP，本文以统计方法耗时为例，不使用Aspectj，采用原生态的方式进行实践。</p>
 <p>使用者所需要做的就是对所需要统计耗时的方法头部加指定注解@Cost就可以使用了。</p>
+<a id="more"></a>
 <h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><ul>
 <li><p>不影响现有逻辑</p>
 </li>

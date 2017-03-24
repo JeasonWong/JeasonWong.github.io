@@ -88,21 +88,18 @@
 
 
 <meta name="description" content="Mess ：https://github.com/JackCho/Mess
-Mess介绍众所周知，我们开混淆打包后生成的apk里，Activity、自定义View、Service等出现在xml里的相关Java类默认都会被keep住，那么这对于app的保护是不足够好的，Mess就是来解决这个问题，把即使出现在xml文件中的Java类照样混淆。
-使用1234567dependencies &amp;#123;">
+Mess介绍众所周知，我们开混淆打包后生成的apk里，Activity、自定义View、Service等出现在xml里的相关Java类默认都会被keep住，那么这对于app的保护是不足够好的，Mess就是来解决这个问题，把即使出现在xml文件中的Java类照样混淆。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mess详解（关于Activity、自定义View等的混淆）">
 <meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2017/02/09/Mess详解（关于Activity、自定义View等的混淆）/index.html">
 <meta property="og:site_name" content="巴巴巴巴巴巴掌">
 <meta property="og:description" content="Mess ：https://github.com/JackCho/Mess
-Mess介绍众所周知，我们开混淆打包后生成的apk里，Activity、自定义View、Service等出现在xml里的相关Java类默认都会被keep住，那么这对于app的保护是不足够好的，Mess就是来解决这个问题，把即使出现在xml文件中的Java类照样混淆。
-使用1234567dependencies &amp;#123;">
-<meta property="og:updated_time" content="2017-02-10T03:51:16.000Z">
+Mess介绍众所周知，我们开混淆打包后生成的apk里，Activity、自定义View、Service等出现在xml里的相关Java类默认都会被keep住，那么这对于app的保护是不足够好的，Mess就是来解决这个问题，把即使出现在xml文件中的Java类照样混淆。">
+<meta property="og:updated_time" content="2017-03-24T02:53:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mess详解（关于Activity、自定义View等的混淆）">
 <meta name="twitter:description" content="Mess ：https://github.com/JackCho/Mess
-Mess介绍众所周知，我们开混淆打包后生成的apk里，Activity、自定义View、Service等出现在xml里的相关Java类默认都会被keep住，那么这对于app的保护是不足够好的，Mess就是来解决这个问题，把即使出现在xml文件中的Java类照样混淆。
-使用1234567dependencies &amp;#123;">
+Mess介绍众所周知，我们开混淆打包后生成的apk里，Activity、自定义View、Service等出现在xml里的相关Java类默认都会被keep住，那么这对于app的保护是不足够好的，Mess就是来解决这个问题，把即使出现在xml文件中的Java类照样混淆。">
 
 
 
@@ -111,7 +108,7 @@ Mess介绍众所周知，我们开混淆打包后生成的apk里，Activity、�
   var CONFIG = {
     root: '/',
     scheme: 'Mist',
-    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
     motion: true,
     duoshuo: {
@@ -349,6 +346,7 @@ Mess介绍众所周知，我们开混淆打包后生成的apk里，Activity、�
       
         <p>Mess ：<a href="https://github.com/JackCho/Mess">https://github.com/JackCho/Mess</a></p>
 <h3 id="Mess介绍"><a href="#Mess介绍" class="headerlink" title="Mess介绍"></a>Mess介绍</h3><p>众所周知，我们开混淆打包后生成的apk里，Activity、自定义View、Service等出现在xml里的相关Java类默认都会被keep住，那么这对于app的保护是不足够好的，Mess就是来解决这个问题，把即使出现在xml文件中的Java类照样混淆。</p>
+<a id="more"></a>
 <h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">dependencies &#123;</div><div class="line">   ...</div><div class="line">   classpath &apos;me.ele:mess-plugin:1.0.1&apos;</div><div class="line"> &#125;</div><div class="line"></div><div class="line">apply plugin: &apos;com.android.library&apos;</div><div class="line">apply plugin: &apos;me.ele.mess&apos;</div></pre></td></tr></table></figure>
 <p>此外，Mess还提供一个可选配置，<strong>ignoreProguard</strong>，由于有些依赖库本身也配置了相关混淆配置，如<strong>com.android.support:recyclerview-v7</strong>、<strong>com.jakewharton:butterknife</strong>等，那么这些文件都将会被添加到<strong>proguardFiles</strong>中，导致依赖库无法被混淆，所以<strong>ignoreProguard</strong>配置就是来解决这个问题的。</p>
 <p>比如忽视<strong>com.android.support:recyclerview-v7</strong>的混淆配置文件，则直接</p>
