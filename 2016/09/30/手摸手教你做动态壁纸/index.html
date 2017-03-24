@@ -90,8 +90,7 @@
 <meta name="description" content="项目地址：https://github.com/JeasonWong/SnowingView
 效果图：
 
-前几天看到有个朋友开源了一个雪花动画，感觉蛮不错的，算法简单，思路清楚，还使用了加速度传感器，于是fork下来，想在此基础上拓展下，动态壁纸应该是个不错的选择。
-分析目前github上大部分的自定义动画都是继承View实现的，包括我自己，平时都直接用View解决，但是想做动态壁纸，就必须得熟悉">
+前几天看到有个朋友开源了一个雪花动画，感觉蛮不错的，算法简单，思路清楚，还使用了加速度传感器，于是fork下来，想在此基础上拓展下，动态壁纸应该是个不错的选择。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="手摸手教你做动态壁纸">
 <meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2016/09/30/手摸手教你做动态壁纸/index.html">
@@ -99,17 +98,15 @@
 <meta property="og:description" content="项目地址：https://github.com/JeasonWong/SnowingView
 效果图：
 
-前几天看到有个朋友开源了一个雪花动画，感觉蛮不错的，算法简单，思路清楚，还使用了加速度传感器，于是fork下来，想在此基础上拓展下，动态壁纸应该是个不错的选择。
-分析目前github上大部分的自定义动画都是继承View实现的，包括我自己，平时都直接用View解决，但是想做动态壁纸，就必须得熟悉">
+前几天看到有个朋友开源了一个雪花动画，感觉蛮不错的，算法简单，思路清楚，还使用了加速度传感器，于是fork下来，想在此基础上拓展下，动态壁纸应该是个不错的选择。">
 <meta property="og:image" content="https://github.com/JeasonWong/SnowingView/blob/master/design/snowingwallpaper.gif?raw=true">
-<meta property="og:updated_time" content="2016-09-30T16:15:15.000Z">
+<meta property="og:updated_time" content="2017-03-24T02:55:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="手摸手教你做动态壁纸">
 <meta name="twitter:description" content="项目地址：https://github.com/JeasonWong/SnowingView
 效果图：
 
-前几天看到有个朋友开源了一个雪花动画，感觉蛮不错的，算法简单，思路清楚，还使用了加速度传感器，于是fork下来，想在此基础上拓展下，动态壁纸应该是个不错的选择。
-分析目前github上大部分的自定义动画都是继承View实现的，包括我自己，平时都直接用View解决，但是想做动态壁纸，就必须得熟悉">
+前几天看到有个朋友开源了一个雪花动画，感觉蛮不错的，算法简单，思路清楚，还使用了加速度传感器，于是fork下来，想在此基础上拓展下，动态壁纸应该是个不错的选择。">
 <meta name="twitter:image" content="https://github.com/JeasonWong/SnowingView/blob/master/design/snowingwallpaper.gif?raw=true">
 
 
@@ -359,6 +356,7 @@
 <p>效果图：</p>
 <p><img src="https://github.com/JeasonWong/SnowingView/blob/master/design/snowingwallpaper.gif?raw=true" alt="Markdown"></p>
 <p>前几天看到有个朋友开源了一个雪花动画，感觉蛮不错的，算法简单，思路清楚，还使用了加速度传感器，于是fork下来，想在此基础上拓展下，动态壁纸应该是个不错的选择。</p>
+<a id="more"></a>
 <h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>目前github上大部分的自定义动画都是继承View实现的，包括我自己，平时都直接用View解决，但是想做动态壁纸，就必须得熟悉用SurfaceView做动画，原因是实现动态壁纸，得继承WallpaperService，并且实现自己的Engine类，而Engine类的内部实现逻辑与SurfaceView类似。</p>
 <p>先简单介绍下SurfaceView，SurfaceView可以避免画图任务繁重的时候造成主线程阻塞，因为它可以在主线程之外的线程中向屏幕上绘图，详细使用后面再说。</p>
 <p>了解了需要什么技术后，还有一点很重要，那就是得充分利用github上现有的轮子，这篇文章我是fork了别人已经写好的一个View，然后改了个别地方，其余的都直接照搬过来，正如我前面所说，目前github上大部分动画都是直接用View实现的，所以要学会如何花少量的时间把View转成SurfaceView尤为重要了。</p>

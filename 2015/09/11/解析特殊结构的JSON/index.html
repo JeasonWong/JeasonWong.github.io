@@ -105,7 +105,7 @@
             &amp;quot;id&amp;quot;: 1,
             &amp;quot;name&amp;quot;: &amp;quot;wangyuwei&amp;quot;,
             &amp;quot;sexuality&amp;quot;: &amp;quot;male&amp;quot;">
-<meta property="og:updated_time" content="2015-09-11T12:51:54.000Z">
+<meta property="og:updated_time" content="2017-03-24T03:07:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="解析特殊结构的JSON">
 <meta name="twitter:description" content="一般来说JSON的Key是已知的，如下所示：
@@ -398,6 +398,7 @@
 }
 </code></pre><p>这种JSON格式并不是很常见，但是我认为性能确实很强悍的。没有多余的Key，除了”fields”外，其余的Key都不是事先知道的，而”fields”里的Value确是与”fields”同级Key的Value一一对应，成为这些Value的Key。多么好的一个想法！</p>
 <p>那么问题来了，对于这种未知Key的JSON数组我们该如何下手呢？</p>
+<a id="more"></a>
 <p>虽然不知道Key，但我们可以使用Iterator遍历一遍就行了。</p>
 <pre><code>JSONObject jsonObj = new JSONObject(json).getJSONObject(&quot;data&quot;).getJSONObject(&quot;snapshot&quot;);
 Iterator keyIter = jsonObj.keys();

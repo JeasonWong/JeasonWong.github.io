@@ -88,27 +88,21 @@
 
 
 <meta name="description" content="前言hook一事看似神秘，其实并不是那么难，希望各位看官看过本文之后能有所收获。
-本次是hook Android的点击事件，也就是OnClickListener，hook的意义在于你能在调用setOnClickListener后做些其他的事，其他一些你想和所有点击事件一起处理的事，那么在这里，我就以埋点为例吧。
-先来展示下效果：
-1234567891011121314public void onC">
+本次是hook Android的点击事件，也就是OnClickListener，hook的意义在于你能在调用setOnClickListener后做些其他的事，其他一些你想和所有点击事件一起处理的事，那么在这里，我就以埋点为例吧。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="手摸手一起hook点击事件">
 <meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2017/01/16/手摸手一起hook点击事件/index.html">
 <meta property="og:site_name" content="巴巴巴巴巴巴掌">
 <meta property="og:description" content="前言hook一事看似神秘，其实并不是那么难，希望各位看官看过本文之后能有所收获。
-本次是hook Android的点击事件，也就是OnClickListener，hook的意义在于你能在调用setOnClickListener后做些其他的事，其他一些你想和所有点击事件一起处理的事，那么在这里，我就以埋点为例吧。
-先来展示下效果：
-1234567891011121314public void onC">
+本次是hook Android的点击事件，也就是OnClickListener，hook的意义在于你能在调用setOnClickListener后做些其他的事，其他一些你想和所有点击事件一起处理的事，那么在这里，我就以埋点为例吧。">
 <meta property="og:image" content="http://ojafgwnc4.bkt.clouddn.com/hook_effect.png?imageView2/1/w/269/h/490/format/jpg/interlace/0/q/100">
 <meta property="og:image" content="http://ojafgwnc4.bkt.clouddn.com/code1.png">
 <meta property="og:image" content="http://ojafgwnc4.bkt.clouddn.com/code2.png">
-<meta property="og:updated_time" content="2017-01-16T15:31:49.000Z">
+<meta property="og:updated_time" content="2017-03-24T02:55:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="手摸手一起hook点击事件">
 <meta name="twitter:description" content="前言hook一事看似神秘，其实并不是那么难，希望各位看官看过本文之后能有所收获。
-本次是hook Android的点击事件，也就是OnClickListener，hook的意义在于你能在调用setOnClickListener后做些其他的事，其他一些你想和所有点击事件一起处理的事，那么在这里，我就以埋点为例吧。
-先来展示下效果：
-1234567891011121314public void onC">
+本次是hook Android的点击事件，也就是OnClickListener，hook的意义在于你能在调用setOnClickListener后做些其他的事，其他一些你想和所有点击事件一起处理的事，那么在这里，我就以埋点为例吧。">
 <meta name="twitter:image" content="http://ojafgwnc4.bkt.clouddn.com/hook_effect.png?imageView2/1/w/269/h/490/format/jpg/interlace/0/q/100">
 
 
@@ -356,6 +350,7 @@
       
         <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>hook一事看似神秘，其实并不是那么难，希望各位看官看过本文之后能有所收获。</p>
 <p>本次是hook Android的点击事件，也就是OnClickListener，hook的意义在于你能在调用setOnClickListener后做些其他的事，其他一些你想和所有点击事件一起处理的事，那么在这里，我就以埋点为例吧。</p>
+<a id="more"></a>
 <p>先来展示下效果：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View view)</span> </span>&#123;</div><div class="line">    Map map = <span class="keyword">new</span> HashMap();</div><div class="line">    <span class="keyword">switch</span> (view.getId()) &#123;</div><div class="line">      <span class="keyword">case</span> R.id.btn_hook1:</div><div class="line">        map.put(<span class="string">"巴"</span>, <span class="string">"掌"</span>);</div><div class="line">        map.put(<span class="string">"菜"</span>, <span class="string">"比"</span>);</div><div class="line">        <span class="keyword">break</span>;</div><div class="line">      <span class="keyword">case</span> R.id.btn_hook2:</div><div class="line">        map.put(<span class="string">"TF-Boys"</span>, <span class="string">"嘿嘿嘿"</span>);</div><div class="line">        map.put(<span class="string">"id"</span>, <span class="string">"111"</span>);</div><div class="line">        <span class="keyword">break</span>;</div><div class="line">    &#125;</div><div class="line">    view.setTag(R.id.id_hook, map);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>我在onClick内干了三件事：</p>
