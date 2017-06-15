@@ -337,7 +337,14 @@
             <h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>问题1：子module里的R.java为何不是常量？</p>
 <p>问题2：ButterKnife是怎么解决的？</p>
 <p>问题3：由于ButterKnife的R2.java存在，导致java compile替换了注解中的常量，为何实际运行时没出现问题？</p>
-<p>### </p>
+<h3 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h3><h4 id="问题1-子module里的R-java为何不是常量？"><a href="#问题1-子module里的R-java为何不是常量？" class="headerlink" title="问题1 子module里的R.java为何不是常量？"></a>问题1 子module里的R.java为何不是常量？</h4><p>在模块开发时大家都会发现module中的R.java是没有final关键字的，如:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> icon_awesome_arrow=<span class="number">0x7f020188</span>;</div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> icon_awesome_close=<span class="number">0x7f020189</span>;</div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> icon_awesome_large=<span class="number">0x7f02018a</span>;</div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> icon_awesome_small=<span class="number">0x7f02018b</span>;</div></pre></td></tr></table></figure>
+<p>这样导致我们使用switch-case也好，注解也好，凡事语法规定必须要是常量的地方都无法直接R.drawable了，这是为何呢？</p>
+<p>那么我们来假设如果有final的话会出现什么问题，每个module各自打成aar的时候AAPT会单独生成R.java，那么在执行java compile成class的时候会将常量直接替换成具体的值，如:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@BindView</span>(<span class="number">2131755430</span>)</div><div class="line"><span class="keyword">protected</span> FrameLayout errorViewParent;</div></pre></td></tr></table></figure>
+<p>由于各个module间无法保证R.java中变量对应着的数值不同，所以如果出现相同的岂不是尴尬了？当然假如相同也没关系，可以反过来取到int数值后去找对应的resName，然后再去app的大R.java里去取，再将各个module的替换掉。mdzz想着就麻烦，索性不给module的R.java定义为常量了。</p>
+<p>俗话说的好，天王盖地虎，小鸡炖蘑菇，没有什么是他们那些大佬无法解决的，比如ButterKnife就提供了一个方案。</p>
+<h4 id="问题2：ButterKnife是怎么解决的？"><a href="#问题2：ButterKnife是怎么解决的？" class="headerlink" title="问题2：ButterKnife是怎么解决的？"></a>问题2：ButterKnife是怎么解决的？</h4><p>mmp，既然官方搞得R.java不是常量，那我们就copy一份R.java，搞个R2.java，然后把所有变量都加上final关键字，然后相关地方直接引用R2不就得了咯。没错，就是这么简单，让我们来看看相关gradle plugin是怎样做的。</p>
 
           
         
@@ -582,7 +589,7 @@
 <p>使用者所需要做的就是对所需要统计耗时的方法头部加指定注解@Cost就可以使用了。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/03/05/ASM实战统计方法耗时/#далее" rel="contents">
+            <a class="btn" href="/2017/03/05/ASM实战统计方法耗时/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -708,7 +715,7 @@
 <h3 id="Mess介绍"><a href="#Mess介绍" class="headerlink" title="Mess介绍"></a>Mess介绍</h3><p>众所周知，我们开混淆打包后生成的apk里，Activity、自定义View、Service等出现在xml里的相关Java类默认都会被keep住，那么这对于app的保护是不足够好的，Mess就是来解决这个问题，把即使出现在xml文件中的Java类照样混淆。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/02/09/Mess详解（关于Activity、自定义View等的混淆）/#далее" rel="contents">
+            <a class="btn" href="/2017/02/09/Mess详解（关于Activity、自定义View等的混淆）/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -833,7 +840,7 @@
           <p>本文动态增加字节码是直接使用的ASM，有关ASM的内容可以看下我之前的一篇文章：<a href="http://www.wangyuwei.me/2017/01/20/ASM-%E6%93%8D%E4%BD%9C%E5%AD%97%E8%8A%82%E7%A0%81%E5%88%9D%E6%8E%A2/">ASM 操作字节码初探</a></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/22/手摸手增加字节码往方法体内插代码/#далее" rel="contents">
+            <a class="btn" href="/2017/01/22/手摸手增加字节码往方法体内插代码/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1012,7 +1019,7 @@
 </table>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/20/ASM-操作字节码初探/#далее" rel="contents">
+            <a class="btn" href="/2017/01/20/ASM-操作字节码初探/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1137,7 +1144,7 @@
           <p>看字节码从这里开始。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/19/JVM指令集整理/#далее" rel="contents">
+            <a class="btn" href="/2017/01/19/JVM指令集整理/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1263,7 +1270,7 @@
 <p>本次是hook Android的点击事件，也就是OnClickListener，hook的意义在于你能在调用setOnClickListener后做些其他的事，其他一些你想和所有点击事件一起处理的事，那么在这里，我就以埋点为例吧。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/16/手摸手一起hook点击事件/#далее" rel="contents">
+            <a class="btn" href="/2017/01/16/手摸手一起hook点击事件/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1393,7 +1400,7 @@
 <h3 id="三、借力工具"><a href="#三、借力工具" class="headerlink" title="三、借力工具"></a>三、借力工具</h3><p>本文大力推借力工具的方案，因为前两种基本局限于我们自己操作，产品和测试同学往往会更无力点，charles登场。<br>大部分同学对charles的印象仅仅局限于抓包看下数据，其实他的功能强的一逼，mock api仅仅是冰山一角。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/04/手摸手带你mock-api/#далее" rel="contents">
+            <a class="btn" href="/2017/01/04/手摸手带你mock-api/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1521,7 +1528,7 @@
 <p>前几天看到有个朋友开源了一个雪花动画，感觉蛮不错的，算法简单，思路清楚，还使用了加速度传感器，于是fork下来，想在此基础上拓展下，动态壁纸应该是个不错的选择。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/09/30/手摸手教你做动态壁纸/#далее" rel="contents">
+            <a class="btn" href="/2016/09/30/手摸手教你做动态壁纸/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
