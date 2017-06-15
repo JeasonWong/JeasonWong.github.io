@@ -257,6 +257,137 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://github.com/JeasonWong/JeasonWong.github.io/2016/09/07/FlipShare分享控件/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JeasonWong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="巴巴巴巴巴巴掌">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/09/07/FlipShare分享控件/" itemprop="url">
+                  FlipShare分享控件
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-07T21:27:03+08:00">
+                2016-09-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>项目地址：<a href="https://github.com/JeasonWong/FlipShare">https://github.com/JeasonWong/FlipShare</a></p>
+<p>效果图：</p>
+<p><img src="https://raw.githubusercontent.com/jeasonwong/FlipShare/master/screenshots/flipshare.gif" alt="Markdown"></p>
+<p>这段时间做了蛮多动画效果，那就趁热打铁，停不下来~</p>
+<p>我发现开源的分享控件很稀少，大部分要么就是直接一个Dialog，要么就是简单的PopupWindow，于是决定撸一发。效果略浮夸，但是用来学习Camera和Matrix也是勉强可以的。为了重拾Matrix，特意看了下线性代数的60页PPT。</p>
+<p>使用方式很简单，通过Builder模式构造。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">FlipShareView share = <span class="keyword">new</span> FlipShareView.Builder(<span class="keyword">this</span>, mBtnLeftTop)</div><div class="line">                        .addItem(<span class="keyword">new</span> ShareItem(<span class="string">"Facebook"</span>, Color.WHITE, <span class="number">0xff43549C</span>, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_facebook)))</div><div class="line">                        .addItem(<span class="keyword">new</span> ShareItem(<span class="string">"Twitter"</span>, Color.WHITE, <span class="number">0xff4999F0</span>, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_twitter)))</div><div class="line">                        .addItem(<span class="keyword">new</span> ShareItem(<span class="string">"Google+"</span>, Color.WHITE, <span class="number">0xffD9392D</span>, BitmapFactory.decodeResource(getResources(), R.mipmap.ic_google)))</div><div class="line">                        .addItem(<span class="keyword">new</span> ShareItem(<span class="string">"http://www.wangyuwei.me"</span>, Color.WHITE, <span class="number">0xff57708A</span>))</div><div class="line">                        .setBackgroundColor(<span class="number">0x60000000</span>)</div><div class="line">                        .setItemDuration(<span class="number">500</span>)</div><div class="line">                        .setSeparateLineColor(<span class="number">0x30000000</span>)</div><div class="line">                        .setAnimType(FlipShareView.TYPE_SLIDE)</div><div class="line">                        .create();</div></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016/09/07/FlipShare分享控件/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://github.com/JeasonWong/JeasonWong.github.io/2016/08/29/手摸手教你实现简单粒子动画/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1262,7 +1393,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
