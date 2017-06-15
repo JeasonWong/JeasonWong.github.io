@@ -87,28 +87,22 @@
 
 
 
-<meta name="description" content="问题问题1：子module里的R.java为何不是常量？
-问题2：ButterKnife是怎么解决的？
-问题3：由于ButterKnife的R2.java存在，导致java compile替换了注解中的常量，为何实际运行时没出现问题？
+<meta name="description" content="问题问题1：子module里的R.java为何不是常量？问题2：ButterKnife是怎么解决的？问题3：由于ButterKnife的R2.java存在，导致java compile替换了注解中的常量，为何实际运行时没出现问题？
 解答问题1 子module里的R.java为何不是常量？在模块开发时大家都会发现module中的R.java是没有final关键字的，如:
-1234public s">
+1234public sta">
 <meta property="og:type" content="article">
 <meta property="og:title" content="R.java、R2.java是时候懂了">
 <meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2017/06/15/R-java、R2-java是时候懂了/index.html">
 <meta property="og:site_name" content="巴巴巴巴巴巴掌">
-<meta property="og:description" content="问题问题1：子module里的R.java为何不是常量？
-问题2：ButterKnife是怎么解决的？
-问题3：由于ButterKnife的R2.java存在，导致java compile替换了注解中的常量，为何实际运行时没出现问题？
+<meta property="og:description" content="问题问题1：子module里的R.java为何不是常量？问题2：ButterKnife是怎么解决的？问题3：由于ButterKnife的R2.java存在，导致java compile替换了注解中的常量，为何实际运行时没出现问题？
 解答问题1 子module里的R.java为何不是常量？在模块开发时大家都会发现module中的R.java是没有final关键字的，如:
-1234public s">
-<meta property="og:updated_time" content="2017-06-15T13:07:23.000Z">
+1234public sta">
+<meta property="og:updated_time" content="2017-06-15T13:22:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="R.java、R2.java是时候懂了">
-<meta name="twitter:description" content="问题问题1：子module里的R.java为何不是常量？
-问题2：ButterKnife是怎么解决的？
-问题3：由于ButterKnife的R2.java存在，导致java compile替换了注解中的常量，为何实际运行时没出现问题？
+<meta name="twitter:description" content="问题问题1：子module里的R.java为何不是常量？问题2：ButterKnife是怎么解决的？问题3：由于ButterKnife的R2.java存在，导致java compile替换了注解中的常量，为何实际运行时没出现问题？
 解答问题1 子module里的R.java为何不是常量？在模块开发时大家都会发现module中的R.java是没有final关键字的，如:
-1234public s">
+1234public sta">
 
 
 
@@ -353,9 +347,7 @@
       
 
       
-        <h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>问题1：子module里的R.java为何不是常量？</p>
-<p>问题2：ButterKnife是怎么解决的？</p>
-<p>问题3：由于ButterKnife的R2.java存在，导致java compile替换了注解中的常量，为何实际运行时没出现问题？</p>
+        <h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>问题1：子module里的R.java为何不是常量？<br>问题2：ButterKnife是怎么解决的？<br>问题3：由于ButterKnife的R2.java存在，导致java compile替换了注解中的常量，为何实际运行时没出现问题？</p>
 <h3 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h3><h4 id="问题1-子module里的R-java为何不是常量？"><a href="#问题1-子module里的R-java为何不是常量？" class="headerlink" title="问题1 子module里的R.java为何不是常量？"></a>问题1 子module里的R.java为何不是常量？</h4><p>在模块开发时大家都会发现module中的R.java是没有final关键字的，如:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> icon_awesome_arrow=<span class="number">0x7f020188</span>;</div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> icon_awesome_close=<span class="number">0x7f020189</span>;</div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> icon_awesome_large=<span class="number">0x7f02018a</span>;</div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> icon_awesome_small=<span class="number">0x7f02018b</span>;</div></pre></td></tr></table></figure>
 <p>这样导致我们使用switch-case也好，注解也好，凡是语法规定必须要使用常量的地方都无法直接R.drawable了，这是为何呢？</p>
@@ -368,7 +360,12 @@
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">applyPlugin</span><span class="params">(variants: <span class="type">DomainObjectSet</span>&lt;<span class="type">out</span> <span class="type">BaseVariant</span>&gt;)</span></span> &#123;</div><div class="line">    variants.all &#123; variant -&gt;</div><div class="line">      variant.outputs.forEach &#123; output -&gt;</div><div class="line">        <span class="keyword">val</span> processResources = output.processResources</div><div class="line">        <span class="comment">// TODO proper task registered as source-generating?</span></div><div class="line">        processResources.doLast &#123;</div><div class="line">          <span class="keyword">val</span> pathToR = processResources.packageForR.replace(<span class="string">'.'</span>, File.separatorChar)</div><div class="line">          <span class="keyword">val</span> rFile = processResources.sourceOutputDir.resolve(pathToR).resolve(<span class="string">"R.java"</span>)</div><div class="line"></div><div class="line">          FinalRClassBuilder.brewJava(rFile, processResources.sourceOutputDir,</div><div class="line">              processResources.packageForR, <span class="string">"R2"</span>)</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
 <p>看到没，与R.java一样的目录，一样的包名，然后改成R2，我水土都不服舅服你。mmp again，突然发现这个文件用kotlin写了？</p>
 <p>关于<strong><a href="https://github.com/JakeWharton/butterknife/blob/master/butterknife-gradle-plugin/src/main/java/butterknife/plugin/FinalRClassBuilder.java">FinalRClassBuilder</a></strong>怎么生成的文件我就不写了，代码都在。</p>
-<h4 id="问题3：由于ButterKnife的R2-java存在，导致java-compile替换了注解中的常量，为何实际运行时没出现问题？"><a href="#问题3：由于ButterKnife的R2-java存在，导致java-compile替换了注解中的常量，为何实际运行时没出现问题？" class="headerlink" title="问题3：由于ButterKnife的R2.java存在，导致java compile替换了注解中的常量，为何实际运行时没出现问题？"></a>问题3：由于ButterKnife的R2.java存在，导致java compile替换了注解中的常量，为何实际运行时没出现问题？</h4>
+<h4 id="问题3：由于ButterKnife的R2-java存在，导致java-compile替换了注解中的常量，为何实际运行时没出现问题？"><a href="#问题3：由于ButterKnife的R2-java存在，导致java-compile替换了注解中的常量，为何实际运行时没出现问题？" class="headerlink" title="问题3：由于ButterKnife的R2.java存在，导致java compile替换了注解中的常量，为何实际运行时没出现问题？"></a>问题3：由于ButterKnife的R2.java存在，导致java compile替换了注解中的常量，为何实际运行时没出现问题？</h4><p>一般这个问题会去思考的人比较少，可能大佬们觉得太简单，那我等菜比就来瞅瞅。module实际打成aar的时候是没有把R.java打进来的，各位可以自行解压你们aar中的classes.jar，我就不截图了。大家会发现，R.java没有，但是R2.java有啊，那么我们之前在module中的注解里使用的R2.drawable，在javac的时候直接替换成具体的int值了，那岂不是打包后要蹦蹦蹦啊。然而，并没有，这是为啥呢？</p>
+<p>我们来看ButterKnife的APT生成的ViewBinding的代码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">BazhangActivity_ViewBinding</span><span class="params">(T target, View source)</span> </span>&#123;</div><div class="line">    <span class="keyword">this</span>.target = target;</div><div class="line"></div><div class="line">    target.parentLayout = Utils.findRequiredViewAsType(source, R.id.parent_layout, <span class="string">"field 'parentLayout'"</span>, ViewGroup.class);</div><div class="line">    target.contentLayout = Utils.findRequiredViewAsType(source, R.id.content, <span class="string">"field 'contentLayout'"</span>, FrameLayout.class);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>擦，发现了吧，实际findViewById取得并不是我们注解里的int值，而仍然是R.id，也就是说注解里传的R.id在编译时已经把该做的都做完了，APT生成的代码取得还是AAPT最终为app生成的R.java，那么也就是最终app打包后BazhangActivity_ViewBinding里的值和原BazhangActivity的值基本都是不同的。假如还在用反射去取注解里的int值来实现findViewById的话就真的尴尬了。</p>
+<h3 id="尾语"><a href="#尾语" class="headerlink" title="尾语"></a>尾语</h3><p>下班、回家。</p>
+
       
     </div>
 
@@ -545,7 +542,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题"><span class="nav-number">1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解答"><span class="nav-number">2.</span> <span class="nav-text">解答</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#问题1-子module里的R-java为何不是常量？"><span class="nav-number">2.1.</span> <span class="nav-text">问题1 子module里的R.java为何不是常量？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#问题2：ButterKnife是怎么解决的？"><span class="nav-number">2.2.</span> <span class="nav-text">问题2：ButterKnife是怎么解决的？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#问题3：由于ButterKnife的R2-java存在，导致java-compile替换了注解中的常量，为何实际运行时没出现问题？"><span class="nav-number">2.3.</span> <span class="nav-text">问题3：由于ButterKnife的R2.java存在，导致java compile替换了注解中的常量，为何实际运行时没出现问题？</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题"><span class="nav-number">1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解答"><span class="nav-number">2.</span> <span class="nav-text">解答</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#问题1-子module里的R-java为何不是常量？"><span class="nav-number">2.1.</span> <span class="nav-text">问题1 子module里的R.java为何不是常量？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#问题2：ButterKnife是怎么解决的？"><span class="nav-number">2.2.</span> <span class="nav-text">问题2：ButterKnife是怎么解决的？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#问题3：由于ButterKnife的R2-java存在，导致java-compile替换了注解中的常量，为何实际运行时没出现问题？"><span class="nav-number">2.3.</span> <span class="nav-text">问题3：由于ButterKnife的R2.java存在，导致java compile替换了注解中的常量，为何实际运行时没出现问题？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#尾语"><span class="nav-number">3.</span> <span class="nav-text">尾语</span></a></li></ol></div>
             
 
           </div>
