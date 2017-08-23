@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="wangyuwei" />
+  <meta name="keywords" content="Hawk, 源码解析," />
 
 
 
@@ -87,12 +87,36 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="巴巴巴巴巴巴掌">
-<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/index.html">
+<meta name="description" content="项目地址：https://github.com/orhanobut/hawk
+
+一、初探Hawk是一种安全的、简单的做key、value存储的库。
+先来看看Hawk的初始化
+1Hawk.init(this).build();
+1.1 构造者模式走进初始化，和大部分lib一样使用了构造者模式做些配置，其中先看看 HawkBuilder.java 所需要构造的变量：
+1234567private Co">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hawk源码解析">
+<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2017/08/23/Hawk源码解析/index.html">
 <meta property="og:site_name" content="巴巴巴巴巴巴掌">
+<meta property="og:description" content="项目地址：https://github.com/orhanobut/hawk
+
+一、初探Hawk是一种安全的、简单的做key、value存储的库。
+先来看看Hawk的初始化
+1Hawk.init(this).build();
+1.1 构造者模式走进初始化，和大部分lib一样使用了构造者模式做些配置，其中先看看 HawkBuilder.java 所需要构造的变量：
+1234567private Co">
+<meta property="og:image" content="https://github.com/orhanobut/hawk/raw/master/art/how-hawk-works.png">
+<meta property="og:updated_time" content="2017-08-23T10:22:34.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="巴巴巴巴巴巴掌">
+<meta name="twitter:title" content="Hawk源码解析">
+<meta name="twitter:description" content="项目地址：https://github.com/orhanobut/hawk
+
+一、初探Hawk是一种安全的、简单的做key、value存储的库。
+先来看看Hawk的初始化
+1Hawk.init(this).build();
+1.1 构造者模式走进初始化，和大部分lib一样使用了构造者模式做些配置，其中先看看 HawkBuilder.java 所需要构造的变量：
+1234567private Co">
+<meta name="twitter:image" content="https://github.com/orhanobut/hawk/raw/master/art/how-hawk-works.png">
 
 
 
@@ -120,13 +144,13 @@
 
 
 
-  <link rel="canonical" href="https://github.com/JeasonWong/JeasonWong.github.io/"/>
+  <link rel="canonical" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/08/23/Hawk源码解析/"/>
 
 
 
 
 
-  <title> 巴巴巴巴巴巴掌 </title>
+  <title> Hawk源码解析 | 巴巴巴巴巴巴掌 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -161,9 +185,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -246,9 +268,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -278,10 +300,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/2017/08/23/Hawk源码解析/" itemprop="url">
-                  Hawk源码解析
-                </a>
+                Hawk源码解析
               
             
           </h1>
@@ -310,6 +329,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a class="cloud-tie-join-count" href="/2017/08/23/Hawk源码解析/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count join-count" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -332,9 +361,7 @@
       
 
       
-        
-          
-            <p>项目地址：<a href="https://github.com/orhanobut/hawk">https://github.com/orhanobut/hawk</a></p>
+        <p>项目地址：<a href="https://github.com/orhanobut/hawk">https://github.com/orhanobut/hawk</a></p>
 <p><img src="https://github.com/orhanobut/hawk/raw/master/art/how-hawk-works.png" alt="处理流程"></p>
 <h3 id="一、初探"><a href="#一、初探" class="headerlink" title="一、初探"></a>一、初探</h3><p>Hawk是一种安全的、简单的做key、value存储的库。</p>
 <p>先来看看Hawk的初始化</p>
@@ -378,1242 +405,72 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</div><div class="line"><span class="keyword">private</span> &lt;T&gt; <span class="function">T <span class="title">toList</span><span class="params">(String json, Class&lt;?&gt; type)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">  <span class="keyword">if</span> (type == <span class="keyword">null</span>) &#123;</div><div class="line">    <span class="keyword">return</span> (T) <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">  &#125;</div><div class="line">  <span class="comment">// 利用gson反序列化回来</span></div><div class="line">  List&lt;T&gt; list = parser.fromJson(</div><div class="line">      json,</div><div class="line">      <span class="keyword">new</span> TypeToken&lt;List&lt;T&gt;&gt;() &#123;</div><div class="line">      &#125;.getType()</div><div class="line">  );</div><div class="line"></div><div class="line">  <span class="keyword">int</span> size = list.size();</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) &#123;</div><div class="line">    <span class="comment">// 解决子元素泛型擦除问题</span></div><div class="line">    list.set(i, (T) parser.fromJson(parser.toJson(list.get(i)), type));</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> (T) list;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="尾语"><a href="#尾语" class="headerlink" title="尾语"></a>尾语</h3><p>Hawk的代码写的很干净，流程中任何步骤都可以被开发人员定制，比如你如果觉得gson太慢，可以换成别的。</p>
 
-          
+      
+    </div>
+
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
       
     </div>
 
     <div>
+      
+        
+
       
     </div>
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/06/15/R-java、R2-java是时候懂了/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="JeasonWong">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="巴巴巴巴巴巴掌">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/06/15/R-java、R2-java是时候懂了/" itemprop="url">
-                  R.java、R2.java是时候懂了
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-15T20:25:58+08:00">
-                2017-06-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/Hawk-源码解析/" rel="tag"># Hawk, 源码解析</a>
           
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
         
-          
-            <h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>问题1：子module里的R.java为何不是常量？<br>问题2：ButterKnife是怎么解决的？<br>问题3：由于ButterKnife的R2.java存在，导致java compile替换了注解中的常量，为何实际运行时没出现问题？</p>
-<h3 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h3><h4 id="问题1-子module里的R-java为何不是常量？"><a href="#问题1-子module里的R-java为何不是常量？" class="headerlink" title="问题1 子module里的R.java为何不是常量？"></a>问题1 子module里的R.java为何不是常量？</h4><p>在模块开发时大家都会发现module中的R.java是没有final关键字的，如:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> icon_awesome_arrow=<span class="number">0x7f020188</span>;</div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> icon_awesome_close=<span class="number">0x7f020189</span>;</div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> icon_awesome_large=<span class="number">0x7f02018a</span>;</div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> icon_awesome_small=<span class="number">0x7f02018b</span>;</div></pre></td></tr></table></figure>
-<p>这样导致我们使用switch-case也好，注解也好，凡是语法规定必须要使用常量的地方都无法直接R.drawable了，这是为何呢？</p>
-<p>那么我们来假设如果有final的话会出现什么问题，每个module各自打成aar的时候AAPT会单独生成R.java，那么在执行java compile成class的时候会将常量直接替换成具体的值，如:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@BindView</span>(<span class="number">2131755430</span>)</div><div class="line"><span class="keyword">protected</span> FrameLayout errorViewParent;</div></pre></td></tr></table></figure>
-<p>由于各个module间无法保证R.java中变量对应着的数值不同，所以如果出现相同的岂不是尴尬了？当然假如相同也没关系，可以反过来取到int数值后去找对应的resName，然后再去app的大R.java里去取，再将各个module的替换掉。mdzz想着就麻烦，索性不给module的R.java定义为常量了。</p>
-<p>俗话说的好，天王盖地虎，小鸡炖蘑菇，没有什么是他们那些大佬无法解决的，比如ButterKnife就提供了一个方案。</p>
-<h4 id="问题2：ButterKnife是怎么解决的？"><a href="#问题2：ButterKnife是怎么解决的？" class="headerlink" title="问题2：ButterKnife是怎么解决的？"></a>问题2：ButterKnife是怎么解决的？</h4><p>mmp，既然官方搞得R.java不是常量，那我们就copy一份R.java，搞个R2.java，然后把所有变量都加上final关键字，然后相关地方直接引用R2不就得了咯。没错，就是这么简单，让我们来看看相关gradle plugin是怎样做的。</p>
-<p><a href="https://github.com/JakeWharton/butterknife/blob/master/butterknife-gradle-plugin/src/main/java/butterknife/plugin/ButterKnifePlugin.kt">源码</a></p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">fun</span> <span class="title">applyPlugin</span><span class="params">(variants: <span class="type">DomainObjectSet</span>&lt;<span class="type">out</span> <span class="type">BaseVariant</span>&gt;)</span></span> &#123;</div><div class="line">    variants.all &#123; variant -&gt;</div><div class="line">      variant.outputs.forEach &#123; output -&gt;</div><div class="line">        <span class="keyword">val</span> processResources = output.processResources</div><div class="line">        <span class="comment">// TODO proper task registered as source-generating?</span></div><div class="line">        processResources.doLast &#123;</div><div class="line">          <span class="keyword">val</span> pathToR = processResources.packageForR.replace(<span class="string">'.'</span>, File.separatorChar)</div><div class="line">          <span class="keyword">val</span> rFile = processResources.sourceOutputDir.resolve(pathToR).resolve(<span class="string">"R.java"</span>)</div><div class="line"></div><div class="line">          FinalRClassBuilder.brewJava(rFile, processResources.sourceOutputDir,</div><div class="line">              processResources.packageForR, <span class="string">"R2"</span>)</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
-<p>看到没，与R.java一样的目录，一样的包名，然后改成R2，我水土都不服舅服你。mmp again，突然发现这个文件用kotlin写了？</p>
-<p>关于<strong><a href="https://github.com/JakeWharton/butterknife/blob/master/butterknife-gradle-plugin/src/main/java/butterknife/plugin/FinalRClassBuilder.java">FinalRClassBuilder</a></strong>怎么生成的文件我就不写了，代码都在。</p>
-<h4 id="问题3：由于ButterKnife的R2-java存在，导致java-compile替换了注解中的常量，为何实际运行时没出现问题？"><a href="#问题3：由于ButterKnife的R2-java存在，导致java-compile替换了注解中的常量，为何实际运行时没出现问题？" class="headerlink" title="问题3：由于ButterKnife的R2.java存在，导致java compile替换了注解中的常量，为何实际运行时没出现问题？"></a>问题3：由于ButterKnife的R2.java存在，导致java compile替换了注解中的常量，为何实际运行时没出现问题？</h4><p>一般这个问题会去思考的人比较少，可能大佬们觉得太简单，那我等菜比就来瞅瞅。module实际打成aar的时候是没有把R.java打进来的，各位可以自行解压你们aar中的classes.jar，我就不截图了。大家会发现，R.java没有，但是R2.java有啊，那么我们之前在module中的注解里使用的R2.drawable，在javac的时候直接替换成具体的int值了，那岂不是打包后要蹦蹦蹦啊。然而，并没有，这是为啥呢？</p>
-<p>我们来看ButterKnife的APT生成的ViewBinding的代码:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">BazhangActivity_ViewBinding</span><span class="params">(T target, View source)</span> </span>&#123;</div><div class="line">    <span class="keyword">this</span>.target = target;</div><div class="line"></div><div class="line">    target.parentLayout = Utils.findRequiredViewAsType(source, R.id.parent_layout, <span class="string">"field 'parentLayout'"</span>, ViewGroup.class);</div><div class="line">    target.contentLayout = Utils.findRequiredViewAsType(source, R.id.content, <span class="string">"field 'contentLayout'"</span>, FrameLayout.class);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>擦，发现了吧，实际findViewById取得并不是我们注解里的int值，而仍然是R.id，也就是说注解里传的R.id在编译时已经把该做的都做完了，APT生成的代码取得还是AAPT最终为app生成的R.java，那么也就是最终app打包后BazhangActivity_ViewBinding里的值和原BazhangActivity的值基本都是不同的。假如还在用反射去取注解里的int值来实现findViewById的话就真的尴尬了。</p>
-<h3 id="尾语"><a href="#尾语" class="headerlink" title="尾语"></a>尾语</h3><p>下班、回家。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
       
 
       
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/03/10/TabLayout与ViewPager绑定后的大坑/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="JeasonWong">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="巴巴巴巴巴巴掌">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
+              <a href="/2017/06/15/R-java、R2-java是时候懂了/" rel="next" title="R.java、R2.java是时候懂了">
+                <i class="fa fa-chevron-left"></i> R.java、R2.java是时候懂了
+              </a>
             
-              
-                
-                <a class="post-title-link" href="/2017/03/10/TabLayout与ViewPager绑定后的大坑/" itemprop="url">
-                  TabLayout与ViewPager绑定后的大坑
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-10T15:26:38+08:00">
-                2017-03-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/03/05/ASM实战统计方法耗时/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="JeasonWong">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="巴巴巴巴巴巴掌">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/03/05/ASM实战统计方法耗时/" itemprop="url">
-                  ASM实战统计方法耗时
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-05T11:04:43+08:00">
-                2017-03-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>先上demo地址：<a href="https://github.com/JeasonWong/CostTime">https://github.com/JeasonWong/CostTime</a></p>
-<h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><p>实际业务开发中有很多需要不改变原业务代码，而需额外增加一些包括各种统计的需求，如APM、无数据埋点等，也就是耳熟能详的AOP，本文以统计方法耗时为例，不使用Aspectj，采用原生态的方式进行实践。</p>
-<p>使用者所需要做的就是对所需要统计耗时的方法头部加指定注解@Cost就可以使用了。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/03/05/ASM实战统计方法耗时/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
           </div>
-          <!--/noindex-->
-        
-      
-    </div>
 
-    <div>
-      
-    </div>
+          <span class="post-nav-divider"></span>
 
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/02/09/Mess详解（关于Activity、自定义View等的混淆）/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="JeasonWong">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="巴巴巴巴巴巴掌">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
+          <div class="post-nav-prev post-nav-item">
             
-            
-              
-                
-                <a class="post-title-link" href="/2017/02/09/Mess详解（关于Activity、自定义View等的混淆）/" itemprop="url">
-                  Mess详解（关于Activity、自定义View等的混淆）
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-09T14:19:35+08:00">
-                2017-02-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>Mess ：<a href="https://github.com/JackCho/Mess">https://github.com/JackCho/Mess</a></p>
-<h3 id="Mess介绍"><a href="#Mess介绍" class="headerlink" title="Mess介绍"></a>Mess介绍</h3><p>众所周知，我们开混淆打包后生成的apk里，Activity、自定义View、Service等出现在xml里的相关Java类默认都会被keep住，那么这对于app的保护是不足够好的，Mess就是来解决这个问题，把即使出现在xml文件中的Java类照样混淆。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/02/09/Mess详解（关于Activity、自定义View等的混淆）/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
           </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/01/22/手摸手增加字节码往方法体内插代码/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="JeasonWong">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="巴巴巴巴巴巴掌">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/22/手摸手增加字节码往方法体内插代码/" itemprop="url">
-                  手摸手增加字节码往方法体内插代码
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-22T10:41:56+08:00">
-                2017-01-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <p>本文动态增加字节码是直接使用的ASM，有关ASM的内容可以看下我之前的一篇文章：<a href="http://www.wangyuwei.me/2017/01/20/ASM-%E6%93%8D%E4%BD%9C%E5%AD%97%E8%8A%82%E7%A0%81%E5%88%9D%E6%8E%A2/">ASM 操作字节码初探</a></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/01/22/手摸手增加字节码往方法体内插代码/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/01/20/ASM-操作字节码初探/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="JeasonWong">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="巴巴巴巴巴巴掌">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/20/ASM-操作字节码初探/" itemprop="url">
-                  ASM 操作字节码初探
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-20T11:20:59+08:00">
-                2017-01-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>JVM的类型签名对照表</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">Type Signature</th>
-<th style="text-align:left">Java Type</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">Z</td>
-<td style="text-align:left">boolean</td>
-</tr>
-<tr>
-<td style="text-align:left">B</td>
-<td style="text-align:left">byte</td>
-</tr>
-<tr>
-<td style="text-align:left">C</td>
-<td style="text-align:left">char</td>
-</tr>
-<tr>
-<td style="text-align:left">S</td>
-<td style="text-align:left">short</td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">int</td>
-</tr>
-<tr>
-<td style="text-align:left">J</td>
-<td style="text-align:left">long</td>
-</tr>
-<tr>
-<td style="text-align:left">F</td>
-<td style="text-align:left">float</td>
-</tr>
-<tr>
-<td style="text-align:left">D</td>
-<td style="text-align:left">double</td>
-</tr>
-<tr>
-<td style="text-align:left">L</td>
-<td style="text-align:left">fully-qualified-class ;fully-qualified-class</td>
-</tr>
-<tr>
-<td style="text-align:left">[ type</td>
-<td style="text-align:left">type[]</td>
-</tr>
-<tr>
-<td style="text-align:left">( arg-types ) ret-type</td>
-<td style="text-align:left">method type</td>
-</tr>
-</tbody>
-</table>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/01/20/ASM-操作字节码初探/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+    <div class="post-spread">
       
     </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/01/19/JVM指令集整理/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="JeasonWong">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="巴巴巴巴巴巴掌">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/19/JVM指令集整理/" itemprop="url">
-                  JVM指令集整理
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-19T13:58:54+08:00">
-                2017-01-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>看字节码从这里开始。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/01/19/JVM指令集整理/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/01/16/手摸手一起hook点击事件/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="JeasonWong">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="巴巴巴巴巴巴掌">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/16/手摸手一起hook点击事件/" itemprop="url">
-                  手摸手一起hook点击事件
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-16T22:23:30+08:00">
-                2017-01-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>hook一事看似神秘，其实并不是那么难，希望各位看官看过本文之后能有所收获。</p>
-<p>本次是hook Android的点击事件，也就是OnClickListener，hook的意义在于你能在调用setOnClickListener后做些其他的事，其他一些你想和所有点击事件一起处理的事，那么在这里，我就以埋点为例吧。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/01/16/手摸手一起hook点击事件/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/01/04/手摸手带你mock-api/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="JeasonWong">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="巴巴巴巴巴巴掌">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/04/手摸手带你mock-api/" itemprop="url">
-                  手摸手带你mock api
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-04T18:31:04+08:00">
-                2017-01-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>mock api是我们日常开发必不可少的一项工作，业务开发中经常会出现UI做完了，但api还没有好的情况，有的时候甚至要提测了，api还没好，那么产品和测试验收的时候咋办呢？</p>
-<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>所有的方案都依赖于后端需要先给一个api模板。</p>
-<p>一般来说有三种途径:</p>
-<h3 id="一、local-data"><a href="#一、local-data" class="headerlink" title="一、local data"></a>一、local data</h3><p>业务熟练的同学model层封装的足够好，getDataFromRemote 和 getDataFromLocal切换自如。</p>
-<h3 id="二、local-ip"><a href="#二、local-ip" class="headerlink" title="二、local ip"></a>二、local ip</h3><p>把baseUrl换成本地ip，本地启个端口开个服务，此方案照样轻松。</p>
-<h3 id="三、借力工具"><a href="#三、借力工具" class="headerlink" title="三、借力工具"></a>三、借力工具</h3><p>本文大力推借力工具的方案，因为前两种基本局限于我们自己操作，产品和测试同学往往会更无力点，charles登场。<br>大部分同学对charles的印象仅仅局限于抓包看下数据，其实他的功能强的一逼，mock api仅仅是冰山一角。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/01/04/手摸手带你mock-api/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-  </section>
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
-  </nav>
-
+  </div>
 
 
           </div>
@@ -1621,6 +478,12 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+  </div>
+
 
         </div>
         
@@ -1640,8 +503,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -1714,6 +586,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、初探"><span class="nav-number">1.</span> <span class="nav-text">一、初探</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-构造者模式"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 构造者模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-外观模式"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 外观模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、-put操作"><span class="nav-number">2.</span> <span class="nav-text">二、 put操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-delete"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 delete()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-converter-toString"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 converter.toString()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-encryption-encrypt"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 encryption.encrypt()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-串行操作"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 串行操作</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、get操作"><span class="nav-number">3.</span> <span class="nav-text">三、get操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-解析串行文本"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 解析串行文本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-反序列化为原对象"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 反序列化为原对象</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#尾语"><span class="nav-number">4.</span> <span class="nav-text">尾语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1819,6 +707,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
 
   
 
