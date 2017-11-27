@@ -87,13 +87,49 @@
 
 
 
+<meta name="description" content="项目地址：https://github.com/JeasonWong/MainDexWrapper
+使用场景场景很多，先说两种：
+
+当使用了multidex进行分包后，为了优化app首次启动
+
+需要代理Application时，如InstantRun和其他hotfix框架
+
+…
+
+如何使用官方方案其实官方支持两种方式将指定class打入maindex：
+
+multiDexKeepProguard">
 <meta property="og:type" content="article">
-<meta property="og:title" content="TabLayout与ViewPager绑定后的大坑">
-<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2017/03/10/TabLayout与ViewPager绑定后的大坑/index.html">
+<meta property="og:title" content="一个快速将指定class打入maindex的插件">
+<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2017/11/27/一个快速将指定class打入maindex的插件/index.html">
 <meta property="og:site_name" content="巴巴巴巴巴巴掌">
-<meta property="og:updated_time" content="2017-03-10T07:26:38.000Z">
+<meta property="og:description" content="项目地址：https://github.com/JeasonWong/MainDexWrapper
+使用场景场景很多，先说两种：
+
+当使用了multidex进行分包后，为了优化app首次启动
+
+需要代理Application时，如InstantRun和其他hotfix框架
+
+…
+
+如何使用官方方案其实官方支持两种方式将指定class打入maindex：
+
+multiDexKeepProguard">
+<meta property="og:updated_time" content="2017-11-27T02:45:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="TabLayout与ViewPager绑定后的大坑">
+<meta name="twitter:title" content="一个快速将指定class打入maindex的插件">
+<meta name="twitter:description" content="项目地址：https://github.com/JeasonWong/MainDexWrapper
+使用场景场景很多，先说两种：
+
+当使用了multidex进行分包后，为了优化app首次启动
+
+需要代理Application时，如InstantRun和其他hotfix框架
+
+…
+
+如何使用官方方案其实官方支持两种方式将指定class打入maindex：
+
+multiDexKeepProguard">
 
 
 
@@ -121,13 +157,13 @@
 
 
 
-  <link rel="canonical" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/03/10/TabLayout与ViewPager绑定后的大坑/"/>
+  <link rel="canonical" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/11/27/一个快速将指定class打入maindex的插件/"/>
 
 
 
 
 
-  <title> TabLayout与ViewPager绑定后的大坑 | 巴巴巴巴巴巴掌 </title>
+  <title> 一个快速将指定class打入maindex的插件 | 巴巴巴巴巴巴掌 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -256,7 +292,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/03/10/TabLayout与ViewPager绑定后的大坑/">
+    <link itemprop="mainEntityOfPage" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/11/27/一个快速将指定class打入maindex的插件/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JeasonWong">
@@ -277,7 +313,7 @@
             
             
               
-                TabLayout与ViewPager绑定后的大坑
+                一个快速将指定class打入maindex的插件
               
             
           </h1>
@@ -292,8 +328,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-10T15:26:38+08:00">
-                2017-03-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-27T10:19:35+08:00">
+                2017-11-27
               </time>
             
 
@@ -311,8 +347,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/03/10/TabLayout与ViewPager绑定后的大坑/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/03/10/TabLayout与ViewPager绑定后的大坑/" itemprop="commentCount"></span>
+                <a href="/2017/11/27/一个快速将指定class打入maindex的插件/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/11/27/一个快速将指定class打入maindex的插件/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -338,7 +374,45 @@
       
 
       
-        
+        <p>项目地址：<a href="https://github.com/JeasonWong/MainDexWrapper">https://github.com/JeasonWong/MainDexWrapper</a></p>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><p>场景很多，先说两种：</p>
+<ul>
+<li><p>当使用了multidex进行分包后，为了优化app首次启动</p>
+</li>
+<li><p>需要代理Application时，如InstantRun和其他hotfix框架</p>
+</li>
+<li>…</li>
+</ul>
+<h3 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h3><h4 id="官方方案"><a href="#官方方案" class="headerlink" title="官方方案"></a>官方方案</h4><p>其实官方支持两种方式将指定class打入maindex：</p>
+<ul>
+<li>multiDexKeepProguard file(‘./maindex-rules.pro’)</li>
+<li>multiDexKeepFile file(‘./maindex.txt’)</li>
+</ul>
+<p>关于这两种方案的使用我就不赘述了。</p>
+<h4 id="MainDexWrapper"><a href="#MainDexWrapper" class="headerlink" title="MainDexWrapper"></a>MainDexWrapper</h4><h5 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h5><p>MainDexWrapper 支持两种方式，其中一种和官方的<code>multiDexKeepProguard file(&#39;./maindex-rules.pro&#39;)</code>相似。</p>
+<p>首先在根build.gradle将插件依赖好：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">buildscript &#123;</div><div class="line">    repositories &#123;</div><div class="line">        maven &#123;</div><div class="line">            url <span class="string">'https://dl.bintray.com/wangyuwei/maven'</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    dependencies &#123;</div><div class="line">        classpath <span class="string">'me.wangyuwei:maindexwrapper-plugin:1.0.0'</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">allprojects &#123;</div><div class="line">    repositories &#123;</div><div class="line">        maven &#123;</div><div class="line">            url <span class="string">'https://dl.bintray.com/wangyuwei/maven'</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后在app的build.gradle使用插件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">apply plugin: &apos;me.wangyuwei.maindexwrapper&apos;</div><div class="line"></div><div class="line">compile &apos;me.wangyuwei:maindexwrapper-annotations:1.0.0&apos;</div></pre></td></tr></table></figure>
+<h5 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h5><p>两种方式：</p>
+<ul>
+<li>书写keep-rules</li>
+<li>给指定的class加上 <code>@KeepMainDex</code> 注解</li>
+</ul>
+<p>1、书写keep-rules：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#</div><div class="line">#-keep class me.wangyuwei.maindexwrapper.demo.Demo &#123;*;&#125;</div></pre></td></tr></table></figure>
+<p>就像配置混淆方式一样，把你需要打入maindex的class的规则写好。</p>
+<p>2、给指定的class加上 <code>@KeepMainDex</code> 注解</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> me.wangyuwei.maindexwrapper.annotations.KeepMainDex;</div><div class="line"></div><div class="line"><span class="meta">@KeepMainDex</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InnerClass</span> </span>&#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>就像混淆支持 <code>@keep</code> 注解一样，使用也很简单。</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>其实很简单。</p>
+<p>一句话说明就是在执行multidexTask前将我们的 <strong>keep-rules</strong> 加入到 <strong>/intermediates/multi-dex/${variant.dirName}/manifest_keep.txt</strong> 里。</p>
+<p><strong>manifest_keep.txt</strong> 是multidex分包时一个很重要的文件，这里keep住的class会被打入到maindex。</p>
+<p>那么目前插件实现的两种方案就比较好下手了：</p>
+<p>第一种是将开发人员书写的 <strong>maindex-rules.pro</strong> 里的内容直接copy到 <strong>manifest_keep.txt</strong> 里；</p>
+<p>第二种用注解的方式直接遍历生成dex前的classes，含有 <code>@KeepMainDex</code>注解的先收集起来，然后再和前者一样copy到 <strong>manifest_keep.txt</strong> 里，我这里使用的 <strong>ASM</strong> 遍历的classes，需要注意的是需要将ClassName里的 <code>&quot;/&quot;替换成&quot;.&quot;</code>，别的就很简单了。</p>
+<h3 id="尾语"><a href="#尾语" class="headerlink" title="尾语"></a>尾语</h3><p>插件整个下来比较简单，当做练手也是可以的。</p>
+
       
     </div>
 
@@ -374,8 +448,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/03/05/ASM实战统计方法耗时/" rel="next" title="ASM实战统计方法耗时">
-                <i class="fa fa-chevron-left"></i> ASM实战统计方法耗时
+              <a href="/2017/08/23/Hawk源码解析/" rel="next" title="Hawk源码解析">
+                <i class="fa fa-chevron-left"></i> Hawk源码解析
               </a>
             
           </div>
@@ -383,10 +457,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/06/15/R-java、R2-java是时候懂了/" rel="prev" title="R.java、R2.java是时候懂了">
-                R.java、R2.java是时候懂了 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -440,8 +510,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -514,6 +593,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用场景"><span class="nav-number">1.</span> <span class="nav-text">使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何使用"><span class="nav-number">2.</span> <span class="nav-text">如何使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#官方方案"><span class="nav-number">2.1.</span> <span class="nav-text">官方方案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MainDexWrapper"><span class="nav-number">2.2.</span> <span class="nav-text">MainDexWrapper</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#配置"><span class="nav-number">2.2.1.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#使用"><span class="nav-number">2.2.2.</span> <span class="nav-text">使用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">3.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#尾语"><span class="nav-number">4.</span> <span class="nav-text">尾语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -639,9 +734,9 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'jeasonwong';
-      var disqus_identifier = '2017/03/10/TabLayout与ViewPager绑定后的大坑/';
+      var disqus_identifier = '2017/11/27/一个快速将指定class打入maindex的插件/';
 
-      var disqus_title = "TabLayout与ViewPager绑定后的大坑";
+      var disqus_title = "一个快速将指定class打入maindex的插件";
 
 
       function run_disqus_script(disqus_script) {
