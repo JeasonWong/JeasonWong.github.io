@@ -87,34 +87,21 @@
 
 
 
-<meta name="description" content="一般来说JSON的Key是已知的，如下所示：
-{
-    &amp;quot;results&amp;quot;: [
-           {
-            &amp;quot;id&amp;quot;: 1,
-            &amp;quot;name&amp;quot;: &amp;quot;wangyuwei&amp;quot;,
-            &amp;quot;sexuality&amp;quot;: &amp;quot;male&amp;quot;">
+<meta name="description" content="项目地址：https://github.com/JeasonWong/R2Assistant
+介绍在子 module 中使用 ButterKnife 时，如果想使用 ButterKnife 提供的编译期注解，那么就得使用 ButterKnife 的 gradle 插件所生成的R2.java，比如 @BindView( R2.id.xxx )，关于更多 R.java 与 R2.java 的资料可以看">
 <meta property="og:type" content="article">
-<meta property="og:title" content="解析特殊结构的JSON">
-<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2015/09/11/解析特殊结构的JSON/index.html">
+<meta property="og:title" content="一个快速生成R2.java中fields的插件">
+<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2017/12/02/一个快速生成R2-java中fields的插件/index.html">
 <meta property="og:site_name" content="巴巴巴巴巴巴掌">
-<meta property="og:description" content="一般来说JSON的Key是已知的，如下所示：
-{
-    &amp;quot;results&amp;quot;: [
-           {
-            &amp;quot;id&amp;quot;: 1,
-            &amp;quot;name&amp;quot;: &amp;quot;wangyuwei&amp;quot;,
-            &amp;quot;sexuality&amp;quot;: &amp;quot;male&amp;quot;">
-<meta property="og:updated_time" content="2017-03-24T03:07:03.000Z">
+<meta property="og:description" content="项目地址：https://github.com/JeasonWong/R2Assistant
+介绍在子 module 中使用 ButterKnife 时，如果想使用 ButterKnife 提供的编译期注解，那么就得使用 ButterKnife 的 gradle 插件所生成的R2.java，比如 @BindView( R2.id.xxx )，关于更多 R.java 与 R2.java 的资料可以看">
+<meta property="og:image" content="http://ojafgwnc4.bkt.clouddn.com/r2assistant.gif">
+<meta property="og:updated_time" content="2017-12-02T03:34:22.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="解析特殊结构的JSON">
-<meta name="twitter:description" content="一般来说JSON的Key是已知的，如下所示：
-{
-    &amp;quot;results&amp;quot;: [
-           {
-            &amp;quot;id&amp;quot;: 1,
-            &amp;quot;name&amp;quot;: &amp;quot;wangyuwei&amp;quot;,
-            &amp;quot;sexuality&amp;quot;: &amp;quot;male&amp;quot;">
+<meta name="twitter:title" content="一个快速生成R2.java中fields的插件">
+<meta name="twitter:description" content="项目地址：https://github.com/JeasonWong/R2Assistant
+介绍在子 module 中使用 ButterKnife 时，如果想使用 ButterKnife 提供的编译期注解，那么就得使用 ButterKnife 的 gradle 插件所生成的R2.java，比如 @BindView( R2.id.xxx )，关于更多 R.java 与 R2.java 的资料可以看">
+<meta name="twitter:image" content="http://ojafgwnc4.bkt.clouddn.com/r2assistant.gif">
 
 
 
@@ -142,13 +129,13 @@
 
 
 
-  <link rel="canonical" href="https://github.com/JeasonWong/JeasonWong.github.io/2015/09/11/解析特殊结构的JSON/"/>
+  <link rel="canonical" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/12/02/一个快速生成R2-java中fields的插件/"/>
 
 
 
 
 
-  <title> 解析特殊结构的JSON | 巴巴巴巴巴巴掌 </title>
+  <title> 一个快速生成R2.java中fields的插件 | 巴巴巴巴巴巴掌 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -277,7 +264,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://github.com/JeasonWong/JeasonWong.github.io/2015/09/11/解析特殊结构的JSON/">
+    <link itemprop="mainEntityOfPage" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/12/02/一个快速生成R2-java中fields的插件/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JeasonWong">
@@ -298,7 +285,7 @@
             
             
               
-                解析特殊结构的JSON
+                一个快速生成R2.java中fields的插件
               
             
           </h1>
@@ -313,8 +300,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-09-11T19:40:29+08:00">
-                2015-09-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-02T10:28:49+08:00">
+                2017-12-02
               </time>
             
 
@@ -332,8 +319,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2015/09/11/解析特殊结构的JSON/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/09/11/解析特殊结构的JSON/" itemprop="commentCount"></span>
+                <a href="/2017/12/02/一个快速生成R2-java中fields的插件/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/12/02/一个快速生成R2-java中fields的插件/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -359,93 +346,14 @@
       
 
       
-        <p>一般来说JSON的Key是已知的，如下所示：</p>
-<pre><code>{
-    &quot;results&quot;: [
-           {
-            &quot;id&quot;: 1,
-            &quot;name&quot;: &quot;wangyuwei&quot;,
-            &quot;sexuality&quot;: &quot;male&quot;
-        },
-        {
-            &quot;id&quot;: 2,
-            &quot;name&quot;: &quot;JeasonWong&quot;,
-            &quot;sexuality&quot;: &quot;female&quot;
-        }
-    ]
-}
-</code></pre><p>这样的JSON太容易解析了，但是有性能上的缺点，比如”id”,”name”,”sexuality”这些Key一直重复出现，一定程度上成为了冗余数据，那么问题来了，如何解决呢？参考以下JSON格式。</p>
-<pre><code>{
-    data: {
-        snapshot: {
-            fields: [
-                &quot;open_px&quot;,
-                &quot;high_px&quot;,
-                &quot;low_px&quot;
-            ],
-            600570.SS: [
-                47.08,
-                48.38,
-                45.88
-            ],
-            000001.SZ: [
-                11.02,
-                11.12,
-                10.88
-            ]
-        }
-    }
-}
-</code></pre><p>这种JSON格式并不是很常见，但是我认为性能确实很强悍的。没有多余的Key，除了”fields”外，其余的Key都不是事先知道的，而”fields”里的Value确是与”fields”同级Key的Value一一对应，成为这些Value的Key。多么好的一个想法！</p>
-<p>那么问题来了，对于这种未知Key的JSON数组我们该如何下手呢？</p>
-<a id="more"></a>
-<p>虽然不知道Key，但我们可以使用Iterator遍历一遍就行了。</p>
-<pre><code>JSONObject jsonObj = new JSONObject(json).getJSONObject(&quot;data&quot;).getJSONObject(&quot;snapshot&quot;);
-Iterator keyIter = jsonObj.keys();
-</code></pre><p>这样一来，所有的Key都拿到了，但这个时候我们只拿到了最外层的Key，即”fields”,”600570.SS”,”000001.SZ”，而”fileds”里的Value还没取出，这些Value即将作为”600570.SS”,”000001.SZ”中Value的Key了（前面已经说了，又啰嗦一遍:)）</p>
-<pre><code>List list = new ArrayList();
-JSONArray fields = jsonObj.getJSONArray(&quot;fields&quot;);
-for (int i = 0; i &lt; fields.length(); i++) {
-    list.add(i, fields.getString(i));
-}
-</code></pre><p>现在”fields”中的Value全都取出来放到了list里。接着就是遍历刚才的keyIter了。</p>
-<pre><code>while (keyIter.hasNext()) {
-    String keys = (String) keyIter.next();
-    JSONArray jsonArray = jsonObj.getJSONArray(keys);
-    Map map = new HashMap();
-    if (keys.equals(&quot;fields&quot;)) {
-        continue;
-    } else {
-        for (int i = 0; i &lt; jsonArray.length(); i++) {
-            map.put(list.get(i), jsonArray.get(i));
-        }
-        HSStockEntity hsStockEntity = new HSStockEntity();
-        hsStockEntity.setSymbol(keys);
-        hsStockEntity.setOpen_px(Double.parseDouble(map.get(&quot;open_px&quot;).toString()));
-        hsStockEntity.setHigh_px(Double.parseDouble(map.get(&quot;high_px&quot;).toString()));
-        hsStockEntity.setLow_px(Double.parseDouble(map.get(&quot;low_px&quot;).toString()));
-        listEntity.add(hsStockEntity);
-    }
-}
-</code></pre><p>从以上代码可以看到，我按照keyIter的顺序拿到”600570.SS”,”000001.SZ”中的Value，然后把他们放到了map里，map的Key是”fields”的Value，而map的Value则是”600570.SS”或”000001.SZ”对应的Value。</p>
-<p>HSStockEntity我的一个Model，这样最后能把所有的hsStockEntity都放在listEntity的集合中了。</p>
-<p>需要特别注意的一点是keyIter取到的Key并一定与你看到的顺序是一样的，也就是”fields”,”600570.SS”,”000001.SZ”三个的顺序是不一定的，那么假如你的JSON数据源必须要按照一定的顺序显示，那你就得需要自己写一下Comparator了。比如我这里对high_px进行降序排序，如果相等时根据symbol再排。</p>
-<pre><code>System.setProperty(&quot;java.util.Arrays.useLegacyMergeSort&quot;, &quot;true&quot;);
-Collections.sort(listEntity, new Comparator&lt;HSStockEntity&gt;() {
-    @Override
-    public int compare(HSStockEntity entity, HSStockEntity t1) {
-        if ((float) entity.getHigh_px() - (float) t1.getHigh_px() ==0) {
-            return entity.getSymbol().compareTo(t1.getSymbol());
-           } else if ((float) entity.getHigh_px() - (float) t1.getHigh_px() &gt; 0) {;
-           if (isRise) return -1;
-            return 1;
-         } else {
-              if (isRise) return 1;
-                  return -1;
-            }
-        }
-});
-</code></pre><p>这样以来，对这种特殊结构的JSON解析就完成了。</p>
+        <p>项目地址：<a href="https://github.com/JeasonWong/R2Assistant">https://github.com/JeasonWong/R2Assistant</a></p>
+<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>在子 module 中使用 ButterKnife 时，如果想使用 ButterKnife 提供的编译期注解，那么就得使用 ButterKnife 的 gradle 插件所生成的R2.java，比如 <code>@BindView( R2.id.xxx )</code>，关于更多 R.java 与 R2.java 的资料可以看我这篇文章 <a href="http://www.wangyuwei.me/2017/06/15/R-java%E3%80%81R2-java%E6%98%AF%E6%97%B6%E5%80%99%E6%87%82%E4%BA%86/" target="_blank" rel="external">R.java、R2.java是时候懂了</a>。</p>
+<p>当我们在子 module 中新增资源 id 时使用 R2.id.xxx 会报红，报红的原因是 R2.java 是依赖 R.java 生成的，必须重新 build project 生成全新的 R2.java，但这样耗时太久了，大点的工程基本需要四五分钟，报红又使强迫症实在看不下去，那么 R2Assistant 就是来解决这个问题的，使用这个插件可以快速生成 R2.java 中还不存在的 fileds，从而提高工作效率。</p>
+<h3 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h3><p><img src="http://ojafgwnc4.bkt.clouddn.com/r2assistant.gif" alt="r2assistant.gif"></p>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><h4 id="在主工程的-build-gradle-中添加插件"><a href="#在主工程的-build-gradle-中添加插件" class="headerlink" title="在主工程的 build.gradle 中添加插件"></a>在主工程的 build.gradle 中添加插件</h4><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">apply <span class="string">plugin:</span> <span class="string">'me.wangyuwei.r2assistant'</span></div><div class="line"></div><div class="line">buildscript &#123;</div><div class="line">    repositories &#123;</div><div class="line">        maven &#123;</div><div class="line">            url <span class="string">'https://dl.bintray.com/wangyuwei/maven'</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    dependencies &#123;</div><div class="line">        classpath <span class="string">'me.wangyuwei:r2assistant-plugin:1.0.0'</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="运行命令"><a href="#运行命令" class="headerlink" title="运行命令"></a>运行命令</h4><p>如果你想对所有的子 module 生效，执行 <code>./gradlew sweepR2</code></p>
+<p>如果你只想对指定的子 module 生效，执行 <code>./gradlew sweepR2 -PmoduleName=${subModuleName}</code></p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><h3 id="尾语"><a href="#尾语" class="headerlink" title="尾语"></a>尾语</h3><p>实现这个功能其实有很多方案，我的这种并不是最好的，我目前想的最好的应该是监听 xml 里的变化，如果有新增资源 id ，而这个 id 在 R2.java 中又不存在，那么自动添加这个 field，而不用现在这样执行一个task，感兴趣的同学可以做做。</p>
 
       
     </div>
@@ -482,15 +390,15 @@ Collections.sort(listEntity, new Comparator&lt;HSStockEntity&gt;() {
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2017/11/27/一个快速将指定class打入maindex的插件/" rel="next" title="一个快速将指定class打入maindex的插件">
+                <i class="fa fa-chevron-left"></i> 一个快速将指定class打入maindex的插件
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/01/24/app推送消息发错后该如何处理/" rel="prev" title="app推送消息发错后该如何处理">
-                app推送消息发错后该如何处理 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -544,8 +452,17 @@ Collections.sort(listEntity, new Comparator&lt;HSStockEntity&gt;() {
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -618,6 +535,22 @@ Collections.sort(listEntity, new Comparator&lt;HSStockEntity&gt;() {
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#演示"><span class="nav-number">2.</span> <span class="nav-text">演示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用"><span class="nav-number">3.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#在主工程的-build-gradle-中添加插件"><span class="nav-number">3.1.</span> <span class="nav-text">在主工程的 build.gradle 中添加插件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行命令"><span class="nav-number">3.2.</span> <span class="nav-text">运行命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">4.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#尾语"><span class="nav-number">5.</span> <span class="nav-text">尾语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -743,9 +676,9 @@ Collections.sort(listEntity, new Comparator&lt;HSStockEntity&gt;() {
 
     <script type="text/javascript">
       var disqus_shortname = 'jeasonwong';
-      var disqus_identifier = '2015/09/11/解析特殊结构的JSON/';
+      var disqus_identifier = '2017/12/02/一个快速生成R2-java中fields的插件/';
 
-      var disqus_title = "解析特殊结构的JSON";
+      var disqus_title = "一个快速生成R2.java中fields的插件";
 
 
       function run_disqus_script(disqus_script) {
