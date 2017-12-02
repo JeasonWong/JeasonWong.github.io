@@ -351,7 +351,20 @@
 <h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><h4 id="在主工程的-build-gradle-中添加插件"><a href="#在主工程的-build-gradle-中添加插件" class="headerlink" title="在主工程的 build.gradle 中添加插件"></a>在主工程的 build.gradle 中添加插件</h4><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">apply <span class="string">plugin:</span> <span class="string">'me.wangyuwei.r2assistant'</span></div><div class="line"></div><div class="line">buildscript &#123;</div><div class="line">    repositories &#123;</div><div class="line">        maven &#123;</div><div class="line">            url <span class="string">'https://dl.bintray.com/wangyuwei/maven'</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    dependencies &#123;</div><div class="line">        classpath <span class="string">'me.wangyuwei:r2assistant-plugin:1.0.0'</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h4 id="运行命令"><a href="#运行命令" class="headerlink" title="运行命令"></a>运行命令</h4><p>如果你想对所有的子 module 生效，执行 <code>./gradlew sweepR2</code></p>
 <p>如果你只想对指定的子 module 生效，执行 <code>./gradlew sweepR2 -PmoduleName=${subModuleName}</code></p>
-<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><h3 id="尾语"><a href="#尾语" class="headerlink" title="尾语"></a>尾语</h3><p>实现这个功能其实有很多方案，我的这种并不是最好的，我目前想的一个不错的方案是监听 xml 里的变化，如果有新增资源 id ，而这个 id 在 R2.java 中又不存在，那么自动添加这个 field，而不用现在这样执行一个task，感兴趣的同学可以做做。</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>原理其实很简单，基本利用正则表达式。</p>
+<p>1、写出 <code>@BindView( R2.id.xxx )</code> 的正则 <code>R2\.id\.([\w]*</code></p>
+<p>2、遍历 /src/main/java 下的所有 java 文件，并找出所有匹配 1 中正则的资源名：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">File srcDir = <span class="keyword">new</span> File(subProject.projectDir.path.toString() + <span class="string">"/src/main/java"</span>)</div><div class="line">srcDir.eachFileRecurse(FileType.FILES) &#123; File file -&gt;</div><div class="line">    <span class="keyword">if</span> (file.toString().endsWith(<span class="string">".java"</span>)) &#123;</div><div class="line">        String fileContent = <span class="keyword">new</span> String(file.bytes)</div><div class="line"></div><div class="line">        Pattern p = Pattern.compile(FIELD_SRC_ID_REGEX)</div><div class="line">        Matcher m = p.matcher(fileContent)</div><div class="line">        <span class="keyword">while</span> (m.find()) &#123;</div><div class="line">            srcFieldsSet.add(m.group(<span class="number">1</span>))</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>3、写出子 module 对应的R2.java 中 id 的正则 ，如 <code>@IdRes
+    public static final int action_bar = 0x7f0a004f;</code>，对应的正则是：<code>@IdRes[\s]*public static final int ([\w]*) = *[\w]*;</code></p>
+<p>4、找出子 module 对应的R2.java 中 符合 2 中正则的资源名：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">File r2File = <span class="keyword">new</span> File(subProject.buildDir.path.toString() + <span class="string">"/generated/source/r/debug/"</span> + packageName.replaceAll(<span class="string">"\\."</span>, <span class="string">"/"</span>) + <span class="string">"/R2.java"</span>)</div><div class="line"></div><div class="line">String r2Content = <span class="keyword">new</span> String(r2File.bytes)</div><div class="line"></div><div class="line">Pattern p = Pattern.compile(FIELD_R2_REGEX)</div><div class="line">Matcher m = p.matcher(r2Content)</div><div class="line"><span class="keyword">while</span> (m.find()) &#123;</div><div class="line">    r2FieldsSet.add(m.group(<span class="number">1</span>))</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>5、找出 /src/main/java 下的新增资源：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">srcFieldsSet.each &#123;</div><div class="line">    <span class="keyword">if</span> (!r2FieldsSet.contains(it)) &#123;</div><div class="line">        R2Log.log(<span class="string">"add filed: $&#123;it&#125;"</span>)</div><div class="line">        generateFieldsSet.add(it)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>6、在 R2.java 中生成新的 filed ，新增 filed 的值可以随便撸，反正运行时用不着：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">def</span> STR_CLASS_ID = <span class="string">'''public static final class id &#123;'''</span></div><div class="line"></div><div class="line"><span class="keyword">int</span> index = r2Content.indexOf(STR_CLASS_ID)</div><div class="line">StringBuilder sb = <span class="keyword">new</span> StringBuilder()</div><div class="line">sb.append(r2Content.substring(<span class="number">0</span>, index + STR_CLASS_ID.length()))</div><div class="line"></div><div class="line">generateFieldsSet.each &#123;</div><div class="line">    sb.append(<span class="string">"\n\t@IdRes\n\tpublic static final int $&#123;it&#125; = 0x7f888888;\n"</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line">sb.append(r2Content.substring(index + STR_CLASS_ID.length(), r2Content.length()))</div><div class="line"></div><div class="line">r2File.delete()</div><div class="line">r2File.withWriter(StandardCharsets.UTF_8.name()) &#123; writer -&gt;</div><div class="line">    writer.write(sb.toString())</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>7、简单吧。</p>
+<h3 id="尾语"><a href="#尾语" class="headerlink" title="尾语"></a>尾语</h3><p>实现这个功能其实有很多方案，我的这种并不是最好的，我目前想的一个不错的方案是监听 xml 里的变化，如果有新增资源 id ，而这个 id 在 R2.java 中又不存在，那么自动添加这个 field，而不用现在这样执行一个task，感兴趣的同学可以做做。</p>
 
           
         
@@ -481,8 +494,7 @@
 
       
         
-          
-            <p>项目地址：<a href="https://github.com/JeasonWong/MainDexWrapper">https://github.com/JeasonWong/MainDexWrapper</a></p>
+          <p>项目地址：<a href="https://github.com/JeasonWong/MainDexWrapper">https://github.com/JeasonWong/MainDexWrapper</a></p>
 <h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><p>场景很多，先说两种：</p>
 <ul>
 <li><p>当使用了multidex进行分包后，为了优化app首次启动</p>
@@ -491,37 +503,13 @@
 </li>
 <li>…</li>
 </ul>
-<h3 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h3><h4 id="官方方案"><a href="#官方方案" class="headerlink" title="官方方案"></a>官方方案</h4><p>其实官方支持两种方式将指定class打入maindex：</p>
-<ul>
-<li>multiDexKeepProguard file(‘./maindex-rules.pro’)</li>
-<li>multiDexKeepFile file(‘./maindex.txt’)</li>
-</ul>
-<p>关于这两种方案的使用我就不赘述了。</p>
-<h4 id="MainDexWrapper"><a href="#MainDexWrapper" class="headerlink" title="MainDexWrapper"></a>MainDexWrapper</h4><h5 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h5><p>MainDexWrapper 支持两种方式，其中一种和官方的<code>multiDexKeepProguard file(&#39;./maindex-rules.pro&#39;)</code>相似。</p>
-<p>首先在根build.gradle将插件依赖好：</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">buildscript &#123;</div><div class="line">    repositories &#123;</div><div class="line">        maven &#123;</div><div class="line">            url <span class="string">'https://dl.bintray.com/wangyuwei/maven'</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    dependencies &#123;</div><div class="line">        classpath <span class="string">'me.wangyuwei:maindexwrapper-plugin:1.0.0'</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">allprojects &#123;</div><div class="line">    repositories &#123;</div><div class="line">        maven &#123;</div><div class="line">            url <span class="string">'https://dl.bintray.com/wangyuwei/maven'</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>然后在app的build.gradle使用插件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">apply plugin: &apos;me.wangyuwei.maindexwrapper&apos;</div><div class="line"></div><div class="line">compile &apos;me.wangyuwei:maindexwrapper-annotations:1.0.0&apos;</div></pre></td></tr></table></figure>
-<h5 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h5><p>两种方式：</p>
-<ul>
-<li>书写keep-rules</li>
-<li>给指定的class加上 <code>@KeepMainDex</code> 注解</li>
-</ul>
-<p>1、书写keep-rules：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#</div><div class="line">#-keep class me.wangyuwei.maindexwrapper.demo.Demo &#123;*;&#125;</div></pre></td></tr></table></figure>
-<p>就像配置混淆方式一样，把你需要打入maindex的class的规则写好。</p>
-<p>2、给指定的class加上 <code>@KeepMainDex</code> 注解</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> me.wangyuwei.maindexwrapper.annotations.KeepMainDex;</div><div class="line"></div><div class="line"><span class="meta">@KeepMainDex</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InnerClass</span> </span>&#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>就像混淆支持 <code>@keep</code> 注解一样，使用也很简单。</p>
-<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>其实很简单。</p>
-<p>一句话说明就是在执行multidexTask前将我们的 <strong>keep-rules</strong> 加入到 <strong>/intermediates/multi-dex/${variant.dirName}/manifest_keep.txt</strong> 里。</p>
-<p><strong>manifest_keep.txt</strong> 是multidex分包时一个很重要的文件，这里keep住的class会被打入到maindex。</p>
-<p>那么目前插件实现的两种方案就比较好下手了：</p>
-<p>第一种是将开发人员书写的 <strong>maindex-rules.pro</strong> 里的内容直接copy到 <strong>manifest_keep.txt</strong> 里；</p>
-<p>第二种用注解的方式直接遍历生成dex前的classes，含有 <code>@KeepMainDex</code>注解的先收集起来，然后再和前者一样copy到 <strong>manifest_keep.txt</strong> 里，我这里使用的 <strong>ASM</strong> 遍历的classes，需要注意的是需要将ClassName里的 <code>&quot;/&quot;替换成&quot;.&quot;</code>，别的就很简单了。</p>
-<h3 id="尾语"><a href="#尾语" class="headerlink" title="尾语"></a>尾语</h3><p>插件整个下来比较简单，当做练手也是可以的。</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/11/27/一个快速将指定class打入maindex的插件/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
