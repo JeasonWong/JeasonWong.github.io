@@ -1,0 +1,756 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="wangyuwei" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="前言我在之前的一篇文章提到了使用系统 TabLayout 的一个Bug，详情见这篇文章，使用了系统TabLayout的app来领bug啦
+系统 TabLayout 和 ViewPager 配合使用时有个 Bug，当切换 Tab 的时候，Tab 会整体往左抖一下，这个抖动速度很快，大家稍微注意点能看到，那么笔者在公司做业务时也有使用到系统的 TabLayout ，进行视觉校验的时候没逃过设计师的法眼">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用系统TabLayout的app快来修Bug">
+<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2017/12/09/使用系统TabLayout的app快来修Bug/index.html">
+<meta property="og:site_name" content="巴巴巴巴巴巴掌">
+<meta property="og:description" content="前言我在之前的一篇文章提到了使用系统 TabLayout 的一个Bug，详情见这篇文章，使用了系统TabLayout的app来领bug啦
+系统 TabLayout 和 ViewPager 配合使用时有个 Bug，当切换 Tab 的时候，Tab 会整体往左抖一下，这个抖动速度很快，大家稍微注意点能看到，那么笔者在公司做业务时也有使用到系统的 TabLayout ，进行视觉校验的时候没逃过设计师的法眼">
+<meta property="og:image" content="http://ojafgwnc4.bkt.clouddn.com/muke.gif">
+<meta property="og:image" content="http://ojafgwnc4.bkt.clouddn.com/xitu.gif">
+<meta property="og:image" content="http://ojafgwnc4.bkt.clouddn.com/openchina.gif">
+<meta property="og:updated_time" content="2017-12-09T13:54:06.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用系统TabLayout的app快来修Bug">
+<meta name="twitter:description" content="前言我在之前的一篇文章提到了使用系统 TabLayout 的一个Bug，详情见这篇文章，使用了系统TabLayout的app来领bug啦
+系统 TabLayout 和 ViewPager 配合使用时有个 Bug，当切换 Tab 的时候，Tab 会整体往左抖一下，这个抖动速度很快，大家稍微注意点能看到，那么笔者在公司做业务时也有使用到系统的 TabLayout ，进行视觉校验的时候没逃过设计师的法眼">
+<meta name="twitter:image" content="http://ojafgwnc4.bkt.clouddn.com/muke.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/12/09/使用系统TabLayout的app快来修Bug/"/>
+
+
+
+
+
+  <title> 使用系统TabLayout的app快来修Bug | 巴巴巴巴巴巴掌 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a1124557c8347bcc3f0d292e1395b686";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">巴巴巴巴巴巴掌</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">菜比成长记</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/12/09/使用系统TabLayout的app快来修Bug/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JeasonWong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="巴巴巴巴巴巴掌">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                使用系统TabLayout的app快来修Bug
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-09T18:24:14+08:00">
+                2017-12-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/09/使用系统TabLayout的app快来修Bug/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/12/09/使用系统TabLayout的app快来修Bug/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>我在之前的一篇文章提到了使用系统 TabLayout 的一个Bug，详情见这篇文章，<a href="https://mp.weixin.qq.com/s?__biz=MjM5OTE4ODgzMw==&amp;mid=2247483681&amp;idx=1&amp;sn=b821ac21b06a26e22a910bfd2c9c2684&amp;chksm=a73e012f904988393dba75371a1548ac4a03180187dace2aeb5b6a629914a22cc113287c3f78#rd" target="_blank" rel="external">使用了系统TabLayout的app来领bug啦</a></p>
+<p>系统 TabLayout 和 ViewPager 配合使用时有个 Bug，当切换 Tab 的时候，Tab 会整体往左抖一下，这个抖动速度很快，大家稍微注意点能看到，那么笔者在公司做业务时也有使用到系统的 TabLayout ，进行视觉校验的时候没逃过设计师的法眼，设计师要求高是件好事，但这个时候重新写一个也不现实，那么该怎么办呢？</p>
+<h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>先来看看直接使用系统 TabLayout 而出现问题的一些知名 App：</p>
+<h4 id="慕-网："><a href="#慕-网：" class="headerlink" title="慕*网："></a>慕*网：</h4><p><img src="http://ojafgwnc4.bkt.clouddn.com/muke.gif" alt="慕*网"></p>
+<h4 id="稀土-金"><a href="#稀土-金" class="headerlink" title="稀土*金"></a>稀土*金</h4><p><img src="http://ojafgwnc4.bkt.clouddn.com/xitu.gif" alt="稀土*金"></p>
+<h4 id="开源-国："><a href="#开源-国：" class="headerlink" title="开源*国："></a>开源*国：</h4><p><img src="http://ojafgwnc4.bkt.clouddn.com/openchina.gif" alt="开源*国"></p>
+<h3 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h3><p>在分析问题之前，我们先回顾下这个 Bug 复现的场景：<strong>先选中一个靠后的 Tab，然后滑动 TabLayout 到最左边，点击第一个 Tab，会发现整个 TabLayout 往左抖了一下，速度很快，但无法忽视</strong></p>
+<p>那么我们要解决的就是快速抖动的问题。</p>
+<p>想解决这个问题，TabLayout 的源码还是得分析的，TabLayout 直接继承的 HorizontalScrollView，不难推测，抖动的产生其实就是被执行了 scroll。</p>
+<p>我们回想下，让 TabLayout 发生 scroll 行为的场景会有哪些？</p>
+<ul>
+<li>直接选中指定 Tab</li>
+<li>滑动 ViewPager</li>
+</ul>
+<p>我们发现的 Bug 出现的场景是点击 Tab 发生的，那么我们点击了 Tab 后符合上面说的场景一，那么 Tab 切换后会导致 ViewPager 滑动，那也会触发 scroll，擦，难道就是因为这样，导致了闪了一下？只能看看源码了：</p>
+<p>首先看看点击 Tab 触发的方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// TabLayout#selectTab</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">selectTab</span><span class="params">(<span class="keyword">final</span> Tab tab, <span class="keyword">boolean</span> updateIndicator)</span> </span>&#123;</div><div class="line">   <span class="keyword">final</span> Tab currentTab = mSelectedTab;</div><div class="line"></div><div class="line">   <span class="keyword">if</span> (currentTab == tab) &#123;</div><div class="line">       ...</div><div class="line">   &#125; <span class="keyword">else</span> &#123;</div><div class="line">       <span class="keyword">final</span> <span class="keyword">int</span> newPosition = tab != <span class="keyword">null</span> ? tab.getPosition() : Tab.INVALID_POSITION;</div><div class="line">       <span class="keyword">if</span> (updateIndicator) &#123;</div><div class="line">           <span class="keyword">if</span> ((currentTab == <span class="keyword">null</span> || currentTab.getPosition() == Tab.INVALID_POSITION)</div><div class="line">                   &amp;&amp; newPosition != Tab.INVALID_POSITION) &#123;</div><div class="line">               ...</div><div class="line">           &#125; <span class="keyword">else</span> &#123;</div><div class="line">               <span class="comment">// 让 Tab 做动画</span></div><div class="line">               animateToTab(newPosition);</div><div class="line">           &#125;</div><div class="line">           ...</div><div class="line">       &#125;</div><div class="line">       ...</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再看 TabLayout#animateToTab</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">animateToTab</span><span class="params">(<span class="keyword">int</span> newPosition)</span> </span>&#123;</div><div class="line">   <span class="keyword">if</span> (newPosition == Tab.INVALID_POSITION) &#123;</div><div class="line">       <span class="keyword">return</span>;</div><div class="line">   &#125;</div><div class="line"></div><div class="line">   ...</div><div class="line">   </div><div class="line">   <span class="keyword">final</span> <span class="keyword">int</span> startScrollX = getScrollX();</div><div class="line">   <span class="keyword">final</span> <span class="keyword">int</span> targetScrollX = calculateScrollXForTab(newPosition, <span class="number">0</span>);</div><div class="line"></div><div class="line">   <span class="keyword">if</span> (startScrollX != targetScrollX) &#123;</div><div class="line">       <span class="comment">// 创建 scroll 动画</span></div><div class="line">       ensureScrollAnimator();</div><div class="line"></div><div class="line">       mScrollAnimator.setIntValues(startScrollX, targetScrollX);</div><div class="line">       <span class="comment">// scroll 动画开始执行</span></div><div class="line">       mScrollAnimator.start();</div><div class="line">   &#125;</div><div class="line"></div><div class="line">   <span class="comment">// Now animate the indicator</span></div><div class="line">   mTabStrip.animateIndicatorToPosition(newPosition, ANIMATION_DURATION);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再看看 ensureScrollAnimator 做了啥：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">ensureScrollAnimator</span><span class="params">()</span> </span>&#123;</div><div class="line">   <span class="keyword">if</span> (mScrollAnimator == <span class="keyword">null</span>) &#123;</div><div class="line">       mScrollAnimator = <span class="keyword">new</span> ValueAnimator();</div><div class="line">       mScrollAnimator.setInterpolator(AnimationUtils.FAST_OUT_SLOW_IN_INTERPOLATOR);</div><div class="line">       mScrollAnimator.setDuration(ANIMATION_DURATION);</div><div class="line">       mScrollAnimator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.AnimatorUpdateListener() &#123;</div><div class="line">           <span class="meta">@Override</span></div><div class="line">           <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationUpdate</span><span class="params">(ValueAnimator animator)</span> </span>&#123;</div><div class="line">               <span class="comment">// 属性动画回调中调用 scrollTo</span></div><div class="line">               scrollTo((<span class="keyword">int</span>) animator.getAnimatedValue(), <span class="number">0</span>);</div><div class="line">           &#125;</div><div class="line">       &#125;);</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到点击 Tab 最终会使 TabLayout 发生 scroll 行为。</p>
+<p>继续顺着刚才说的点击 Tab 的时候也会触发 ViewPager 的滑动，我们看看 ViewPager 滑动方法里做了啥：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// TabLayout#TabLayoutOnPageChangeListener</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">TabLayoutOnPageChangeListener</span> <span class="keyword">implements</span> <span class="title">ViewPager</span>.<span class="title">OnPageChangeListener</span> </span>&#123;</div><div class="line">   ...</div><div class="line"></div><div class="line">   <span class="meta">@Override</span></div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onPageScrolled</span><span class="params">(<span class="keyword">final</span> <span class="keyword">int</span> position, <span class="keyword">final</span> <span class="keyword">float</span> positionOffset,</span></span></div><div class="line">           <span class="keyword">final</span> <span class="keyword">int</span> positionOffsetPixels) &#123;</div><div class="line">       <span class="keyword">final</span> TabLayout tabLayout = mTabLayoutRef.get();</div><div class="line">       <span class="keyword">if</span> (tabLayout != <span class="keyword">null</span>) &#123;</div><div class="line">           ...</div><div class="line">           <span class="comment">// 这里又调用了设置 Scroll 的位置的方法</span></div><div class="line">           tabLayout.setScrollPosition(position, positionOffset, updateText, updateIndicator);</div><div class="line">       &#125;</div><div class="line">   &#125;</div><div class="line">   ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再看看 setScrollPosition ：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">setScrollPosition</span><span class="params">(<span class="keyword">int</span> position, <span class="keyword">float</span> positionOffset, <span class="keyword">boolean</span> updateSelectedText,</span></span></div><div class="line">        <span class="keyword">boolean</span> updateIndicatorPosition) &#123;</div><div class="line">    ...</div><div class="line">    scrollTo(calculateScrollXForTab(position, positionOffset), <span class="number">0</span>);</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>看到了吧，这里也调用了 scrollTo。</p>
+<p>那么之前抖动的问题就很显然了，点击 Tab 的时候会触发 TabLayout 的scrollTo，而点击 Tab 会触发ViewPager 滑动，ViewPager的滑动也特么触发了 scrollTo，这 ViewPager 滑动导致的 scrollTo 就是我们闪烁的原因！</p>
+<p>分析完毕，如何解决呢？</p>
+<h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><h3 id="尾语"><a href="#尾语" class="headerlink" title="尾语"></a>尾语</h3>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/02/一个快速生成R2-java中fields的插件/" rel="next" title="一个快速生成R2.java中fields的插件">
+                <i class="fa fa-chevron-left"></i> 一个快速生成R2.java中fields的插件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="JeasonWong" />
+          <p class="site-author-name" itemprop="name">JeasonWong</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/JeasonWong" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/WongYuwei" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述"><span class="nav-number">2.</span> <span class="nav-text">问题描述</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#慕-网："><span class="nav-number">2.1.</span> <span class="nav-text">慕*网：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#稀土-金"><span class="nav-number">2.2.</span> <span class="nav-text">稀土*金</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#开源-国："><span class="nav-number">2.3.</span> <span class="nav-text">开源*国：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题分析"><span class="nav-number">3.</span> <span class="nav-text">问题分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决"><span class="nav-number">4.</span> <span class="nav-text">解决</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#尾语"><span class="nav-number">5.</span> <span class="nav-text">尾语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JeasonWong</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'jeasonwong';
+      var disqus_identifier = '2017/12/09/使用系统TabLayout的app快来修Bug/';
+
+      var disqus_title = "使用系统TabLayout的app快来修Bug";
+
+
+      function run_disqus_script(disqus_script) {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
