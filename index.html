@@ -257,6 +257,165 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/12/16/MultiDex-编译过程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JeasonWong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="巴巴巴巴巴巴掌">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/12/16/MultiDex-编译过程/" itemprop="url">
+                  MultiDex 编译过程
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-16T14:32:36+08:00">
+                2017-12-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/16/MultiDex-编译过程/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/12/16/MultiDex-编译过程/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="分析-MultiDexTransform"><a href="#分析-MultiDexTransform" class="headerlink" title="分析 MultiDexTransform"></a>分析 MultiDexTransform</h3><p>当我们在 gradle 中将 multiDexEnabled 设为 true 后，编译 app 的过程中 Terminal 会多出一行: <strong>:app:transformClassesWithMultidexlistForDebug</strong></p>
+<p>显然 MultiDex 相关操作也是通过 Transform Api 完成了，自然我们查看 <strong>MultiDexTransform</strong> 源码，直接看 <em>#transform</em> 方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">transform</span><span class="params">(@NonNull TransformInvocation invocation)</span></span></div><div class="line">       <span class="keyword">throws</span> IOException, TransformException, InterruptedException &#123;</div><div class="line">   ...</div><div class="line">   <span class="keyword">try</span> &#123;</div><div class="line">       <span class="comment">// 核实输入文件</span></div><div class="line">       File input = verifyInputs(invocation.getReferencedInputs());</div><div class="line">       shrinkWithProguard(input);</div><div class="line">       computeList(input);</div><div class="line">   &#125; <span class="keyword">catch</span> (ParseException | ProcessException e) &#123;</div><div class="line">       <span class="keyword">throw</span> <span class="keyword">new</span> TransformException(e);</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>哟吼，核心代码好少啊，一个 <strong>shrinkWithProguard</strong>， 一个 <strong>computeList</strong>。</p>
+<h4 id="shrinkWithProguard"><a href="#shrinkWithProguard" class="headerlink" title="shrinkWithProguard"></a>shrinkWithProguard</h4><p>当我看到了方法名叫 <strong>shrinkWithProguard</strong> ，感觉很亲切啊，这不就是混淆器嘛，然后联想起 app 编译过程中输出的 <em>app/build/intermediates/multi-dex/debug/</em> 下的那几个文件了：</p>
+<p><img src="http://ojafgwnc4.bkt.clouddn.com/QQ20171216-150021@2x.png" alt="debug"></p>
+<p>其中 <strong>manifest_keep.txt</strong> 里的内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># view AndroidManifest.xml #generated:15</div><div class="line">-keep class android.support.multidex.MultiDexApplication &#123; &lt;init&gt;(...); &#125;</div></pre></td></tr></table></figure>
+<p>我的乖乖，<strong>shrinkWithProguard</strong> 方法势必和混淆器有扯不断的关系咯，来看看 <strong>shrinkWithProguard</strong> 具体的实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">shrinkWithProguard</span><span class="params">(@NonNull File input)</span> <span class="keyword">throws</span> IOException, ParseException </span>&#123;</div><div class="line"></div><div class="line">  <span class="comment">// =&gt; 1</span></div><div class="line">   dontobfuscate();</div><div class="line">   dontoptimize();</div><div class="line">   dontpreverify();</div><div class="line">   dontwarn();</div><div class="line">   dontnote();</div><div class="line">   forceprocessing();</div><div class="line"></div><div class="line">   </div><div class="line">   <span class="comment">// =&gt; 2</span></div><div class="line">   applyConfigurationFile(manifestKeepListProguardFile);</div><div class="line">   <span class="comment">// =&gt; 3</span></div><div class="line">   <span class="keyword">if</span> (userMainDexKeepProguard != <span class="keyword">null</span>) &#123;</div><div class="line">       applyConfigurationFile(userMainDexKeepProguard);</div><div class="line">   &#125;</div><div class="line">   <span class="comment">// =&gt; 4</span></div><div class="line">   <span class="comment">// add a couple of rules that cannot be easily parsed from the manifest.</span></div><div class="line">   keep(<span class="string">"public class * extends android.app.Instrumentation &#123; &lt;init&gt;(); &#125;"</span>);</div><div class="line">   keep(<span class="string">"public class * extends android.app.Application &#123; "</span></div><div class="line">           + <span class="string">"  &lt;init&gt;(); "</span></div><div class="line">           + <span class="string">"  void attachBaseContext(android.content.Context);"</span></div><div class="line">           + <span class="string">"&#125;"</span>);</div><div class="line">   keep(<span class="string">"public class * extends android.app.backup.BackupAgent &#123; &lt;init&gt;(); &#125;"</span>);</div><div class="line">   keep(<span class="string">"public class * extends java.lang.annotation.Annotation &#123; *;&#125;"</span>);</div><div class="line">   keep(<span class="string">"class com.android.tools.fd.** &#123;*;&#125;"</span>); <span class="comment">// Instant run.</span></div><div class="line"></div><div class="line">   <span class="comment">// =&gt; 5</span></div><div class="line">   <span class="comment">// handle inputs</span></div><div class="line">   libraryJar(findShrinkedAndroidJar());</div><div class="line">   inJar(input);</div><div class="line">   </div><div class="line">   <span class="comment">// =&gt; 6</span></div><div class="line">   <span class="comment">// outputs.</span></div><div class="line">   outJar(variantScope.getProguardComponentsJarFile());</div><div class="line">   printconfiguration(configFileOut);</div><div class="line"></div><div class="line">   <span class="comment">// =&gt; 7</span></div><div class="line">   <span class="comment">// run proguard</span></div><div class="line">   runProguard();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>有点长，但是结构很清晰，我把上面代码块分为了7个部分，第一部分是干嘛的？我以第一个 dont 方法为例，<strong>dontobfuscate</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dontobfuscate</span><span class="params">()</span> </span>&#123;</div><div class="line">   configuration.obfuscate = <span class="keyword">false</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>configuration 是 proguard 里的一个配置类，换言之，这样写的效果等同于我们在给 app 做混淆的时候在 <strong>peoguard-rules.pro</strong> 写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-dontobfuscate</div></pre></td></tr></table></figure>
+<p>好的，第一部分代码其实就是对混淆进行了配置，那接下来的第二部分就太好理解了，<strong>applyConfigurationFile(manifestKeepListProguardFile);</strong> ：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">applyConfigurationFile</span><span class="params">(@NonNull File file)</span> <span class="keyword">throws</span> IOException, ParseException </span>&#123;</div><div class="line">   ConfigurationParser parser =</div><div class="line">           <span class="keyword">new</span> ConfigurationParser(file, System.getProperties());</div><div class="line">   <span class="keyword">try</span> &#123;</div><div class="line">       parser.parse(configuration);</div><div class="line">   &#125; <span class="keyword">finally</span> &#123;</div><div class="line">       parser.close();</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>manifestKeepListProguardFile</strong> 就是之前提到的 <strong>manifest_keep.txt</strong>，等于把 <strong>manifest_keep.txt</strong> 里的 keep 规则也加了进来。</p>
+<p>那第三部分和第二部分也是一样的咯，第三部分相当于是给开发人员的外部拓展入口，在 build.gradle 中配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">multiDexKeepProguard file(&apos;./maindex-rules.pro&apos;)</div></pre></td></tr></table></figure>
+<p>第四部分就是一大堆 keep 规则，包括 keep Application 、Annotation 啦。</p>
+<p>以上四部分就是把 keep 规则搞好了，继续看第五步，比较重要，先看 <strong>findShrinkedAndroidJar</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@NonNull</span></div><div class="line"><span class="function"><span class="keyword">private</span> File <span class="title">findShrinkedAndroidJar</span><span class="params">()</span> </span>&#123;</div><div class="line">   ...</div><div class="line">   File shrinkedAndroid = <span class="keyword">new</span> File(</div><div class="line">           variantScope.getGlobalScope().getAndroidBuilder().getTargetInfo()</div><div class="line">                   .getBuildTools()</div><div class="line">                   .getLocation(),</div><div class="line">           <span class="string">"lib"</span> + File.separatorChar + <span class="string">"shrinkedAndroid.jar"</span>);</div><div class="line"></div><div class="line">   ...</div><div class="line">   <span class="keyword">return</span> shrinkedAndroid;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>返回的是 Android SDK 的 build-tools 里的 <strong>shrinkedAndroid.jar</strong></p>
+<p>那很明显了，第五步就是把 <strong>shrinkedAndroid.jar</strong> 和刚刚的 <strong>input</strong> 文件都加入 classpath 里。</p>
+<p>第六步则是定义了一下相关输出文件。</p>
+<p>第七步运行混淆器。</p>
+<p>从以上流程我们能得知，<strong>shrinkWithProguard</strong> 就是将我们的原来编译好的 jar 文件在使用 proguard 后输出了一个满足规则的 jar ，这个 jar 在哪？下图里的 <strong>componentClasses.jar</strong> 就是了，并且 <strong>components.flags</strong> 就是 <strong>shrinkWithProguard</strong>  中前四步所生成的 keep 规则。</p>
+<p><img src="http://ojafgwnc4.bkt.clouddn.com/QQ20171216-150021@2x.png" alt="debug"></p>
+<h4 id="computeList"><a href="#computeList" class="headerlink" title="computeList"></a>computeList</h4><h3 id="分析-DexTransform"><a href="#分析-DexTransform" class="headerlink" title="分析 DexTransform"></a>分析 DexTransform</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">:app:transformClassesWithMultidexlistForDebug</div><div class="line">:app:transformClassesWithDexForDebug</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/12/09/使用系统TabLayout的app快来修Bug/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1582,141 +1741,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/01/19/JVM指令集整理/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="JeasonWong">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="巴巴巴巴巴巴掌">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/19/JVM指令集整理/" itemprop="url">
-                  JVM指令集整理
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-19T13:58:54+08:00">
-                2017-01-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/01/19/JVM指令集整理/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/01/19/JVM指令集整理/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>看字节码从这里开始。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/01/19/JVM指令集整理/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1766,7 +1790,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
