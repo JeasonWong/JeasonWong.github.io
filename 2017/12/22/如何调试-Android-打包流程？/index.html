@@ -87,39 +87,50 @@
 
 
 
-<meta name="description" content="我我是巴掌，目前就职饿了么，从事主站 app 端开发
-乐于分享，写点东西记录下成长
-擅长动画啦，日常工作中就需要还原大量 UED 天马星空的交互视频
-gradle 插件啦，平常会写点自己需要的小插件，目前维护的插件有：
+<meta name="description" content="前言其实和调试 gradle plugin 一个套路。
+步骤1、新建一个 Module，命名 buildSrc（buildsrc）
+2、删除 Module 文件下除了 build.gradle 外的所有文件，然后 sync
+3、点击 Edit configurations 
 
-https://github.com/eleme/Mess
-https://github.com/JeasonWong/R2Assistant
-https://github.co">
-<meta property="og:type" content="website">
-<meta property="og:title" content="介绍">
-<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/about/index.html">
+4、新建 Remote
+
+按照默认配置点击 OK
+
+5、输入打包命令，末尾加上 -Dorg.gradle.debug=tr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何调试 Android 打包流程？">
+<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2017/12/22/如何调试-Android-打包流程？/index.html">
 <meta property="og:site_name" content="巴巴巴巴巴巴掌">
-<meta property="og:description" content="我我是巴掌，目前就职饿了么，从事主站 app 端开发
-乐于分享，写点东西记录下成长
-擅长动画啦，日常工作中就需要还原大量 UED 天马星空的交互视频
-gradle 插件啦，平常会写点自己需要的小插件，目前维护的插件有：
+<meta property="og:description" content="前言其实和调试 gradle plugin 一个套路。
+步骤1、新建一个 Module，命名 buildSrc（buildsrc）
+2、删除 Module 文件下除了 build.gradle 外的所有文件，然后 sync
+3、点击 Edit configurations 
 
-https://github.com/eleme/Mess
-https://github.com/JeasonWong/R2Assistant
-https://github.co">
-<meta property="og:image" content="http://ojafgwnc4.bkt.clouddn.com/qrcode_for_gh_f224bbca6c83_430.jpg">
-<meta property="og:updated_time" content="2017-12-12T08:56:42.000Z">
+4、新建 Remote
+
+按照默认配置点击 OK
+
+5、输入打包命令，末尾加上 -Dorg.gradle.debug=tr">
+<meta property="og:image" content="http://ojafgwnc4.bkt.clouddn.com/QQ20171222-185532.png">
+<meta property="og:image" content="http://ojafgwnc4.bkt.clouddn.com/QQ20171223-110930@2x.png">
+<meta property="og:image" content="http://ojafgwnc4.bkt.clouddn.com/QQ20171223-111238@2x.png">
+<meta property="og:image" content="http://ojafgwnc4.bkt.clouddn.com/QQ20171223-111606@2x.png">
+<meta property="og:image" content="http://ojafgwnc4.bkt.clouddn.com/QQ20171223-111834@2x.png">
+<meta property="og:image" content="http://ojafgwnc4.bkt.clouddn.com/QQ20171223-112053@2x.png">
+<meta property="og:updated_time" content="2017-12-23T03:22:11.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="介绍">
-<meta name="twitter:description" content="我我是巴掌，目前就职饿了么，从事主站 app 端开发
-乐于分享，写点东西记录下成长
-擅长动画啦，日常工作中就需要还原大量 UED 天马星空的交互视频
-gradle 插件啦，平常会写点自己需要的小插件，目前维护的插件有：
+<meta name="twitter:title" content="如何调试 Android 打包流程？">
+<meta name="twitter:description" content="前言其实和调试 gradle plugin 一个套路。
+步骤1、新建一个 Module，命名 buildSrc（buildsrc）
+2、删除 Module 文件下除了 build.gradle 外的所有文件，然后 sync
+3、点击 Edit configurations 
 
-https://github.com/eleme/Mess
-https://github.com/JeasonWong/R2Assistant
-https://github.co">
-<meta name="twitter:image" content="http://ojafgwnc4.bkt.clouddn.com/qrcode_for_gh_f224bbca6c83_430.jpg">
+4、新建 Remote
+
+按照默认配置点击 OK
+
+5、输入打包命令，末尾加上 -Dorg.gradle.debug=tr">
+<meta name="twitter:image" content="http://ojafgwnc4.bkt.clouddn.com/QQ20171222-185532.png">
 
 
 
@@ -147,19 +158,13 @@ https://github.co">
 
 
 
-  <link rel="canonical" href="https://github.com/JeasonWong/JeasonWong.github.io/about/"/>
+  <link rel="canonical" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/12/22/如何调试-Android-打包流程？/"/>
 
 
 
 
 
-  <title>
-  
-
-  
-    介绍 | 巴巴巴巴巴巴掌
-  
-</title>
+  <title> 如何调试 Android 打包流程？ | 巴巴巴巴巴巴掌 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -194,7 +199,7 @@ https://github.co">
     
   
 
-  <div class="container sidebar-position-left  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -279,29 +284,176 @@ https://github.co">
             
 
   <div id="posts" class="posts-expand">
-  <header class="post-header">
+    
 
-	<h1 class="post-title" itemprop="name headline">介绍</h1>
+  
 
+  
+  
+  
 
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/12/22/如何调试-Android-打包流程？/">
 
-</header>
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JeasonWong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="巴巴巴巴巴巴掌">
+    </span>
 
     
-    
-      <h3 id="我"><a href="#我" class="headerlink" title="我"></a>我</h3><p>我是巴掌，目前就职饿了么，从事主站 app 端开发</p>
-<p>乐于分享，写点东西记录下成长</p>
-<h3 id="擅长"><a href="#擅长" class="headerlink" title="擅长"></a>擅长</h3><p>动画啦，日常工作中就需要还原大量 UED 天马星空的交互视频</p>
-<p>gradle 插件啦，平常会写点自己需要的小插件，目前维护的插件有：</p>
-<ul>
-<li><a href="https://github.com/eleme/Mess">https://github.com/eleme/Mess</a></li>
-<li><a href="https://github.com/JeasonWong/R2Assistant">https://github.com/JeasonWong/R2Assistant</a></li>
-<li><a href="https://github.com/JeasonWong/MainDexWrapper">https://github.com/JeasonWong/MainDexWrapper</a></li>
-</ul>
-<h3 id="联系"><a href="#联系" class="headerlink" title="联系"></a>联系</h3><p><a href="https://weibo.com/WongYuwei" target="_blank" rel="external">微博</a></p>
-<p><img src="http://ojafgwnc4.bkt.clouddn.com/qrcode_for_gh_f224bbca6c83_430.jpg" alt="微信公众号"></p>
+      <header class="post-header">
 
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                如何调试 Android 打包流程？
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-22T15:52:46+08:00">
+                2017-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/22/如何调试-Android-打包流程？/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/12/22/如何调试-Android-打包流程？/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
     
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>其实和调试 gradle plugin 一个套路。</p>
+<h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><p>1、新建一个 Module，命名 buildSrc（buildsrc）</p>
+<p>2、删除 Module 文件下除了 build.gradle 外的所有文件，然后 sync</p>
+<p>3、点击 Edit configurations </p>
+<p><img src="http://ojafgwnc4.bkt.clouddn.com/QQ20171222-185532.png" alt=""></p>
+<p>4、新建 Remote</p>
+<p><img src="http://ojafgwnc4.bkt.clouddn.com/QQ20171223-110930@2x.png" alt=""></p>
+<p>按照默认配置点击 OK</p>
+<p><img src="http://ojafgwnc4.bkt.clouddn.com/QQ20171223-111238@2x.png" alt=""></p>
+<p>5、输入打包命令，末尾加上 <code>-Dorg.gradle.debug=true --no-daemon</code></p>
+<p>如：<code>./gradlew assDebug -Dorg.gradle.debug=true --no-daemon</code></p>
+<p>6、点击 debug</p>
+<p><img src="http://ojafgwnc4.bkt.clouddn.com/QQ20171223-111606@2x.png" alt=""></p>
+<h3 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h3><p>按照以后步骤做后就可以愉快的调试了，来试验下。</p>
+<p>打开 <strong>TaskManager.java</strong>，在判断是否需要使用 MultiDex 的地方打个断点。</p>
+<p><img src="http://ojafgwnc4.bkt.clouddn.com/QQ20171223-111834@2x.png" alt=""></p>
+<p>然后执行步骤中的 5、6，然后等到这里被执行时就会断住了。</p>
+<p><img src="http://ojafgwnc4.bkt.clouddn.com/QQ20171223-112053@2x.png" alt=""></p>
+<h3 id="尾语"><a href="#尾语" class="headerlink" title="尾语"></a>尾语</h3><p>可能还有更好的方案。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/16/MultiDex-编译过程/" rel="next" title="MultiDex 编译过程">
+                <i class="fa fa-chevron-left"></i> MultiDex 编译过程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -340,8 +492,17 @@ https://github.co">
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -414,6 +575,22 @@ https://github.co">
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#步骤"><span class="nav-number">2.</span> <span class="nav-text">步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#演示"><span class="nav-number">3.</span> <span class="nav-text">演示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#尾语"><span class="nav-number">4.</span> <span class="nav-text">尾语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -519,6 +696,10 @@ https://github.co">
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
 
   
 
@@ -535,9 +716,9 @@ https://github.co">
 
     <script type="text/javascript">
       var disqus_shortname = 'jeasonwong';
-      var disqus_identifier = 'about/index.html';
+      var disqus_identifier = '2017/12/22/如何调试-Android-打包流程？/';
 
-      var disqus_title = "介绍";
+      var disqus_title = "如何调试 Android 打包流程？";
 
 
       function run_disqus_script(disqus_script) {
