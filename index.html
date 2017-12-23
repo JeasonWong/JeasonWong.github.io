@@ -346,21 +346,23 @@
           
             <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>其实和调试 gradle plugin 一个套路。</p>
 <h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><p>1、新建一个 Module，命名 buildSrc（buildsrc）</p>
-<p>2、删除 Module 文件下除了 build.gradle 外的所有文件，然后 sync</p>
-<p>3、点击 Edit configurations </p>
+<p>2、将 build.gralde 里的内容修改为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">apply plugin: &apos;groovy&apos;</div><div class="line"></div><div class="line">dependencies &#123;</div><div class="line">    compile gradleApi()</div><div class="line">    compile localGroovy()</div><div class="line">    compile &apos;com.android.tools.build:gradle:2.3.3&apos;  // 或者其他你需要调试的 android-plugin 的版本</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">repositories &#123;</div><div class="line">    jcenter()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>3、删除 Module 文件下除了 build.gradle 外的所有文件，然后 sync</p>
+<p>4、点击 Edit configurations </p>
 <p><img src="http://ojafgwnc4.bkt.clouddn.com/QQ20171222-185532.png" alt=""></p>
-<p>4、新建 Remote</p>
+<p>5、新建 Remote</p>
 <p><img src="http://ojafgwnc4.bkt.clouddn.com/QQ20171223-110930@2x.png" alt=""></p>
 <p>按照默认配置点击 OK</p>
 <p><img src="http://ojafgwnc4.bkt.clouddn.com/QQ20171223-111238@2x.png" alt=""></p>
-<p>5、输入打包命令，末尾加上 <code>-Dorg.gradle.debug=true --no-daemon</code></p>
+<p>6、输入打包命令，末尾加上 <code>-Dorg.gradle.debug=true --no-daemon</code></p>
 <p>如：<code>./gradlew assDebug -Dorg.gradle.debug=true --no-daemon</code></p>
-<p>6、点击 debug</p>
+<p>7、点击 debug</p>
 <p><img src="http://ojafgwnc4.bkt.clouddn.com/QQ20171223-111606@2x.png" alt=""></p>
 <h3 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h3><p>按照以后步骤做后就可以愉快的调试了，来试验下。</p>
 <p>打开 <strong>TaskManager.java</strong>，在判断是否需要使用 MultiDex 的地方打个断点。</p>
 <p><img src="http://ojafgwnc4.bkt.clouddn.com/QQ20171223-111834@2x.png" alt=""></p>
-<p>然后执行步骤中的 5、6，然后等到这里被执行时就会断住了。</p>
+<p>然后执行步骤中的 6、7，然后等到这里被执行时就会断住了。</p>
 <p><img src="http://ojafgwnc4.bkt.clouddn.com/QQ20171223-112053@2x.png" alt=""></p>
 <h3 id="尾语"><a href="#尾语" class="headerlink" title="尾语"></a>尾语</h3><p>可能还有更好的方案。</p>
 
