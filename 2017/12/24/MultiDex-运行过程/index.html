@@ -1,0 +1,752 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="wangyuwei" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="结构MultiDex 代码比较少，关键类就三个。
+
+分析MultiDexApplication123456789public class MultiDexApplication extends Application &amp;#123;  public MultiDexApplication() &amp;#123;  &amp;#125;  protected void attachBaseContext(Conte">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MultiDex 运行过程">
+<meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2017/12/24/MultiDex-运行过程/index.html">
+<meta property="og:site_name" content="巴巴巴巴巴巴掌">
+<meta property="og:description" content="结构MultiDex 代码比较少，关键类就三个。
+
+分析MultiDexApplication123456789public class MultiDexApplication extends Application &amp;#123;  public MultiDexApplication() &amp;#123;  &amp;#125;  protected void attachBaseContext(Conte">
+<meta property="og:image" content="http://ojafgwnc4.bkt.clouddn.com/QQ20171226-173603.png">
+<meta property="og:image" content="http://ojafgwnc4.bkt.clouddn.com/QQ20171229-191557@2x.png">
+<meta property="og:image" content="http://ojafgwnc4.bkt.clouddn.com/E75A63FB-1892-4BD7-AF5C-838BD2941D46.png">
+<meta property="og:updated_time" content="2018-01-02T03:07:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MultiDex 运行过程">
+<meta name="twitter:description" content="结构MultiDex 代码比较少，关键类就三个。
+
+分析MultiDexApplication123456789public class MultiDexApplication extends Application &amp;#123;  public MultiDexApplication() &amp;#123;  &amp;#125;  protected void attachBaseContext(Conte">
+<meta name="twitter:image" content="http://ojafgwnc4.bkt.clouddn.com/QQ20171226-173603.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/12/24/MultiDex-运行过程/"/>
+
+
+
+
+
+  <title> MultiDex 运行过程 | 巴巴巴巴巴巴掌 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a1124557c8347bcc3f0d292e1395b686";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">巴巴巴巴巴巴掌</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">菜比成长记</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://github.com/JeasonWong/JeasonWong.github.io/2017/12/24/MultiDex-运行过程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JeasonWong">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="巴巴巴巴巴巴掌">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                MultiDex 运行过程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-24T07:53:50+08:00">
+                2017-12-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/24/MultiDex-运行过程/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/12/24/MultiDex-运行过程/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><p>MultiDex 代码比较少，关键类就三个。</p>
+<p><img src="http://ojafgwnc4.bkt.clouddn.com/QQ20171226-173603.png" alt=""></p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><h4 id="MultiDexApplication"><a href="#MultiDexApplication" class="headerlink" title="MultiDexApplication"></a>MultiDexApplication</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MultiDexApplication</span> <span class="keyword">extends</span> <span class="title">Application</span> </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="title">MultiDexApplication</span><span class="params">()</span> </span>&#123;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">attachBaseContext</span><span class="params">(Context base)</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>.attachBaseContext(base);</div><div class="line">    MultiDex.install(<span class="keyword">this</span>);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>显然，关键得看 Multidex#install。</p>
+<h4 id="MultiDex"><a href="#MultiDex" class="headerlink" title="MultiDex"></a>MultiDex</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">install</span><span class="params">(Context context)</span> </span>&#123;</div><div class="line">   Log.i(TAG, <span class="string">"install"</span>);</div><div class="line">   <span class="comment">// 1</span></div><div class="line">   <span class="keyword">if</span> (IS_VM_MULTIDEX_CAPABLE) &#123;</div><div class="line">       Log.i(TAG, <span class="string">"VM has multidex support, MultiDex support library is disabled."</span>);</div><div class="line">       <span class="keyword">return</span>;</div><div class="line">   &#125;</div><div class="line"></div><div class="line">   <span class="comment">// 2</span></div><div class="line">   <span class="keyword">if</span> (Build.VERSION.SDK_INT &lt; MIN_SDK_VERSION) &#123;</div><div class="line">       <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Multi dex installation failed. SDK "</span> + Build.VERSION.SDK_INT</div><div class="line">               + <span class="string">" is unsupported. Min SDK version is "</span> + MIN_SDK_VERSION + <span class="string">"."</span>);</div><div class="line">   &#125;</div><div class="line"></div><div class="line">   <span class="comment">// 3</span></div><div class="line">   ...</div><div class="line">   Log.i(TAG, <span class="string">"install done"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="1"><a href="#1" class="headerlink" title="// 1"></a>// 1</h5><p>当虚拟机支持 MultiDex，直接打个 log 知会你一声，那么怎么判断当前虚拟机是否支持 MultiDex 呢？来看 IS_VM_MULTIDEX_CAPABLE：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">static</span> &#123;</div><div class="line">    ...</div><div class="line">    IS_VM_MULTIDEX_CAPABLE = isVMMultidexCapable(System.getProperty(<span class="string">"java.vm.version"</span>));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isVMMultidexCapable</span><span class="params">(String versionString)</span> </span>&#123;</div><div class="line">    <span class="keyword">boolean</span> isMultidexCapable = <span class="keyword">false</span>;</div><div class="line">    <span class="keyword">if</span>(versionString != <span class="keyword">null</span>) &#123;</div><div class="line">        Matcher matcher = Pattern.compile(<span class="string">"(\\d+)\\.(\\d+)(\\.\\d+)?"</span>).matcher(versionString);</div><div class="line">        <span class="keyword">if</span>(matcher.matches()) &#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="keyword">int</span> e = Integer.parseInt(matcher.group(<span class="number">1</span>));</div><div class="line">            <span class="keyword">int</span> minor = Integer.parseInt(matcher.group(<span class="number">2</span>));</div><div class="line">            isMultidexCapable = e &gt; <span class="number">2</span> || e == <span class="number">2</span> &amp;&amp; minor &gt;= <span class="number">1</span>;</div><div class="line">        &#125; <span class="keyword">catch</span> (NumberFormatException var5) &#123;</div><div class="line">            ;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>静态代码块里拿到虚拟机版本号，正则判断版本是否大于 2.1，如果大于 2.1 就表明当前虚拟机默认支持 MultiDex。</p>
+<p>那么有几个问题：</p>
+<ul>
+<li>什么样的虚拟机默认支持 MultiDex?</li>
+<li>为什么是 2.1?</li>
+</ul>
+<p>第一个问题，ART 虚拟机默认支持 MultiDex，为什么？会在 <strong>ART 和 DAVILK</strong> 虚拟机的区别中解释。</p>
+<p>第二个问题，来看看官方文档：<a href="https://developer.android.com/guide/practices/verifying-apps-art.html#GC_Migration" target="_blank" rel="external">如何判断当前是否是 ART 虚拟机</a></p>
+<p><img src="http://ojafgwnc4.bkt.clouddn.com/QQ20171229-191557@2x.png" alt=""></p>
+<p>文档说，当 java.vm.version &gt;= 2.0.0 则表明是 ART 虚拟机，可是 MultiDex 的代码里写的是 &gt;= 2.1，为什么？应该是文档没更新。。。。</p>
+<p>那么 java.vm.version 又是在哪里被设置的呢？来看看 <strong>java.lang.System</strong>：</p>
+<p><img src="http://ojafgwnc4.bkt.clouddn.com/E75A63FB-1892-4BD7-AF5C-838BD2941D46.png" alt=""></p>
+<h5 id="2"><a href="#2" class="headerlink" title="// 2"></a>// 2</h5><p>MultiDex 最低支持 Android 1.6</p>
+<h5 id="3"><a href="#3" class="headerlink" title="// 3"></a>// 3</h5><p>这部分是 MultiDex 的工作，仔细梳理。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">ApplicationInfo applicationInfo = getApplicationInfo(context);</div><div class="line"><span class="keyword">if</span> (applicationInfo == <span class="keyword">null</span>) &#123;</div><div class="line">    <span class="keyword">return</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> ApplicationInfo <span class="title">getApplicationInfo</span><span class="params">(Context context)</span> </span>&#123;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">return</span> context.getApplicationInfo();</div><div class="line">    &#125; <span class="keyword">catch</span> (RuntimeException e) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/22/如何调试-Android-打包流程？/" rel="next" title="如何调试 Android 打包流程？">
+                <i class="fa fa-chevron-left"></i> 如何调试 Android 打包流程？
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="JeasonWong" />
+          <p class="site-author-name" itemprop="name">JeasonWong</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/JeasonWong" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/WongYuwei" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#结构"><span class="nav-number">1.</span> <span class="nav-text">结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析"><span class="nav-number">2.</span> <span class="nav-text">分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MultiDexApplication"><span class="nav-number">2.1.</span> <span class="nav-text">MultiDexApplication</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MultiDex"><span class="nav-number">2.2.</span> <span class="nav-text">MultiDex</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1"><span class="nav-number">2.2.1.</span> <span class="nav-text">// 1</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2"><span class="nav-number">2.2.2.</span> <span class="nav-text">// 2</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3"><span class="nav-number">2.2.3.</span> <span class="nav-text">// 3</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JeasonWong</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'jeasonwong';
+      var disqus_identifier = '2017/12/24/MultiDex-运行过程/';
+
+      var disqus_title = "MultiDex 运行过程";
+
+
+      function run_disqus_script(disqus_script) {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+
+      
+        var disqus_config = function () {
+            this.page.url = disqus_url;
+            this.page.identifier = disqus_identifier;
+            this.page.title = disqus_title;
+        };
+        run_disqus_script('embed.js');
+      
+
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

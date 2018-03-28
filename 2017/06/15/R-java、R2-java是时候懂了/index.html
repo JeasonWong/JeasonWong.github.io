@@ -93,7 +93,7 @@
 <meta property="og:url" content="https://github.com/JeasonWong/JeasonWong.github.io/2017/06/15/R-java、R2-java是时候懂了/index.html">
 <meta property="og:site_name" content="巴巴巴巴巴巴掌">
 <meta property="og:description" content="问题问题1：子module里的R.java为何不是常量？问题2：ButterKnife是怎么解决的？问题3：由于ButterKnife的R2.java存在，导致java compile替换了注解中的常量，为何实际运行时没出现问题？">
-<meta property="og:updated_time" content="2017-08-24T03:42:31.000Z">
+<meta property="og:updated_time" content="2018-03-28T09:18:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="R.java、R2.java是时候懂了">
 <meta name="twitter:description" content="问题问题1：子module里的R.java为何不是常量？问题2：ButterKnife是怎么解决的？问题3：由于ButterKnife的R2.java存在，导致java compile替换了注解中的常量，为何实际运行时没出现问题？">
@@ -348,7 +348,7 @@
 <p>这样导致我们使用switch-case也好，注解也好，凡是语法规定必须要使用常量的地方都无法直接R.drawable了，这是为何呢？</p>
 <p>那么我们来假设如果有final的话会出现什么问题，每个module各自打成aar的时候AAPT会单独生成R.java，那么在执行java compile成class的时候会将常量直接替换成具体的值，如:</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@BindView</span>(<span class="number">2131755430</span>)</div><div class="line"><span class="keyword">protected</span> FrameLayout errorViewParent;</div></pre></td></tr></table></figure>
-<p>由于各个module间无法保证R.java中变量对应着的数值不同，所以如果出现相同的岂不是尴尬了？当然假如相同也没关系，可以反过来取到int数值后去找对应的resName，然后再去app的大R.java里去取，再将各个module的替换掉。mdzz想着就麻烦，索性不给module的R.java定义为常量了。</p>
+<p>由于各个module间无法保证R.java中变量对应着的数值不同，如果相同了会导致不同的资源name映射一个id，这是资源打包时绝对不允许的一件事。</p>
 <p>俗话说的好，天王盖地虎，小鸡炖蘑菇，没有什么是他们那些大佬无法解决的，比如ButterKnife就提供了一个方案。</p>
 <h4 id="问题2：ButterKnife是怎么解决的？"><a href="#问题2：ButterKnife是怎么解决的？" class="headerlink" title="问题2：ButterKnife是怎么解决的？"></a>问题2：ButterKnife是怎么解决的？</h4><p>mmp，既然官方搞得R.java不是常量，那我们就copy一份R.java，搞个R2.java，然后把所有变量都加上final关键字，然后相关地方直接引用R2不就得了咯。没错，就是这么简单，让我们来看看相关gradle plugin是怎样做的。</p>
 <p><a href="https://github.com/JakeWharton/butterknife/blob/master/butterknife-gradle-plugin/src/main/java/butterknife/plugin/ButterKnifePlugin.kt">源码</a></p>
@@ -487,7 +487,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-count">24</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -578,7 +578,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
